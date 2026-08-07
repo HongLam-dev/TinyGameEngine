@@ -11,8 +11,16 @@ endif()
 
 project ("TinyGameEngine")
 
+find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
+
 # Add source to this project's executable.
 add_executable (TinyGameEngine "TinyGameEngine.cpp" "TinyGameEngine.h")
+
+target_link_libraries(TinyGameEngine PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::System
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET TinyGameEngine PROPERTY CXX_STANDARD 20)
