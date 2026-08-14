@@ -17,10 +17,11 @@ find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
 add_executable (TinyGameEngine "Game/main.cpp" 
 "Engine/Source/TinyGameEngine.cpp"
 "Engine/Source/Input.cpp" 
-"Engine/Source/Window.cpp" "Engine/Source/Component.cpp" "Engine/Header/SpriteRenderer.h" "Engine/Source/SpriteRenderer.cpp" "Engine/Header/GameObject.h" "Engine/Source/GameObject.cpp" "Engine/Header/Transform.h" "Engine/Source/Transform.cpp" "Engine/Header/Vector3.h")
+"Engine/Source/Window.cpp" "Engine/Source/Component.cpp" "Engine/Header/SpriteRenderer.h" "Engine/Source/SpriteRenderer.cpp" "Engine/Header/GameObject.h" "Engine/Source/GameObject.cpp" "Engine/Header/Transform.h" "Engine/Source/Transform.cpp" "Engine/Header/Vector3.h" "Game/Header/PlayerController.h" "Game/Source/PlayerController.cpp")
 
 target_include_directories(TinyGameEngine PRIVATE
     Engine/Header
+    Game/Header
 )
 
 target_link_libraries(TinyGameEngine PRIVATE

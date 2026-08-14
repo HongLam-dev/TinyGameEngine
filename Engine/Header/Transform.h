@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Vector3.h"
-using namespace TinyEngine;
+#include <iostream>
 
 namespace TinyEngine {
 
@@ -9,13 +9,17 @@ namespace TinyEngine {
     {
     public:
         Transform(
+            GameObject& owner,
             Vector3 position = {},
             Vector3 scale = { 1.0f, 1.0f, 1.0f },
             Vector3 rotation = {}
-        ) : position(position), scale(scale), rotation(rotation) {};
+        ) : position(position), scale(scale), rotation(rotation), Component(owner) {};
         void SetPosition(const Vector3& newPosition);
-       const Vector3& GetPosition() const { return position; }
-        Vector3& GetPosition() { return position; }
+       const Vector3& GetPosition() const { 
+           return position; }
+        Vector3& GetPosition() { 
+           
+            return position; }
     private:
         Vector3 position{};
         Vector3 scale{ 1.0f, 1.0f, 1.0f };

@@ -8,8 +8,13 @@ namespace TinyEngine
 	public:
 		bool isKeyPressed(sf::Keyboard::Key key);
 		void ProcessEvent(const sf::Event& event);
+		static Input& Get()
+		{
+			static Input instance;
+			return instance;
+		}
+
 	private:
 		std::array<bool, static_cast<std::size_t>(sf::Keyboard::KeyCount)> keyStates{};
-
 	};
 }

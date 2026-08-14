@@ -5,8 +5,7 @@ int main()
 {
 	TinyEngine::TinyGameEngine engine;
 	TinyEngine::Window winow;
-	TinyEngine::Input input;
-	engine.Run(winow, input);
+	engine.Run(winow);
 	
 	return 0;
 }

@@ -10,7 +10,7 @@ namespace TinyEngine {
 
 	class GameObject {
 	public:
-		GameObject() {}
+		GameObject() : transform(*this) {}
 		void Update();
 		void FixedUpdate();
 		void Render(Window& window);
@@ -18,6 +18,7 @@ namespace TinyEngine {
 		{
 			return transform;
 		}
+
 		Transform& GetTransform()
 		{
 			return transform;
@@ -26,7 +27,7 @@ namespace TinyEngine {
 			requires std::derived_from<T, Component>
 		T& AddComponent()
 		{
-			auto component = std::make_unique<T>();
+			auto component = std::make_unique<T>(*this);
 
 			T& ref = *component;
 
