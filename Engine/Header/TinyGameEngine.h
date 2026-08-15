@@ -15,6 +15,7 @@ namespace TinyEngine
 		void Render(TinyEngine::Window& window);
 		void ProcessInput();
 		void Run(TinyEngine::Window& window);
+		void StartObject();
 
 	private:
 		int targetFPS = 60;

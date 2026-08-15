@@ -5,8 +5,11 @@ namespace TinyEngine {
 	class Component
 	{
 	public:
-		Component(GameObject& owner):owner(owner) {}
+		explicit Component(GameObject& owner)
+			: owner(owner)
+		{}
 		GameObject& GetOwner();
+		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
 		virtual ~Component() = default;

@@ -18,7 +18,7 @@ namespace TinyEngine
 		{
 			if (auto* renderer = dynamic_cast<SpriteRenderer*>(component.get()))
 			{
-				renderer->Render(window,transform.GetPosition());
+				renderer->Render(window,transform);
 			}
 		}
 	}
@@ -31,4 +31,11 @@ namespace TinyEngine
 		}
 	}
 
+	void GameObject::Start()
+	{
+		for (auto& component : components)
+		{
+			component->Start();
+		}
+	}
 }

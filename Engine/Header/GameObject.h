@@ -13,16 +13,9 @@ namespace TinyEngine {
 		GameObject() : transform(*this) {}
 		void Update();
 		void FixedUpdate();
+		void Start();
 		void Render(Window& window);
-		const Transform& GetTransform() const
-		{
-			return transform;
-		}
 
-		Transform& GetTransform()
-		{
-			return transform;
-		}
 		template <typename T>
 			requires std::derived_from<T, Component>
 		T& AddComponent()
@@ -33,6 +26,25 @@ namespace TinyEngine {
 
 			components.push_back(std::move(component));
 			return ref;
+		}
+
+		template <typename T>
+			requires std::derived_from<T, Component>
+		T& GetComponent()
+		{
+			for (auto& component : components)
+			{
+				if (auto* requiredCo = dynamic_cast<T*>(component.get()))
+				{
+					return *requiredCo;
+				}
+				else if(auto* requiredCo = dynamic_cast<T*>(&transform))
+				{
+					return *requiredCo;
+				}
+			}
+			
+			throw std::runtime_error("Component not found");
 		}
 	private:
 		Transform transform;

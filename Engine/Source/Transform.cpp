@@ -6,4 +6,11 @@ namespace TinyEngine {
 	{
 		this->position = pos;
 	}
+	void Transform::SetScale(const Vector3& newScale) {
+		this->scale = newScale;
+	}
+	void Transform::SetRotation(const Vector3& newRotation)
+	{
+		this->rotation = rotation;
+	}
 }

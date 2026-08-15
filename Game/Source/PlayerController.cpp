@@ -4,36 +4,43 @@
 #include "GameObject.h"
 #include <iostream>
 
+
+void PlayerController::Start() {
+	transform = &GetOwner().GetComponent<Transform>();
+}
+
 void PlayerController::Update()
 {
-	Vector3 targetPos;
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
 	{
-		targetPos = GetOwner().GetTransform().GetPosition();
-		targetPos.y += moveSpeed;
-		GetOwner().GetTransform().SetPosition(targetPos);
+		direction = Vector3::Down;
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
 	{
-		targetPos = GetOwner().GetTransform().GetPosition();
-		targetPos.x += moveSpeed;
-		GetOwner().GetTransform().SetPosition(targetPos);
+		direction = Vector3::Right;
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::S))
 	{
-		targetPos = GetOwner().GetTransform().GetPosition();
-		targetPos.y -= moveSpeed;
-		GetOwner().GetTransform().SetPosition(targetPos);
+		direction = Vector3::Up;
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::A))
 	{
-		targetPos = GetOwner().GetTransform().GetPosition();
-		targetPos.x -= moveSpeed;
-		GetOwner().GetTransform().SetPosition(targetPos);
+		direction = Vector3::Left;
+	}
+	else
+	{
+		direction = Vector3::Zero;
 	}
 }
 
+
 void PlayerController::FixedUpdate()
 {
-
+	if (direction != Vector3::Zero)
+	{
+		Vector3 targetPos;
+		targetPos = transform->GetPosition();
+		targetPos += direction * moveSpeed;
+		transform->SetPosition(targetPos);
+	}
 }

@@ -18,18 +18,17 @@ namespace TinyEngine
 		auto player = std::make_unique<GameObject>();
 
 		GameObject& playerRef = *player;
-
-
 		sf::Texture texture;
 		if (!texture.loadFromFile("Assets/player.png"))
 			return;
 		sf::Sprite sprite(texture);
 		SpriteRenderer& renderer = playerRef.AddComponent<SpriteRenderer>();
 		playerRef.AddComponent<PlayerController>();
-
 		renderer.SetSprite(sprite);
 
 		gameObjects.push_back(std::move(player));
+
+		StartObject();
 
 		while (window.IsOpen())
 		{
@@ -62,8 +61,14 @@ namespace TinyEngine
 			}
 		}
 	}
-
 	
+	void TinyGameEngine::StartObject()
+	{
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->Start();
+		}
+	}
 
 	void TinyGameEngine::FixedUpdate()
 	{
