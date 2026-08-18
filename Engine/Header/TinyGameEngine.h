@@ -14,7 +14,6 @@ namespace TinyEngine
 		void FixedUpdate();
 		void Update();
 		void Render(TinyEngine::Window& window);
-		void ProcessInput();
 		void Run(TinyEngine::Window& window);
 		void StartObject();
 		CollisionManager& GetCollisionManager() { return collisonManager; }

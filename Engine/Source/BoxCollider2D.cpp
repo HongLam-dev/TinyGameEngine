@@ -13,8 +13,8 @@ namespace TinyEngine {
 	}
 	Bounds BoxCollider2D::GetBounds() const {
 		Bounds bounds;
-		bounds.max = Vector3(GetPosition().x+size.x, GetPosition().y + size.y,0);
-		bounds.min = Vector3(GetPosition().x - size.x, GetPosition().y - size.y, 0);
+		bounds.max = Vector3(GetPosition().x+size.x/2, GetPosition().y + size.y/2,0);
+		bounds.min = Vector3(GetPosition().x - size.x/2, GetPosition().y - size.y/2, 0);
 		return bounds;
 	}
 

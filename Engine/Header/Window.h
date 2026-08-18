@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 namespace TinyEngine
 {
+	class BoxCollider2D;
 	class Window
 	{
 	public:
@@ -16,6 +17,7 @@ namespace TinyEngine
 		std::optional<sf::Event> PollEvent();
 		void Display();
 		void Draw(const sf::Drawable& object);
+		void DrawCollider(const BoxCollider2D& collider);
 		void Clear();
 	private:
 		sf::RenderWindow sfmlWindow;

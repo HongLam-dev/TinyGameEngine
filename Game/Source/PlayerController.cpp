@@ -4,7 +4,6 @@
 #include "GameObject.h"
 #include <iostream>
 
-
 void PlayerController::Start() {
 	transform = &GetOwner().GetComponent<Transform>();
 }

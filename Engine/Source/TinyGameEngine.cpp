@@ -25,7 +25,7 @@ namespace TinyEngine
 		SpriteRenderer& renderer = playerRef.AddComponent<SpriteRenderer>();
 		BoxCollider2D& collider = playerRef.AddComponent<BoxCollider2D>();
 		collider.SetStatic(false);
-		collider.SetSize({ 20,20,20 });
+		collider.SetSize({ 50,50,50 });
 		
 		playerRef.AddComponent<PlayerController>();
 		renderer.SetSprite(sprite);
@@ -44,7 +44,7 @@ namespace TinyEngine
 		SpriteRenderer& renderer2 = playerRef2.AddComponent<SpriteRenderer>();
 		BoxCollider2D& collider2 = playerRef2.AddComponent<BoxCollider2D>();
 		collider2.SetStatic(true);
-		collider2.SetSize({ 20,20,20 });
+		collider2.SetSize({ 50,50,50 });
 
 		renderer2.SetSprite(sprite2);
 		playerRef2.GetComponent<Transform>().SetScale({ 0.1f,0.1f,0.1f });
@@ -62,7 +62,6 @@ namespace TinyEngine
 			{
 				if (event->is<sf::Event::Closed>())
 					window.Close();
-
 				Input::Get().ProcessEvent(*event);
 			}
 
@@ -70,7 +69,11 @@ namespace TinyEngine
 			accumulatedTimeStep += deltaTime;
 			accumulatedRenderTime += deltaTime;
 
-			ProcessInput();
+			if (accumulatedRenderTime >= 1.0 / targetFPS)
+			{	
+				Update();
+			}
+
 			while (accumulatedTimeStep >= 1.0 / timeStep)
 			{
 				FixedUpdate();
@@ -81,7 +84,6 @@ namespace TinyEngine
 			if (accumulatedRenderTime >= 1.0 / targetFPS)
 			{
 				Render(window);
-				Update();
 				accumulatedRenderTime = 0;
 			}
 		}
@@ -97,11 +99,11 @@ namespace TinyEngine
 
 	void TinyGameEngine::FixedUpdate()
 	{
-		collisonManager.CheckCollision();
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->FixedUpdate();
 		}
+		collisonManager.CheckCollision();
 	}
 
 	void TinyGameEngine::Update()
@@ -116,16 +118,17 @@ namespace TinyEngine
 	{
 	
 		window.Clear();
+
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->Render(window);
+		}
+		for (auto& collider : collisonManager.GetColliders())
+		{
+			window.DrawCollider(*collider);
 		}
 
 		window.Display();
 	}
 
-	void TinyGameEngine::ProcessInput()
-	{
-
-	}
 }

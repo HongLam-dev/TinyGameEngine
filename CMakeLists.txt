@@ -17,7 +17,7 @@ find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
 add_executable (TinyGameEngine "Game/main.cpp" 
 "Engine/Source/TinyGameEngine.cpp"
 "Engine/Source/Input.cpp" 
-"Engine/Source/Window.cpp" "Engine/Source/Component.cpp" "Engine/Header/SpriteRenderer.h" "Engine/Source/SpriteRenderer.cpp" "Engine/Header/GameObject.h" "Engine/Source/GameObject.cpp" "Engine/Header/Transform.h" "Engine/Source/Transform.cpp" "Engine/Header/Vector3.h" "Game/Header/PlayerController.h" "Game/Source/PlayerController.cpp" "Engine/Header/CollisionManager.h" "Engine/Source/CollisionManager.cpp" "Engine/Header/BoxCollider2D.h" "Engine/Source/BoxCollider2D.cpp" "Engine/Header/Bounds.h")
+"Engine/Source/Window.cpp" "Engine/Source/Component.cpp" "Engine/Header/SpriteRenderer.h" "Engine/Source/SpriteRenderer.cpp" "Engine/Header/GameObject.h" "Engine/Source/GameObject.cpp" "Engine/Header/Transform.h" "Engine/Source/Transform.cpp" "Engine/Header/Vector3.h" "Game/Header/PlayerController.h" "Game/Source/PlayerController.cpp" "Engine/Header/CollisionManager.h" "Engine/Source/CollisionManager.cpp" "Engine/Header/BoxCollider2D.h" "Engine/Source/BoxCollider2D.cpp" "Engine/Header/Bounds.h" "Editor/Gizmo.h")
 
 target_include_directories(TinyGameEngine PRIVATE
     Engine/Header
