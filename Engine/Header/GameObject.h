@@ -8,13 +8,15 @@
 #include "Window.h"
 namespace TinyEngine {
 
+	class TinyGameEngine;
 	class GameObject {
 	public:
-		GameObject() : transform(*this) {}
+		GameObject(TinyGameEngine& engine) : transform(*this), engine(engine) {}
 		void Update();
 		void FixedUpdate();
 		void Start();
 		void Render(Window& window);
+		TinyGameEngine& GetEngineContext() const { return engine; };
 
 		template <typename T>
 			requires std::derived_from<T, Component>
@@ -46,8 +48,29 @@ namespace TinyEngine {
 			
 			throw std::runtime_error("Component not found");
 		}
+
+		template <typename T>
+			requires std::derived_from<T, Component>
+		const T& GetComponent() const
+		{
+			for (auto& component : components)
+			{
+				if (auto* requiredCo = dynamic_cast<const T*>(component.get()))
+				{
+					return *requiredCo;
+				}
+				else if (auto* requiredCo = dynamic_cast<const T*>(&transform))
+				{
+					return *requiredCo;
+				}
+			}
+
+			throw std::runtime_error("Component not found");
+		}
+
 	private:
 		Transform transform;
 		std::vector<std::unique_ptr<Component>> components;
+		TinyGameEngine& engine;
 	};
 }

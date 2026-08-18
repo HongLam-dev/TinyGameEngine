@@ -7,7 +7,7 @@ using namespace TinyEngine;
 class PlayerController: public Component
 {
 public:
-	PlayerController(GameObject& owner,float moveSpeed=20):Component(owner), moveSpeed(moveSpeed) {}
+	PlayerController(GameObject& owner,float moveSpeed=10):Component(owner), moveSpeed(moveSpeed) {}
 	void Update() override;
 	void FixedUpdate() override;
 	void Start() override;

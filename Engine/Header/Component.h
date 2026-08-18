@@ -8,6 +8,7 @@ namespace TinyEngine {
 		explicit Component(GameObject& owner)
 			: owner(owner)
 		{}
+		const GameObject& GetOwner() const;
 		GameObject& GetOwner();
 		virtual void Start() {};
 		virtual void Update() {};
