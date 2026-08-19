@@ -25,50 +25,79 @@ namespace TinyEngine{
 		}
 	}
 
-	void CollisionManager::ResolveCollision(BoxCollider2D& collider,BoxCollider2D& other , const Vector3& separation)
+	void CollisionManager::ResolveCollision(
+		BoxCollider2D& a,
+		BoxCollider2D& b,
+		const Vector3& separation)
 	{
-		Vector3 newPos;
-		if (!collider.IsStatic())
+		if (a.IsStatic() && b.IsStatic())
+			return;
+
+		float aRatio;
+		float bRatio;
+
+		if (a.IsStatic())
 		{
-			newPos = collider.GetPosition();
-
-			newPos += separation;
-
-			collider.SetPosition(newPos);
-		}	
+			aRatio = 0.0f;
+			bRatio = 1.0f;
+		}
+		else if (b.IsStatic())
+		{
+			aRatio = 1.0f;
+			bRatio = 0.0f;
+		}
 		else
 		{
-			newPos = other.GetPosition();
-			newPos -= separation;
-			other.SetPosition(newPos);
+			aRatio = 0.5f;
+			bRatio = 0.5f;
 		}
+
+		a.SetPosition(
+			a.GetPosition() + separation * aRatio
+		);
+
+		b.SetPosition(
+			b.GetPosition() - separation * bRatio
+		);
 	}
 
-	Vector3 CollisionManager::CheckOverlap(const BoxCollider2D& collider, const BoxCollider2D& other)
+	Vector3 CollisionManager::CheckOverlap(
+		const BoxCollider2D& collider,
+		const BoxCollider2D& other)
 	{
-		Vector3 separation=Vector3::Zero;
-		Vector3 direction = collider.GetPosition() - other.GetPosition();
-		Bounds boundsA = collider.GetBounds();
-		Bounds boundsB = other.GetBounds();
+		Bounds a = collider.GetBounds();
+		Bounds b = other.GetBounds();
 
 		bool overlapX =
-			boundsA.min.x < boundsB.max.x &&
-			boundsA.max.x > boundsB.min.x;
-		bool overlapY =
-			boundsA.min.y < boundsB.max.y &&
-			boundsA.max.y > boundsB.min.y;
-		bool overlap =
-			overlapX && overlapY;
+			a.min.x < b.max.x &&
+			a.max.x > b.min.x;
 
-		if (overlap)
-		{
-			if(direction.x>0)
-				separation.x = boundsB.max.x - boundsA.min.x;
-			else
-			{
-				separation.x = boundsB.min.x - boundsA.max.x;
-			}
-		}
+		bool overlapY =
+			a.min.y < b.max.y &&
+			a.max.y > b.min.y;
+
+		if (!overlapX || !overlapY)
+			return Vector3::Zero;
+
+		Vector3 direction =
+			collider.GetPosition() - other.GetPosition();
+
+		Vector3 separation;
+
+		if (direction.x > 0)
+			separation.x = b.max.x - a.min.x;
+		else
+			separation.x = b.min.x - a.max.x;
+
+		if (direction.y > 0)
+			separation.y = b.max.y - a.min.y;
+		else
+			separation.y = b.min.y - a.max.y;
+
+		if (std::abs(separation.x) < std::abs(separation.y))
+			separation.y = 0;
+		else
+			separation.x = 0;
 
 		return separation;
 	}

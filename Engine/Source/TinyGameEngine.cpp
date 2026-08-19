@@ -7,6 +7,7 @@
 #include "SpriteRenderer.h"
 #include "PlayerController.h"
 #include "BoxCollider2D.h"
+#include "RigidBody2D.h"
 namespace TinyEngine
 {
 
@@ -28,6 +29,9 @@ namespace TinyEngine
 		collider.SetSize({ 50,50,50 });
 		
 		playerRef.AddComponent<PlayerController>();
+		RigidBody2D& rb= playerRef.AddComponent<RigidBody2D>();
+		rb.SetGravityFactor(0.01);
+
 		renderer.SetSprite(sprite);
 		playerRef.GetComponent<Transform>().SetScale({0.1f,0.1f,0.1f});
 
@@ -48,7 +52,7 @@ namespace TinyEngine
 
 		renderer2.SetSprite(sprite2);
 		playerRef2.GetComponent<Transform>().SetScale({ 0.1f,0.1f,0.1f });
-		playerRef2.GetComponent<Transform>().SetPosition({ 100,100,100 });
+		playerRef2.GetComponent<Transform>().SetPosition({ 0,500,0 });
 
 		gameObjects.push_back(std::move(player2));
 		//end

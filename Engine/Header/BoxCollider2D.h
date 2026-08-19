@@ -20,6 +20,7 @@ namespace TinyEngine {
 		Vector3 size{1,1,1};
 		Vector3 offset = Vector3::Zero;
 		bool isStatic = true;
+		bool isTrigger = false;
 	};
 
 }

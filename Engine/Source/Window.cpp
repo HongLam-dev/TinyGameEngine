@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "BoxCollider2D.h"
 #include "Bounds.h"
+#include "EngineSettings.h"
 #include <iostream>
 namespace TinyEngine
 {
@@ -32,20 +33,21 @@ namespace TinyEngine
 	{
 		sfmlWindow.draw(object);
 	}
+
 	void TinyEngine::Window::DrawCollider(const BoxCollider2D& collider)
 	{
-		Bounds bounds = collider.GetBounds();
+		const Bounds bounds = collider.GetBounds();
 
 		sf::RectangleShape rectangle;
 
 		rectangle.setPosition({
-			collider.GetPosition().x,
-			collider.GetPosition().y
+			WorldToPixels(bounds.min.x),
+			WorldToPixels(bounds.min.y)
 			});
 
 		rectangle.setSize({
-			bounds.max.x - bounds.min.x,
-			bounds.max.y - bounds.min.y
+			WorldToPixels(bounds.max.x - bounds.min.x),
+			WorldToPixels(bounds.max.y - bounds.min.y)
 			});
 
 		rectangle.setFillColor(sf::Color::Transparent);
