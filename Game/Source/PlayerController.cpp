@@ -7,6 +7,7 @@
 
 void PlayerController::Start() {
 	transform = &GetOwner().GetComponent<Transform>();
+	rb = &GetOwner().GetComponent<RigidBody2D>();
 }
 
 void PlayerController::Update()
@@ -36,11 +37,8 @@ void PlayerController::Update()
 
 void PlayerController::FixedUpdate()
 {
-	if (direction != Vector3::Zero)
+	if (direction != Vector3::Zero && rb!=nullptr)
 	{
-		Vector3 targetPos;
-		targetPos = transform->GetPosition();
-		targetPos += direction * moveSpeed*GetOwner().GetEngineContext().GetFixedDeltaTime();
-		transform->SetPosition(targetPos);
+		rb->SetVelocity(direction*moveSpeed);
 	}
 }

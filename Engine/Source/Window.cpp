@@ -39,12 +39,24 @@ namespace TinyEngine
 		const Bounds bounds = collider.GetBounds();
 
 		sf::RectangleShape rectangle;
-		const Vector3 position = collider.GetPosition();
+
+		const float width =
+			WorldToPixels(bounds.max.x - bounds.min.x);
+
+		const float height =
+			WorldToPixels(bounds.max.y - bounds.min.y);
 
 		rectangle.setSize({
-			WorldToPixels(bounds.max.x - bounds.min.x),
-			WorldToPixels(bounds.max.y - bounds.min.y)
+			width,
+			height
 			});
+
+		rectangle.setOrigin({
+			width / 2.0f,
+			height / 2.0f
+			});
+
+		const Vector3 position = collider.GetPosition();
 
 		rectangle.setPosition({
 			WorldToPixels(position.x),
@@ -55,6 +67,6 @@ namespace TinyEngine
 		rectangle.setOutlineColor(sf::Color::Green);
 		rectangle.setOutlineThickness(1.0f);
 
-		sfmlWindow.draw(rectangle);
+		Draw(rectangle);
 	}
 }

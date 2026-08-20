@@ -5,7 +5,17 @@
 #include <cmath>
 #include <iostream>
 
-namespace TinyEngine{
+namespace TinyEngine {
+
+	void CollisionManager::OnComponentAdded(Component& component)
+	{
+
+	}
+	void CollisionManager::OnComponentRemoved(Component& component) {
+
+	}
+
+
 	void CollisionManager::CheckCollision()
 	{
 		for (size_t i = 0; i < colliders.size(); i++)

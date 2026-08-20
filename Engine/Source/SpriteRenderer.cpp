@@ -9,7 +9,6 @@ namespace TinyEngine {
         const Transform& transform)
     {
         const Vector3 position = transform.GetPosition();
-
         sprite->setPosition({
             WorldToPixels(position.x),
             WorldToPixels(position.y)
@@ -18,6 +17,10 @@ namespace TinyEngine {
         sprite->setScale({
             transform.GetScale().x,
             transform.GetScale().y
+            });
+        sprite->setOrigin({
+    sprite->getLocalBounds().size.x / 2.0f,
+    sprite->getLocalBounds().size.y / 2.0f
             });
 
         sf::Angle angle = sf::radians(

@@ -38,4 +38,48 @@ namespace TinyEngine
 			component->Start();
 		}
 	}
+
+	void GameObject::NotifyComponentAdded(Component& component)
+	{
+		for (IComponentObserver* observer : observers)
+		{
+			observer->OnComponentAdded(component);
+		}
+	}
+
+	void GameObject::NotifyComponentRemoved(Component& component)
+	{
+		for (IComponentObserver* observer : observers)
+		{
+			observer->OnComponentRemoved(component);
+		}
+	}
+
+	void GameObject::AddComponentObserver(IComponentObserver& observer)
+	{
+		observers.push_back(&observer);
+	}
+
+	void GameObject::RemoveComponentObserver(IComponentObserver& observer)
+	{
+		std::erase(observers, &observer);
+	}
+
+	void GameObject::RemoveComponent(Component* component)
+	{
+		auto it = std::find_if(
+			components.begin(),
+			components.end(),
+			[component](const std::unique_ptr<Component>& ptr)
+			{
+				return ptr.get() == component;
+			});
+
+		if (it != components.end())
+		{
+			NotifyComponentRemoved(**it);
+
+			components.erase(it);
+		}
+	}
 }

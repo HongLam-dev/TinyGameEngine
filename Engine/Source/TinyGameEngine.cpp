@@ -32,9 +32,9 @@ namespace TinyEngine
 			playerRef.AddComponent<BoxCollider2D>();
 
 		collider.SetSize({
-			PixelsToWorld(50),
-			PixelsToWorld(50),
-			PixelsToWorld(50)
+			PixelsToWorld(64),
+			PixelsToWorld(64),
+			PixelsToWorld(0)
 			});
 
 		collider.SetStatic(false);
@@ -78,9 +78,9 @@ namespace TinyEngine
 			playerRef2.AddComponent<BoxCollider2D>();
 
 		collider2.SetSize({
-			PixelsToWorld(50),
-			PixelsToWorld(50),
-			PixelsToWorld(50)
+			PixelsToWorld(64),
+			PixelsToWorld(64),
+			PixelsToWorld(0)
 			});
 
 		renderer2.SetSprite(sprite2);

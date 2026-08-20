@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "Vector3.h"
 #include "Transform.h"
+#include "RigidBody2D.h"
 using namespace TinyEngine;
 
 class PlayerController: public Component
@@ -14,6 +15,7 @@ public:
 	void Start() override;
 private:
 	Transform* transform = nullptr;
+	RigidBody2D* rb = nullptr;
 	float moveSpeed=10.0f;
 	Vector3 direction=Vector3::Zero;
 };
