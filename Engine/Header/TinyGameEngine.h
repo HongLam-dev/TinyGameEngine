@@ -16,7 +16,7 @@ namespace TinyEngine
 		void Render(TinyEngine::Window& window);
 		void Run(TinyEngine::Window& window);
 		void StartObject();
-		CollisionManager& GetCollisionManager() { return collisonManager; }
+		GameObject& CreateGameObject();
 		float GetDeltaTime() const { return deltaTime; };
 		float GetFixedDeltaTime() const { return fixedDeltatime; };
 	private:
@@ -24,7 +24,7 @@ namespace TinyEngine
 		int timeStep = 60;
 		float deltaTime = 0;
 		float fixedDeltatime = 0;
-		CollisionManager collisonManager;
+		CollisionManager collisionManager;
 		sf::Clock clock;
 		std::vector<std::unique_ptr<GameObject>> gameObjects;
 	};

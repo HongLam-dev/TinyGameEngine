@@ -14,9 +14,7 @@ namespace TinyEngine
 
 	void TinyGameEngine::Run(TinyEngine::Window& window)
 	{
-		auto player = std::make_unique<GameObject>(*this);
-
-		GameObject& playerRef = *player;
+		GameObject& playerRef = CreateGameObject();
 
 		sf::Texture texture;
 
@@ -55,14 +53,10 @@ namespace TinyEngine
 				PixelsToWorld(-500),
 				0
 				});
-
-		gameObjects.push_back(std::move(player));
 		//end
 		
 		//player2
-		auto player2 = std::make_unique<GameObject>(*this);
-
-		GameObject& playerRef2 = *player2;
+		GameObject& playerRef2 = CreateGameObject();
 
 		sf::Texture texture2;
 
@@ -91,8 +85,6 @@ namespace TinyEngine
 				PixelsToWorld(500),
 				0
 				});
-
-		gameObjects.push_back(std::move(player2));
 		//end
 
 
@@ -145,7 +137,7 @@ namespace TinyEngine
 		{
 			gameObject->FixedUpdate();
 		}
-		collisonManager.CheckCollision();
+		collisionManager.CheckCollision();
 	}
 
 	void TinyGameEngine::Update()
@@ -165,12 +157,21 @@ namespace TinyEngine
 		{
 			gameObject->Render(window);
 		}
-		for (auto& collider : collisonManager.GetColliders())
+		for (auto& collider : collisionManager.GetColliders())
 		{
 			window.DrawCollider(*collider);
 		}
 
 		window.Display();
 	}
+	GameObject& TinyGameEngine::CreateGameObject()
+	{
+		auto go = std::make_unique<GameObject>(*this);
 
+		go->AddComponentObserver(collisionManager);
+
+		gameObjects.push_back(std::move(go));
+
+		return *gameObjects.back();
+	}
 }

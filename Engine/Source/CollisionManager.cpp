@@ -9,7 +9,10 @@ namespace TinyEngine {
 
 	void CollisionManager::OnComponentAdded(Component& component)
 	{
-
+		if (auto* collider = dynamic_cast<BoxCollider2D*>(&component))
+		{
+			AsignCollider(collider);
+		}
 	}
 	void CollisionManager::OnComponentRemoved(Component& component) {
 

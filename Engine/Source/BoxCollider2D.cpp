@@ -1,11 +1,9 @@
-#include "BoxCollider2D.h"
 #include "Vector3.h"
 #include "TinyGameEngine.h"
 
 namespace TinyEngine {
 
 	BoxCollider2D::BoxCollider2D(GameObject& owner):Component(owner) {
-		GetOwner().GetEngineContext().GetCollisionManager().AsignCollider(this);
 	}
 
 	Vector3 BoxCollider2D::GetPosition() const {
