@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "vector3.h"
 #include "GameObject.h"
+#include "TinyGameEngine.h"
 #include <iostream>
 
 void PlayerController::Start() {
@@ -39,7 +40,7 @@ void PlayerController::FixedUpdate()
 	{
 		Vector3 targetPos;
 		targetPos = transform->GetPosition();
-		targetPos += direction * moveSpeed;
+		targetPos += direction * moveSpeed*GetOwner().GetEngineContext().GetFixedDeltaTime();
 		transform->SetPosition(targetPos);
 	}
 }

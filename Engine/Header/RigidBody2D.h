@@ -15,6 +15,7 @@ namespace TinyEngine {
 		void ApplyGravity();
 		void AddImpulse(Vector3 force);
 		void AddForce(Vector3 force);
+		void ApplyVelocity();
 		void FixedUpdate() override;
 	private:
 		Vector3 velocity{0,0,0};

@@ -8,12 +8,12 @@ class PlayerController: public Component
 {
 public:
 	using Component::Component;
-	PlayerController(GameObject& owner,float moveSpeed=10):Component(owner), moveSpeed(moveSpeed) {}
+	PlayerController(GameObject& owner):Component(owner) {}
 	void Update() override;
 	void FixedUpdate() override;
 	void Start() override;
 private:
 	Transform* transform = nullptr;
-	float moveSpeed;
+	float moveSpeed=10.0f;
 	Vector3 direction=Vector3::Zero;
 };

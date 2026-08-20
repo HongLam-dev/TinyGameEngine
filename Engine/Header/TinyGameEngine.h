@@ -17,11 +17,13 @@ namespace TinyEngine
 		void Run(TinyEngine::Window& window);
 		void StartObject();
 		CollisionManager& GetCollisionManager() { return collisonManager; }
-
+		float GetDeltaTime() const { return deltaTime; };
+		float GetFixedDeltaTime() const { return fixedDeltatime; };
 	private:
 		int targetFPS = 60;
 		int timeStep = 60;
 		float deltaTime = 0;
+		float fixedDeltatime = 0;
 		CollisionManager collisonManager;
 		sf::Clock clock;
 		std::vector<std::unique_ptr<GameObject>> gameObjects;

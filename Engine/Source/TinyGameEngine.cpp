@@ -8,51 +8,89 @@
 #include "PlayerController.h"
 #include "BoxCollider2D.h"
 #include "RigidBody2D.h"
+#include "EngineSettings.h"
 namespace TinyEngine
 {
 
 	void TinyGameEngine::Run(TinyEngine::Window& window)
 	{
-		float accumulatedTimeStep = 0;
-		float accumulatedRenderTime = 0;
-
 		auto player = std::make_unique<GameObject>(*this);
 
 		GameObject& playerRef = *player;
+
 		sf::Texture texture;
+
 		if (!texture.loadFromFile("Assets/player.png"))
 			return;
+
 		sf::Sprite sprite(texture);
-		SpriteRenderer& renderer = playerRef.AddComponent<SpriteRenderer>();
-		BoxCollider2D& collider = playerRef.AddComponent<BoxCollider2D>();
+
+		SpriteRenderer& renderer =
+			playerRef.AddComponent<SpriteRenderer>();
+
+		BoxCollider2D& collider =
+			playerRef.AddComponent<BoxCollider2D>();
+
+		collider.SetSize({
+			PixelsToWorld(50),
+			PixelsToWorld(50),
+			PixelsToWorld(50)
+			});
+
 		collider.SetStatic(false);
-		collider.SetSize({ 50,50,50 });
-		
+
 		playerRef.AddComponent<PlayerController>();
-		RigidBody2D& rb= playerRef.AddComponent<RigidBody2D>();
-		rb.SetGravityFactor(0.01);
+
+		RigidBody2D& rb =
+			playerRef.AddComponent<RigidBody2D>();
+
+		rb.SetGravityFactor(0.1f);
 
 		renderer.SetSprite(sprite);
-		playerRef.GetComponent<Transform>().SetScale({0.1f,0.1f,0.1f});
+
+
+		playerRef.GetComponent<Transform>()
+			.SetPosition({
+				PixelsToWorld(500),
+				PixelsToWorld(-500),
+				0
+				});
 
 		gameObjects.push_back(std::move(player));
-
+		//end
+		
 		//player2
 		auto player2 = std::make_unique<GameObject>(*this);
 
 		GameObject& playerRef2 = *player2;
+
 		sf::Texture texture2;
+
 		if (!texture2.loadFromFile("Assets/player.png"))
 			return;
+
 		sf::Sprite sprite2(texture2);
-		SpriteRenderer& renderer2 = playerRef2.AddComponent<SpriteRenderer>();
-		BoxCollider2D& collider2 = playerRef2.AddComponent<BoxCollider2D>();
-		collider2.SetStatic(true);
-		collider2.SetSize({ 50,50,50 });
+
+		SpriteRenderer& renderer2 =
+			playerRef2.AddComponent<SpriteRenderer>();
+
+		BoxCollider2D& collider2 =
+			playerRef2.AddComponent<BoxCollider2D>();
+
+		collider2.SetSize({
+			PixelsToWorld(50),
+			PixelsToWorld(50),
+			PixelsToWorld(50)
+			});
 
 		renderer2.SetSprite(sprite2);
-		playerRef2.GetComponent<Transform>().SetScale({ 0.1f,0.1f,0.1f });
-		playerRef2.GetComponent<Transform>().SetPosition({ 0,500,0 });
+
+		playerRef2.GetComponent<Transform>()
+			.SetPosition({
+				PixelsToWorld(500),
+				PixelsToWorld(500),
+				0
+				});
 
 		gameObjects.push_back(std::move(player2));
 		//end
@@ -69,26 +107,26 @@ namespace TinyEngine
 				Input::Get().ProcessEvent(*event);
 			}
 
-			deltaTime = clock.restart().asSeconds();
-			accumulatedTimeStep += deltaTime;
-			accumulatedRenderTime += deltaTime;
+			float elapsedTime = clock.restart().asSeconds();
+			deltaTime += elapsedTime;
+			fixedDeltatime += elapsedTime;
 
-			if (accumulatedRenderTime >= 1.0 / targetFPS)
+			if (deltaTime >= 1.0 / targetFPS)
 			{	
 				Update();
 			}
 
-			while (accumulatedTimeStep >= 1.0 / timeStep)
+			while (fixedDeltatime >= 1.0 / timeStep)
 			{
 				FixedUpdate();
 
-				accumulatedTimeStep -= 1.0f / timeStep;
+				fixedDeltatime -= 1.0f / timeStep;
 			}
 
-			if (accumulatedRenderTime >= 1.0 / targetFPS)
+			if (deltaTime >= 1.0 / targetFPS)
 			{
 				Render(window);
-				accumulatedRenderTime = 0;
+				deltaTime = 0;
 			}
 		}
 	}
