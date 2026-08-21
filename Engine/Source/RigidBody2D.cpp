@@ -6,6 +6,27 @@
 #include <iostream>
 
 namespace TinyEngine {
+
+	Rigidbody2D::Rigidbody2D(GameObject& owner) :Component(owner) {
+
+		std::vector<BoxCollider2D*> colliders = owner.GetComponents<BoxCollider2D>();
+		for (auto* collider : colliders)
+		{
+			collider->SetRigidbody();
+		}
+	};
+
+
+	void Rigidbody2D::Start()
+	{
+
+		std::vector<BoxCollider2D*> colliders = GetOwner().GetComponents<BoxCollider2D>();
+		for (auto* collider : colliders)
+		{
+			collider->SetRigidbody();
+		}
+	}
+
 	void Rigidbody2D::FixedUpdate() {
 		ApplyGravity();
 
@@ -24,7 +45,6 @@ namespace TinyEngine {
 			+ velocity 
 		);
 	}
-
 
 	void Rigidbody2D::AddImpulse(Vector3 force) {
 

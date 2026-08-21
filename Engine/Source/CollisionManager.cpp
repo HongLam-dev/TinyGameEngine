@@ -13,22 +13,6 @@ namespace TinyEngine {
 		if (auto* collider = dynamic_cast<BoxCollider2D*>(&component))
 		{
 			colliders.push_back(collider);
-
-			GameObject& object = collider->GetOwner();
-
-			if (auto* rb = object.GetComponent<Rigidbody2D>())
-			{
-				collider->GetRigidbody();
-			}
-		}
-		else if (auto* rb = dynamic_cast<Rigidbody2D*>(&component))
-		{
-			GameObject& object = rb->GetOwner();
-
-			if (auto* collider = object.GetComponent<BoxCollider2D>())
-			{
-				collider->GetRigidbody();
-			}
 		}
 	}
 	void CollisionManager::OnComponentRemoved(Component& component) {
@@ -60,7 +44,7 @@ namespace TinyEngine {
 		BoxCollider2D& b,
 		const Vector3& separation)
 	{
-		if (a.GetRigidbody() && b.GetRigidbody())
+		if (!a.GetRigidbody() && !b.GetRigidbody())
 			return;
 
 		Vector3 correctionVector = separation;

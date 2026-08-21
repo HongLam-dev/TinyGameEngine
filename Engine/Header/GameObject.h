@@ -16,6 +16,10 @@ namespace TinyEngine {
 		void Update();
 		void FixedUpdate();
 		void Start();
+		void OnCollisionEnter();
+		void OnCollisionStay();
+		void OnCollisionExit();
+		void OnTriggerEnter();
 		void Render(Window& window);
 		TinyGameEngine& GetEngineContext() const { return engine; };
 		void AddComponentObserver(IComponentObserver& observer);
@@ -72,6 +76,23 @@ namespace TinyEngine {
 			}
 
 			return nullptr;
+		}
+
+		template <typename T>
+			requires std::derived_from<T, Component>
+		std::vector<T*> GetComponents()
+		{
+			std::vector<T*> result;
+
+			for (auto& component : components)
+			{
+				if (auto* requiredComponent = dynamic_cast<T*>(component.get()))
+				{
+					result.push_back(requiredComponent);
+				}
+			}
+
+			return result;
 		}
 
 	private:

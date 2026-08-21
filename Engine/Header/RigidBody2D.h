@@ -6,10 +6,11 @@ namespace TinyEngine {
 	class Rigidbody2D: public Component
 	{
 	public:
-		Rigidbody2D(GameObject& owner):Component(owner) {};
+		Rigidbody2D(GameObject& owner);
 		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		Vector3 GetVelocity() { return velocity; }
+		void Start() override;
 		void SetMass(float mass) { this->mass = mass; }
 		float GetMass() { return mass; }
 		void ApplyGravity();

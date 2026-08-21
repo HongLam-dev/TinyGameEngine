@@ -13,6 +13,10 @@ namespace TinyEngine {
 		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
+		virtual void OnCollisionEnter(){}
+		virtual void OnCollisionStay(){}
+		virtual void OnCollisionExit(){}
+		virtual void OnTriggerEnter(){}
 		virtual ~Component() = default;
 	private:
 		GameObject& owner;
