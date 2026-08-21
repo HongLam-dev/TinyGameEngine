@@ -5,9 +5,17 @@ namespace TinyEngine {
 
 	BoxCollider2D::BoxCollider2D(GameObject& owner):Component(owner) {
 	}
+	
+	void BoxCollider2D::Start() {
+		SetRigidbody();
+	}
+
+	void BoxCollider2D::SetRigidbody() {
+		rb = GetOwner().GetComponent<Rigidbody2D>();
+	}
 
 	Vector3 BoxCollider2D::GetPosition() const {
-		return GetOwner().GetComponent<Transform>().GetPosition()+offset;
+		return GetOwner().GetComponent<Transform>()->GetPosition()+offset;
 	}
 	Bounds BoxCollider2D::GetBounds() const {
 		Bounds bounds;
@@ -17,6 +25,6 @@ namespace TinyEngine {
 	}
 
 	void BoxCollider2D::SetPosition(const Vector3& newPos) {
-		GetOwner().GetComponent<Transform>().SetPosition(newPos-offset);
+		GetOwner().GetComponent<Transform>()->SetPosition(newPos-offset);
 	}
 }

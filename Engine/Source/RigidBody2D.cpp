@@ -6,7 +6,7 @@
 #include <iostream>
 
 namespace TinyEngine {
-	void RigidBody2D::FixedUpdate() {
+	void Rigidbody2D::FixedUpdate() {
 		ApplyGravity();
 
 		Vector3 acceleration = accumulatedForce / mass;
@@ -17,23 +17,23 @@ namespace TinyEngine {
 		ApplyVelocity();
 	}
 
-	void RigidBody2D::ApplyVelocity() {
+	void Rigidbody2D::ApplyVelocity() {
 		velocity*= GetOwner().GetEngineContext().GetFixedDeltaTime();
-		GetOwner().GetComponent<Transform>().SetPosition(
-			GetOwner().GetComponent<Transform>().GetPosition()
+		GetOwner().GetComponent<Transform>()->SetPosition(
+			GetOwner().GetComponent<Transform>()->GetPosition()
 			+ velocity 
 		);
 	}
 
 
-	void RigidBody2D::AddImpulse(Vector3 force) {
+	void Rigidbody2D::AddImpulse(Vector3 force) {
 
 	}
 
-	void RigidBody2D::AddForce(Vector3 force) {
+	void Rigidbody2D::AddForce(Vector3 force) {
 		accumulatedForce += force;
 	}
-	void RigidBody2D::ApplyGravity() {
-		AddForce(gravity*gravityFactor*mass);
+	void Rigidbody2D::ApplyGravity() {
+		AddForce(gravity*gravityScale*mass);
 	}
 }

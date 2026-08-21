@@ -35,20 +35,18 @@ namespace TinyEngine
 			PixelsToWorld(0)
 			});
 
-		collider.SetStatic(false);
-
 		playerRef.AddComponent<PlayerController>();
 
-		RigidBody2D& rb =
-			playerRef.AddComponent<RigidBody2D>();
+		Rigidbody2D& rb =
+			playerRef.AddComponent<Rigidbody2D>();
 
-		rb.SetGravityFactor(0.1f);
+		rb.SetGravityScale(0.1f);
 
 		renderer.SetSprite(sprite);
 
 
 		playerRef.GetComponent<Transform>()
-			.SetPosition({
+			->SetPosition({
 				PixelsToWorld(500),
 				PixelsToWorld(-500),
 				0
@@ -80,7 +78,7 @@ namespace TinyEngine
 		renderer2.SetSprite(sprite2);
 
 		playerRef2.GetComponent<Transform>()
-			.SetPosition({
+			->SetPosition({
 				PixelsToWorld(500),
 				PixelsToWorld(500),
 				0

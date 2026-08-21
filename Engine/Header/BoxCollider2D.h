@@ -2,24 +2,29 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Vector3.h"
+#include "Rigidbody2D.h"
 #include "Bounds.h"
 namespace TinyEngine {
 	class BoxCollider2D: public Component
 	{
 	public:
 		BoxCollider2D(GameObject& owner);
-			
+		void Start() override;
+		void SetRigidbody();
+		Rigidbody2D* GetRigidbody() { return rb; }
 		void SetSize(const Vector3& size)  { this->size=size; }
-		void SetStatic(bool isStatic) { this->isStatic = isStatic; }
 		void SetPosition(const Vector3& newPos);
 		Vector3 GetPosition() const;
 		Vector3 GetSize() const { return size; }
 		Bounds GetBounds() const;
-		bool IsStatic() { return isStatic; }
+		void SetIsTrigger(bool isTrigger) {
+			this->isTrigger = isTrigger;
+		}
+		bool GetIsTrigger() { return isTrigger; };
 	private:
 		Vector3 size{1,1,1};
 		Vector3 offset = Vector3::Zero;
-		bool isStatic = true;
+		Rigidbody2D* rb = nullptr;
 		bool isTrigger = false;
 	};
 

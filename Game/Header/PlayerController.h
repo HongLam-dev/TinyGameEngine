@@ -15,7 +15,7 @@ public:
 	void Start() override;
 private:
 	Transform* transform = nullptr;
-	RigidBody2D* rb = nullptr;
+	Rigidbody2D* rb = nullptr;
 	float moveSpeed=10.0f;
 	Vector3 direction=Vector3::Zero;
 };

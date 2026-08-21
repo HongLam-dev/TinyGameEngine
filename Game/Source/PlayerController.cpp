@@ -6,8 +6,8 @@
 #include <iostream>
 
 void PlayerController::Start() {
-	transform = &GetOwner().GetComponent<Transform>();
-	rb = &GetOwner().GetComponent<RigidBody2D>();
+	transform = GetOwner().GetComponent<Transform>();
+	rb = GetOwner().GetComponent<Rigidbody2D>();
 }
 
 void PlayerController::Update()
@@ -31,6 +31,11 @@ void PlayerController::Update()
 	else
 	{
 		direction = Vector3::Zero;
+	}
+
+	if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
+	{
+		rb->SetGravityScale(1);
 	}
 }
 

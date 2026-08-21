@@ -38,40 +38,40 @@ namespace TinyEngine {
 
 		template <typename T>
 			requires std::derived_from<T, Component>
-		T& GetComponent()
+		T* GetComponent()
 		{
 			for (auto& component : components)
 			{
-				if (auto* requiredCo = dynamic_cast<T*>(component.get()))
+				if (auto* requiredComponent = dynamic_cast<T*>(component.get()))
 				{
-					return *requiredCo;
-				}
-				else if(auto* requiredCo = dynamic_cast<T*>(&transform))
-				{
-					return *requiredCo;
+					return requiredComponent;
 				}
 			}
-			
-			throw std::runtime_error("Component not found");
+			if (auto* requiredComponent = dynamic_cast<T*>(&transform))
+			{
+				return requiredComponent;
+			}
+
+			return nullptr;
 		}
 
 		template <typename T>
 			requires std::derived_from<T, Component>
-		const T& GetComponent() const
+		const T* GetComponent() const
 		{
 			for (auto& component : components)
 			{
-				if (auto* requiredCo = dynamic_cast<const T*>(component.get()))
+				if (auto* requiredComponent = dynamic_cast<const T*>(component.get()))
 				{
-					return *requiredCo;
-				}
-				else if (auto* requiredCo = dynamic_cast<const T*>(&transform))
-				{
-					return *requiredCo;
+					return requiredComponent;
 				}
 			}
+			if (auto* requiredComponent = dynamic_cast<const T*>(&transform))
+			{
+				return requiredComponent;
+			}
 
-			throw std::runtime_error("Component not found");
+			return nullptr;
 		}
 
 	private:

@@ -2,6 +2,7 @@
 #include "BoxCollider2D.h"
 #include "Vector3.h"
 #include "Bounds.h"
+#include "RigidBody2D.h"
 #include <cmath>
 #include <iostream>
 
@@ -11,7 +12,23 @@ namespace TinyEngine {
 	{
 		if (auto* collider = dynamic_cast<BoxCollider2D*>(&component))
 		{
-			AsignCollider(collider);
+			colliders.push_back(collider);
+
+			GameObject& object = collider->GetOwner();
+
+			if (auto* rb = object.GetComponent<Rigidbody2D>())
+			{
+				collider->GetRigidbody();
+			}
+		}
+		else if (auto* rb = dynamic_cast<Rigidbody2D*>(&component))
+		{
+			GameObject& object = rb->GetOwner();
+
+			if (auto* collider = object.GetComponent<BoxCollider2D>())
+			{
+				collider->GetRigidbody();
+			}
 		}
 	}
 	void CollisionManager::OnComponentRemoved(Component& component) {
@@ -27,7 +44,7 @@ namespace TinyEngine {
 			{
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
-				if (a.IsStatic() && b.IsStatic())
+				if (!a.GetRigidbody() && !b.GetRigidbody())
 					continue;
 				Vector3 separation = CheckOverlap(a, b) ;
 				if (separation != Vector3::Zero)
@@ -43,18 +60,24 @@ namespace TinyEngine {
 		BoxCollider2D& b,
 		const Vector3& separation)
 	{
-		if (a.IsStatic() && b.IsStatic())
+		if (a.GetRigidbody() && b.GetRigidbody())
 			return;
+
+		Vector3 correctionVector = separation;
+		if (std::abs(separation.x) < std::abs(separation.y))
+			correctionVector.y = 0;
+		else
+			correctionVector.x = 0;
 
 		float aRatio;
 		float bRatio;
 
-		if (a.IsStatic())
+		if (!a.GetRigidbody())
 		{
 			aRatio = 0.0f;
 			bRatio = 1.0f;
 		}
-		else if (b.IsStatic())
+		else if (!b.GetRigidbody())
 		{
 			aRatio = 1.0f;
 			bRatio = 0.0f;
@@ -66,11 +89,11 @@ namespace TinyEngine {
 		}
 
 		a.SetPosition(
-			a.GetPosition() + separation * aRatio
+			a.GetPosition() + correctionVector * aRatio
 		);
 
 		b.SetPosition(
-			b.GetPosition() - separation * bRatio
+			b.GetPosition() - correctionVector * bRatio
 		);
 	}
 
@@ -106,11 +129,6 @@ namespace TinyEngine {
 			separation.y = b.max.y - a.min.y;
 		else
 			separation.y = b.min.y - a.max.y;
-
-		if (std::abs(separation.x) < std::abs(separation.y))
-			separation.y = 0;
-		else
-			separation.x = 0;
 
 		return separation;
 	}
