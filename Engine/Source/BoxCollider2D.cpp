@@ -28,22 +28,22 @@ namespace TinyEngine {
 		GetOwner().GetComponent<Transform>()->SetPosition(newPos-offset);
 	}
 
-	void BoxCollider2D::NotifyCollisionEnter(BoxCollider2D& other) {
+	void BoxCollider2D::NotifyCollisionEnter(const Collision& collision) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionEnter(other);
+			component->OnCollisionEnter(collision);
 		}
 	}
-	void BoxCollider2D::NotifyCollisionStay(BoxCollider2D& other) {
+	void BoxCollider2D::NotifyCollisionStay(const Collision& collision) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionStay(other);
+			component->OnCollisionEnter(collision);
 		}
 	}
-	void BoxCollider2D::NotifyCollisionExit(BoxCollider2D& other) {
+	void BoxCollider2D::NotifyCollisionExit(const Collision& collision) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionExit(other);
+			component->OnCollisionEnter(collision);
 		}
 	}
 	void BoxCollider2D::NotifyTriggerEnter(BoxCollider2D& other) {
@@ -55,13 +55,21 @@ namespace TinyEngine {
 	void BoxCollider2D::NotifyTriggerStay(BoxCollider2D& other) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnTriggerStay(other);
+			component->OnTriggerEnter(other);
 		}
 	}
 	void BoxCollider2D::NotifyTriggerExit(BoxCollider2D& other) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnTriggerExit(other);
+			component->OnTriggerEnter(other);
 		}
+	}
+
+	void BoxCollider2D::OnCollisionEnter(const Collision& collision)
+	{
+
+	}
+	void BoxCollider2D::OnCollisionStay(const Collision& collision) {
+
 	}
 }

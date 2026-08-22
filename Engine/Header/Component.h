@@ -2,6 +2,7 @@
 namespace TinyEngine {
 	class BoxCollider2D;
 	class GameObject;
+	class Collision;
 	class Component
 	{
 	public:
@@ -13,9 +14,9 @@ namespace TinyEngine {
 		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
-		virtual void OnCollisionEnter(BoxCollider2D& other){}
-		virtual void OnCollisionStay(BoxCollider2D& other){}
-		virtual void OnCollisionExit(BoxCollider2D& other){}
+		virtual void OnCollisionEnter(const Collision& collision){}
+		virtual void OnCollisionStay(const Collision& collision){}
+		virtual void OnCollisionExit( const Collision& collision){}
 		virtual void OnTriggerEnter(BoxCollider2D& other){}
 		virtual void OnTriggerStay(BoxCollider2D& other){}
 		virtual void OnTriggerExit(BoxCollider2D& other){}
