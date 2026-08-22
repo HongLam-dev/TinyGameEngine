@@ -1,7 +1,7 @@
 #pragma once
 namespace TinyEngine {
+	class BoxCollider2D;
 	class GameObject;
-
 	class Component
 	{
 	public:
@@ -13,10 +13,12 @@ namespace TinyEngine {
 		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
-		virtual void OnCollisionEnter(){}
-		virtual void OnCollisionStay(){}
-		virtual void OnCollisionExit(){}
-		virtual void OnTriggerEnter(){}
+		virtual void OnCollisionEnter(BoxCollider2D& other){}
+		virtual void OnCollisionStay(BoxCollider2D& other){}
+		virtual void OnCollisionExit(BoxCollider2D& other){}
+		virtual void OnTriggerEnter(BoxCollider2D& other){}
+		virtual void OnTriggerStay(BoxCollider2D& other){}
+		virtual void OnTriggerExit(BoxCollider2D& other){}
 		virtual ~Component() = default;
 	private:
 		GameObject& owner;

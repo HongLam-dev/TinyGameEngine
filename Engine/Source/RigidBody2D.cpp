@@ -9,7 +9,7 @@ namespace TinyEngine {
 
 	Rigidbody2D::Rigidbody2D(GameObject& owner) :Component(owner) {
 
-		std::vector<BoxCollider2D*> colliders = owner.GetComponents<BoxCollider2D>();
+		std::vector<BoxCollider2D*> colliders = owner.GetAllComponentsOfType<BoxCollider2D>();
 		for (auto* collider : colliders)
 		{
 			collider->SetRigidbody();
@@ -20,7 +20,7 @@ namespace TinyEngine {
 	void Rigidbody2D::Start()
 	{
 
-		std::vector<BoxCollider2D*> colliders = GetOwner().GetComponents<BoxCollider2D>();
+		std::vector<BoxCollider2D*> colliders = GetOwner().GetAllComponentsOfType<BoxCollider2D>();
 		for (auto* collider : colliders)
 		{
 			collider->SetRigidbody();

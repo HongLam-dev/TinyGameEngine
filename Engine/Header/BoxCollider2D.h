@@ -1,16 +1,22 @@
 #pragma once
 #include "Component.h"
-#include "GameObject.h"
 #include "Vector3.h"
 #include "Rigidbody2D.h"
 #include "Bounds.h"
 namespace TinyEngine {
+	class GameObject;
 	class BoxCollider2D: public Component
 	{
 	public:
 		BoxCollider2D(GameObject& owner);
 		void Start() override;
 		void SetRigidbody();
+		void NotifyCollisionEnter(BoxCollider2D& other);
+		void NotifyCollisionStay(BoxCollider2D& other);
+		void NotifyCollisionExit(BoxCollider2D& other);
+		void NotifyTriggerEnter(BoxCollider2D& other);
+		void NotifyTriggerStay(BoxCollider2D& other);
+		void NotifyTriggerExit(BoxCollider2D& other);
 		Rigidbody2D* GetRigidbody() { return rb; }
 		void SetSize(const Vector3& size)  { this->size=size; }
 		void SetPosition(const Vector3& newPos);

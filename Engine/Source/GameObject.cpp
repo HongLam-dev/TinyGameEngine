@@ -40,19 +40,6 @@ namespace TinyEngine
 	}
 
 
-	void GameObject::OnCollisionEnter() {
-
-	}
-	void GameObject::OnCollisionStay() {
-
-	}
-	void GameObject::OnCollisionExit() {
-
-	}
-	void GameObject::OnTriggerEnter() {
-
-	}
-
 	void GameObject::NotifyComponentAdded(Component& component)
 	{
 		for (IComponentObserver* observer : observers)
