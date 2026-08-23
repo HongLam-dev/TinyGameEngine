@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Transform.h"
 #include "RigidBody2D.h"
+#include "BoxCollider2D.h"
 using namespace TinyEngine;
 
 class PlayerController: public Component
@@ -13,6 +14,9 @@ public:
 	void Update() override;
 	void FixedUpdate() override;
 	void Start() override;
+	void OnCollisionEnter(const Collision& collision) override;
+	void OnCollisionStay(const Collision& collision) override;
+	void OnCollisionExit(const Collision& collision) override;
 private:
 	Transform* transform = nullptr;
 	Rigidbody2D* rb = nullptr;

@@ -3,6 +3,7 @@
 #include "vector3.h"
 #include "GameObject.h"
 #include "TinyGameEngine.h"
+#include "BoxCollider2D.h"
 #include <iostream>
 
 void PlayerController::Start() {
@@ -46,4 +47,14 @@ void PlayerController::FixedUpdate()
 	{
 		rb->SetVelocity(direction*moveSpeed);
 	}
+}
+
+void PlayerController::OnCollisionEnter(const Collision& collision) {
+	std::cout << "Enter";
+}
+void PlayerController::OnCollisionStay(const Collision& collision) {
+	std::cout << "Stay";
+}
+void PlayerController::OnCollisionExit(const Collision& collision) {
+	std::cout << "Exit";
 }

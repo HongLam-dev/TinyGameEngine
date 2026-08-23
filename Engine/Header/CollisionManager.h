@@ -32,8 +32,8 @@ namespace TinyEngine{
         };
 	public:
 		void CheckCollision();
-		Vector3 CheckOverlap(const BoxCollider2D& collider, const BoxCollider2D& other);
-		void ResolveCollision(BoxCollider2D& collider, BoxCollider2D& other, const Vector3& separation);
+		bool CheckOverlap(const BoxCollider2D& collider, const BoxCollider2D& other);
+		void CollisionCallback(BoxCollider2D& collider, BoxCollider2D& other, bool overlap);
 		const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
 		void OnComponentAdded(Component& component) override;
 		void OnComponentRemoved(Component& component) override;

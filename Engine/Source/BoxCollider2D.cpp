@@ -37,13 +37,13 @@ namespace TinyEngine {
 	void BoxCollider2D::NotifyCollisionStay(const Collision& collision) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionEnter(collision);
+			component->OnCollisionStay(collision);
 		}
 	}
 	void BoxCollider2D::NotifyCollisionExit(const Collision& collision) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionEnter(collision);
+			component->OnCollisionExit(collision);
 		}
 	}
 	void BoxCollider2D::NotifyTriggerEnter(BoxCollider2D& other) {
@@ -55,13 +55,13 @@ namespace TinyEngine {
 	void BoxCollider2D::NotifyTriggerStay(BoxCollider2D& other) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnTriggerEnter(other);
+			component->OnTriggerStay(other);
 		}
 	}
 	void BoxCollider2D::NotifyTriggerExit(BoxCollider2D& other) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnTriggerEnter(other);
+			component->OnTriggerExit(other);
 		}
 	}
 

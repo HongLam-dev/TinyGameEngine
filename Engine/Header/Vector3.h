@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 namespace TinyEngine{
 
     struct Vector3
@@ -13,6 +14,21 @@ namespace TinyEngine{
         static const Vector3 Down;
         static const Vector3 Right;
         static const Vector3 Left;
+
+        Vector3 Normalize() const
+        {
+            float length = Magnitude();
+
+            if (length == 0.0f)
+                return Vector3::Zero;
+
+            return *this / length;
+        }
+        float Magnitude() const
+        {
+            return std::sqrt(x * x + y * y + z * z);
+        }
+
 
         bool operator==(const Vector3&) const = default;
 
@@ -84,7 +100,6 @@ namespace TinyEngine{
             return *this;
         }
     };
-
 
     inline const Vector3 Vector3::Zero{ 0.0f, 0.0f, 0.0f };
     inline const Vector3 Vector3::One{ 1.0f, 1.0f, 1.0f };

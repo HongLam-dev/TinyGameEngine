@@ -48,7 +48,7 @@ namespace TinyEngine
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
 				PixelsToWorld(500),
-				PixelsToWorld(-500),
+				PixelsToWorld(-1000),
 				0
 				});
 		//end
