@@ -55,9 +55,10 @@ namespace TinyEngine {
 			}
 			else
 			{
-				separation.x = ba.max.x - bb.min.x;
+				separation.x = bb.min.x- ba.max.x ;
 				contactPoint.x =ba.min.x+((separation.x)/2);
 			}
+
 			if (direction.y > 0)
 			{
 				separation.y = bb.max.y - ba.min.y;
@@ -65,7 +66,7 @@ namespace TinyEngine {
 			}
 			else
 			{
-				separation.y = ba.max.y - bb.min.y;
+				separation.y = bb.min.y- ba.max.y;
 				contactPoint.y = ba.min.y + ((separation.y) / 2);
 			}
 
@@ -83,7 +84,12 @@ namespace TinyEngine {
 			Vector3 relativeVeloctiy = aVelocity - bVelocity;
 
 			Collision aCollision{b,contactPoint,normal,relativeVeloctiy};
-			Collision bCollision{ a,contactPoint,normal,relativeVeloctiy*(-1) };
+			Collision bCollision{ a,contactPoint,normal*(-1),relativeVeloctiy * (-1)};
+
+			if (overlap)
+			{
+				ResolveCollision(a, b, correctionVector);
+			}
 
 			if (previousPairs.contains({ &a, &b }))
 			{
@@ -108,7 +114,6 @@ namespace TinyEngine {
 					b.NotifyCollisionEnter(bCollision);
 				}
 			}
-			previousPairs = currentPairs;
 		}
 
 		else
@@ -136,42 +141,41 @@ namespace TinyEngine {
 					b.NotifyTriggerEnter(a);
 				}
 			}
-			previousPairs = currentPairs;
+	
 		}
-
-	/*	Vector3 correctionVector = separation;
-		if (std::abs(separation.x) < std::abs(separation.y))
-			correctionVector.y = 0;
-		else
-			correctionVector.x = 0;
-
-		float aRatio;
-		float bRatio;
-
-		if (!a.GetRigidbody())
-		{
-			aRatio = 0.0f;
-			bRatio = 1.0f;
-		}
-		else if (!b.GetRigidbody())
-		{
-			aRatio = 1.0f;
-			bRatio = 0.0f;
-		}
-		else
-		{
-			aRatio = 0.5f;
-			bRatio = 0.5f;
-		}
-
-		a.SetPosition(
-			a.GetPosition() + correctionVector * aRatio
-		);
-
-		b.SetPosition(
-			b.GetPosition() - correctionVector * bRatio
-		);*/
+		previousPairs = currentPairs;
 	}
+
+	void CollisionManager::ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector) {
+
+			float aRatio;
+			float bRatio;
+
+			if (!a.GetRigidbody())
+			{
+				aRatio = 0.0f;
+				bRatio = 1.0f;
+			}
+			else if (!b.GetRigidbody())
+			{
+				aRatio = 1.0f;
+				bRatio = 0.0f;
+			}
+			else
+			{
+				aRatio = 0.5f;
+				bRatio = 0.5f;
+			}
+
+			a.SetPosition(
+				a.GetPosition() + correctionVector * aRatio
+			);
+
+			b.SetPosition(
+				b.GetPosition() - correctionVector * bRatio
+			);
+	}
+
 
 	bool CollisionManager::CheckOverlap(
 		const BoxCollider2D& collider,

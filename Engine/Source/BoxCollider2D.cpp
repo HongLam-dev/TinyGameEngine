@@ -64,12 +64,4 @@ namespace TinyEngine {
 			component->OnTriggerExit(other);
 		}
 	}
-
-	void BoxCollider2D::OnCollisionEnter(const Collision& collision)
-	{
-
-	}
-	void BoxCollider2D::OnCollisionStay(const Collision& collision) {
-
-	}
 }

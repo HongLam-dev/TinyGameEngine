@@ -47,47 +47,22 @@ namespace TinyEngine
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
-				PixelsToWorld(500),
-				PixelsToWorld(-1000),
+				PixelsToWorld(250),
+				PixelsToWorld(400),
 				0
 				});
 		//end
 		
-		//player2
-		GameObject& playerRef2 = CreateGameObject();
+		//boxes
+		CreateASimpleBox({250,500,0},{500,64,0});
 
-		sf::Texture texture2;
+		CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
 
-		if (!texture2.loadFromFile("Assets/player.png"))
-			return;
-
-		sf::Sprite sprite2(texture2);
-
-		SpriteRenderer& renderer2 =
-			playerRef2.AddComponent<SpriteRenderer>();
-
-		BoxCollider2D& collider2 =
-			playerRef2.AddComponent<BoxCollider2D>();
-
-		collider2.SetSize({
-			PixelsToWorld(64),
-			PixelsToWorld(64),
-			PixelsToWorld(0)
-			});
-
-		renderer2.SetSprite(sprite2);
-
-		playerRef2.GetComponent<Transform>()
-			->SetPosition({
-				PixelsToWorld(500),
-				PixelsToWorld(500),
-				0
-				});
 		//end
 
 
 		StartObject();
-
+		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{
 			while (const std::optional event = window.PollEvent())
@@ -99,18 +74,18 @@ namespace TinyEngine
 
 			float elapsedTime = clock.restart().asSeconds();
 			deltaTime += elapsedTime;
-			fixedDeltatime += elapsedTime;
+			accumulatedTimeStep += elapsedTime;
 
 			if (deltaTime >= 1.0 / targetFPS)
 			{	
 				Update();
 			}
 
-			while (fixedDeltatime >= 1.0 / timeStep)
+			while (accumulatedTimeStep >= 1.0 / timeStep)
 			{
 				FixedUpdate();
 
-				fixedDeltatime -= 1.0f / timeStep;
+				accumulatedTimeStep -= 1.0f / timeStep;
 			}
 
 			if (deltaTime >= 1.0 / targetFPS)
@@ -171,5 +146,27 @@ namespace TinyEngine
 		gameObjects.push_back(std::move(go));
 
 		return *gameObjects.back();
+	}
+
+	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size) {
+		GameObject& playerRef = CreateGameObject();
+
+		BoxCollider2D& collider =
+			playerRef.AddComponent<BoxCollider2D>();
+
+		collider.SetSize({
+			PixelsToWorld(size.x),
+			PixelsToWorld(size.y),
+			PixelsToWorld(size.z)
+			});
+
+
+		playerRef.GetComponent<Transform>()
+			->SetPosition({
+				PixelsToWorld(position.x),
+				PixelsToWorld(position.y),
+				position.z
+				});
+		return playerRef;
 	}
 }

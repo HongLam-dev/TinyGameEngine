@@ -17,13 +17,13 @@ namespace TinyEngine
 		void Run(TinyEngine::Window& window);
 		void StartObject();
 		GameObject& CreateGameObject();
+		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size);
 		float GetDeltaTime() const { return deltaTime; };
-		float GetFixedDeltaTime() const { return fixedDeltatime; };
+		float GetFixedDeltaTime() const { return 1.0/timeStep; };
 	private:
 		int targetFPS = 60;
 		int timeStep = 60;
 		float deltaTime = 0;
-		float fixedDeltatime = 0;
 		CollisionManager collisionManager;
 		sf::Clock clock;
 		std::vector<std::unique_ptr<GameObject>> gameObjects;

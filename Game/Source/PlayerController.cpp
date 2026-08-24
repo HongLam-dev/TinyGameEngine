@@ -15,7 +15,7 @@ void PlayerController::Update()
 {
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
 	{
-		direction = Vector3::Down;
+		rb->AddForce({ 0,-20,0 });
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
 	{

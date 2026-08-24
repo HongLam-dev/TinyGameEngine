@@ -17,8 +17,6 @@ namespace TinyEngine {
 		void NotifyTriggerEnter(BoxCollider2D& other);
 		void NotifyTriggerStay(BoxCollider2D& other);
 		void NotifyTriggerExit(BoxCollider2D& other);
-		void OnCollisionEnter(const Collision& collision) override;
-		void OnCollisionStay(const Collision& collision) override;
 		Rigidbody2D* GetRigidbody() { return rb; }
 		void SetSize(const Vector3& size)  { this->size=size; }
 		void SetPosition(const Vector3& newPos);

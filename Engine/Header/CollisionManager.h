@@ -37,6 +37,7 @@ namespace TinyEngine{
 		const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
 		void OnComponentAdded(Component& component) override;
 		void OnComponentRemoved(Component& component) override;
+        void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b,const Vector3& correctionVector);
 	private:
 		std::vector<BoxCollider2D*> colliders;
         std::set<CollisionPair> previousPairs;
