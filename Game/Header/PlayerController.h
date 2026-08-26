@@ -20,6 +20,6 @@ public:
 private:
 	Transform* transform = nullptr;
 	Rigidbody2D* rb = nullptr;
-	float moveSpeed=10.0f;
+	float moveSpeed=5.0f;
 	Vector3 direction=Vector3::Zero;
 };

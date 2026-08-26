@@ -20,6 +20,40 @@ namespace TinyEngine {
 
 	}
 
+	bool CollisionManager::ContinousCollisonDetect(BoxCollider2D& a, BoxCollider2D& b)
+	{
+		Vector3 aVelocity;
+		Vector3 bVelocity;
+		Vector3 aPreviousPos;
+		Vector3 bPreviousPos;
+		Bounds aPreviousBounds;
+		Bounds bPreviousBounds;
+		if (a.GetRigidbody())
+		{
+			aVelocity=a.GetRigidbody()->GetVelocity();
+			aPreviousPos = a.GetRigidbody()->GetPreviousPosition();
+		}
+		else
+		{
+			aVelocity = Vector3::Zero;
+			aPreviousPos = a.GetPosition();
+		}
+
+		if (b.GetRigidbody())
+		{
+			bVelocity = b.GetRigidbody()->GetVelocity();
+			bPreviousPos = b.GetRigidbody()->GetPreviousPosition();
+		}
+		else
+		{
+			bVelocity = Vector3::Zero;
+			bPreviousPos = b.GetPosition();
+		}
+		aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
+		bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
+		
+		return false;
+	}
 
 	void CollisionManager::CheckCollision()
 	{

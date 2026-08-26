@@ -2,6 +2,7 @@
 #include "BoxCollider2D.h"
 #include "Bounds.h"
 #include "EngineSettings.h"
+#include "Vector3.h"
 #include <iostream>
 namespace TinyEngine
 {
@@ -32,6 +33,15 @@ namespace TinyEngine
 	void TinyEngine::Window::Draw(const sf::Drawable& object)
 	{
 		sfmlWindow.draw(object);
+	}
+
+	void Window::SetPosition(const Vector3& position)
+	{
+		
+		sfmlWindow.setPosition({
+			 static_cast<int>(position.x),
+	static_cast<int>(position.y)
+			});
 	}
 
 	void TinyEngine::Window::DrawCollider(const BoxCollider2D& collider)

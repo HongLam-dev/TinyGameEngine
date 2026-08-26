@@ -23,6 +23,7 @@ namespace TinyEngine {
 		Vector3 GetPosition() const;
 		Vector3 GetSize() const { return size; }
 		Bounds GetBounds() const;
+		Bounds GetBoundsAtPosition(Vector3 position) const;
 		void SetIsTrigger(bool isTrigger) {
 			this->isTrigger = isTrigger;
 		}

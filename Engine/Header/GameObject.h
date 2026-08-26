@@ -21,6 +21,7 @@ namespace TinyEngine {
 		void AddComponentObserver(IComponentObserver& observer);
 		void RemoveComponentObserver(IComponentObserver& observer);
 		void RemoveComponent(Component* component);
+		Transform& GetTransform() { return transform; }
 
 		template <typename T>
 			requires std::derived_from<T, Component>

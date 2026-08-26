@@ -15,17 +15,22 @@ namespace TinyEngine {
 	}
 
 	Vector3 BoxCollider2D::GetPosition() const {
-		return GetOwner().GetComponent<Transform>()->GetPosition()+offset;
+		return GetTransform().GetPosition()+offset;
 	}
 	Bounds BoxCollider2D::GetBounds() const {
+		return GetBoundsAtPosition(GetTransform().GetPosition());
+	}
+
+	Bounds BoxCollider2D::GetBoundsAtPosition(Vector3 oldPosition) const {
 		Bounds bounds;
-		bounds.max = Vector3(GetPosition().x+size.x/2, GetPosition().y + size.y/2,0);
-		bounds.min = Vector3(GetPosition().x - size.x/2, GetPosition().y - size.y/2, 0);
+		Vector3 oldColliderPosition = oldPosition + offset;
+		bounds.max = Vector3(oldColliderPosition.x + size.x / 2, oldColliderPosition.y + size.y / 2, 0);
+		bounds.min = Vector3(oldColliderPosition.x - size.x / 2, oldColliderPosition.y - size.y / 2, 0);
 		return bounds;
 	}
 
 	void BoxCollider2D::SetPosition(const Vector3& newPos) {
-		GetOwner().GetComponent<Transform>()->SetPosition(newPos-offset);
+		GetTransform().SetPosition(newPos-offset);
 	}
 
 	void BoxCollider2D::NotifyCollisionEnter(const Collision& collision) {

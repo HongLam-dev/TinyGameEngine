@@ -8,6 +8,7 @@
 #include <set>
 
 namespace TinyEngine{
+
 	class CollisionManager : public IComponentObserver
 	{
 	private:
@@ -33,6 +34,7 @@ namespace TinyEngine{
 	public:
 		void CheckCollision();
 		bool CheckOverlap(const BoxCollider2D& collider, const BoxCollider2D& other);
+        bool ContinousCollisonDetect(BoxCollider2D& a, BoxCollider2D& b);
 		void CollisionCallback(BoxCollider2D& collider, BoxCollider2D& other, bool overlap);
 		const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
 		void OnComponentAdded(Component& component) override;

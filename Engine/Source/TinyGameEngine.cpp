@@ -40,7 +40,7 @@ namespace TinyEngine
 		Rigidbody2D& rb =
 			playerRef.AddComponent<Rigidbody2D>();
 
-		rb.SetGravityScale(0.1f);
+//		rb.SetGravityScale(0.1f);
 
 		renderer.SetSprite(sprite);
 

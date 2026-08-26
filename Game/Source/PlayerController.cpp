@@ -36,7 +36,7 @@ void PlayerController::Update()
 
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
 	{
-		rb->SetGravityScale(1);
+		//rb->SetGravityScale(1);
 	}
 }
 

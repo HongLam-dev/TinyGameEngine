@@ -10,4 +10,8 @@ namespace TinyEngine
 	{
 		return owner;
 	}
+
+	Transform& Component::GetTransform() const {
+		return owner.GetTransform();
+	}
 }

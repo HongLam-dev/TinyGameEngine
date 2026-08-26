@@ -1,6 +1,7 @@
 #pragma once
 namespace TinyEngine {
 	class BoxCollider2D;
+	class Transform;
 	class GameObject;
 	class Collision;
 	class Component
@@ -11,6 +12,7 @@ namespace TinyEngine {
 		{}
 		const GameObject& GetOwner() const;
 		GameObject& GetOwner();
+		Transform& GetTransform() const;
 		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
