@@ -23,6 +23,7 @@ namespace TinyEngine {
 		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }
+		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
 		Vector3 GetVelocity(){ return velocity; }
 		float GetMass() { return mass; }
 		CollisionDetectionMode GetCollisionDetectMode() { return collisionDetectMode; }

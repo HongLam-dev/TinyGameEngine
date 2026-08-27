@@ -34,13 +34,13 @@ namespace TinyEngine
 			PixelsToWorld(64),
 			PixelsToWorld(0)
 			});
-
 		playerRef.AddComponent<PlayerController>();
 
 		Rigidbody2D& rb =
 			playerRef.AddComponent<Rigidbody2D>();
 
 //		rb.SetGravityScale(0.1f);
+		//rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 
 		renderer.SetSprite(sprite);
 

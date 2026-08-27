@@ -20,14 +20,14 @@ namespace TinyEngine {
 
 	}
 
-	bool CollisionManager::ContinousCollisonDetect(BoxCollider2D& a, BoxCollider2D& b)
+	bool CollisionManager::ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b)
 	{
+		bool overlapped = false;
 		Vector3 aVelocity;
 		Vector3 bVelocity;
 		Vector3 aPreviousPos;
 		Vector3 bPreviousPos;
-		Bounds aPreviousBounds;
-		Bounds bPreviousBounds;
+
 		if (a.GetRigidbody())
 		{
 			aVelocity=a.GetRigidbody()->GetVelocity();
@@ -49,10 +49,85 @@ namespace TinyEngine {
 			bVelocity = Vector3::Zero;
 			bPreviousPos = b.GetPosition();
 		}
-		aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
-		bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
-		
-		return false;
+		Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
+		Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
+		Vector3 relativeVelocity = aVelocity - bVelocity;
+
+		float tEnter = 0;
+		float tExit = 1.0f / 60;
+
+		if (relativeVelocity.x != 0 && relativeVelocity.y != 0)
+		{
+			float tEnterX = (bPreviousBounds.min.x - aPreviousBounds.max.x) / relativeVelocity.x;
+			float tExitX = (bPreviousBounds.max.x - aPreviousBounds.min.x) / relativeVelocity.x;
+			float tEnterY = (bPreviousBounds.min.y - aPreviousBounds.max.y) / relativeVelocity.y;
+			float tExitY = (bPreviousBounds.max.y - aPreviousBounds.min.y) / relativeVelocity.y;
+
+			if (tEnterX > 0 || tEnterY > 0)
+			{
+				if (tEnterX > tEnterY)
+					tEnter = tEnterX;
+				else
+					tEnter = tEnterY;
+			}
+
+			if (tExitX < tExit || tExitY < tExit)
+			{
+				if (tExitX < tExitY)
+					tExit = tExitX;
+				else
+					tExit = tExitY;
+			}
+		}
+		else
+		{
+			if (relativeVelocity.x == 0 && CheckOverlapX(a.GetBounds(), a.GetBounds()))
+			{
+				float tEnterY = (bPreviousBounds.min.y - aPreviousBounds.max.y) / relativeVelocity.y;
+				float tExitY = (bPreviousBounds.max.y - aPreviousBounds.min.y) / relativeVelocity.y;
+				if (tEnterY > 0)
+				{
+					tEnter = tEnterY;
+				}
+
+				if (tExitY < tExit)
+				{
+					tExit = tExitY;
+				}
+			
+			}
+			else if (relativeVelocity.y == 0 && CheckOverlapY(a.GetBounds(), a.GetBounds()))
+			{
+				float tEnterX = (bPreviousBounds.min.x - aPreviousBounds.max.x) / relativeVelocity.x;
+				float tExitX = (bPreviousBounds.max.x - aPreviousBounds.min.x) / relativeVelocity.x;
+				if (tEnterX > 0)
+				{
+					tEnter = tEnterX;
+				}
+
+				if (tExitX < tExit)
+				{
+					tExit = tExitX;
+				}
+			}
+
+		}
+
+		if (tEnter < tExit)
+		{
+			overlapped = true;
+			if (!a.GetIsTrigger() && !b.GetIsTrigger())
+			{
+				Vector3 aNewPos = aPreviousPos + aVelocity * tEnter;
+				Vector3 bNewPos = bPreviousPos + bVelocity * tEnter;
+
+				a.SetPosition(aNewPos);
+				b.SetPosition(bNewPos);
+				DiscreteCollisionDetect(a,b);
+			}
+		}
+
+		return overlapped;
 	}
 
 	void CollisionManager::CheckCollision()
@@ -65,20 +140,33 @@ namespace TinyEngine {
 				BoxCollider2D& b = *colliders[j];
 				if (!a.GetRigidbody() && !b.GetRigidbody())
 					continue;
-				CollisionCallback(a,b, CheckOverlap(a, b));
+
+				Vector3 aVelocity = a.GetRigidbody()? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
+				Vector3 bVelocity = b.GetRigidbody() ? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
+
+				Vector3 relativeVeloctiy = aVelocity - bVelocity;
+				CollisionDetectionMode aMode = a.GetRigidbody() ? a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete ;
+				CollisionDetectionMode bMode = b.GetRigidbody() ? b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+				CollisionDetectionMode mode = aMode== CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete ?
+					CollisionDetectionMode::Discrete : CollisionDetectionMode::Continuous;
+
+				if(mode== CollisionDetectionMode::Discrete || relativeVeloctiy==Vector3::Zero)
+					DiscreteCollisionDetect(a,b);
+		 		else
+					ContinuousCollisionDetect(a, b);
 			}
 		}
 	}
 
-	void CollisionManager::CollisionCallback(
+	void CollisionManager::DiscreteCollisionDetect(
 		BoxCollider2D& a,
-		BoxCollider2D& b,
-		bool overlap)
-	{		
+		BoxCollider2D& b)
+	{	
+		Bounds ba = a.GetBounds();
+		Bounds bb = b.GetBounds();
+		bool overlap = CheckOverlapY(ba, bb) && CheckOverlapX(ba, bb);
 		if (!a.GetIsTrigger() && !b.GetIsTrigger())
 		{
-			Bounds ba = a.GetBounds();
-			Bounds bb = b.GetBounds();
 			Vector3 direction = a.GetPosition() - b.GetPosition();
 			Vector3 contactPoint;
 			Vector3 separation;
@@ -211,21 +299,16 @@ namespace TinyEngine {
 	}
 
 
-	bool CollisionManager::CheckOverlap(
-		const BoxCollider2D& collider,
-		const BoxCollider2D& other)
-	{
-		Bounds a = collider.GetBounds();
-		Bounds b = other.GetBounds();
-
+	bool CollisionManager::CheckOverlapX(const Bounds& a, const Bounds& b) {
 		bool overlapX =
 			a.min.x < b.max.x &&
 			a.max.x > b.min.x;
-
+		return overlapX;
+	}
+	bool CollisionManager::CheckOverlapY(const Bounds& a, const Bounds& b) {
 		bool overlapY =
 			a.min.y < b.max.y &&
 			a.max.y > b.min.y;
-
-		return overlapX && overlapY;
+		return overlapY;
 	}
 }

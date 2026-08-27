@@ -43,7 +43,7 @@ void PlayerController::Update()
 
 void PlayerController::FixedUpdate()
 {
-	if (direction != Vector3::Zero && rb!=nullptr)
+	if (rb!=nullptr)
 	{
 		rb->SetVelocity(direction*moveSpeed);
 	}

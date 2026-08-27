@@ -31,12 +31,11 @@ namespace TinyEngine {
 		velocity += acceleration;
 		accumulatedForce = Vector3::Zero;
 
-		velocity *= GetOwner().GetEngineContext().GetFixedDeltaTime();
 		ApplyVelocity();
 	}
 
 	void Rigidbody2D::ApplyVelocity() {
-		Vector3 newPosition = GetOwner().GetComponent<Transform>()->GetPosition() + velocity;
+		Vector3 newPosition = GetOwner().GetComponent<Transform>()->GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
 		previousPostion = newPosition;
 		transform->SetPosition(newPosition);
 	}

@@ -5,12 +5,18 @@
 #include "Vector3.h"
 #include "IComponentObserver.h"
 #include <vector>
+#include "Bounds.h"
 #include <set>
 
 namespace TinyEngine{
 
 	class CollisionManager : public IComponentObserver
 	{
+    public:
+        void CheckCollision();
+        void OnComponentAdded(Component& component) override;
+        void OnComponentRemoved(Component& component) override;
+        const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
 	private:
         struct CollisionPair
         {
@@ -31,16 +37,12 @@ namespace TinyEngine{
             }
             auto operator<=>(const CollisionPair&) const = default;
         };
-	public:
-		void CheckCollision();
-		bool CheckOverlap(const BoxCollider2D& collider, const BoxCollider2D& other);
-        bool ContinousCollisonDetect(BoxCollider2D& a, BoxCollider2D& b);
-		void CollisionCallback(BoxCollider2D& collider, BoxCollider2D& other, bool overlap);
-		const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
-		void OnComponentAdded(Component& component) override;
-		void OnComponentRemoved(Component& component) override;
-        void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b,const Vector3& correctionVector);
-	private:
+        bool CheckOverlapX(const Bounds& a, const Bounds& b);
+        bool CheckOverlapY(const Bounds& a, const Bounds& b);
+        bool ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b);
+		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
+        void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);
+
 		std::vector<BoxCollider2D*> colliders;
         std::set<CollisionPair> previousPairs;
         std::set<CollisionPair> currentPairs;   
