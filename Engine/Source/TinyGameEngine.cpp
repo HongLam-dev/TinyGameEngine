@@ -39,8 +39,8 @@ namespace TinyEngine
 		Rigidbody2D& rb =
 			playerRef.AddComponent<Rigidbody2D>();
 
-//		rb.SetGravityScale(0.1f);
-		//rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
+		rb.SetGravityScale(0.0f);
+		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 
 		renderer.SetSprite(sprite);
 
@@ -54,9 +54,8 @@ namespace TinyEngine
 		//end
 		
 		//boxes
-		CreateASimpleBox({250,500,0},{500,64,0});
-
-		CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
+		CreateASimpleBox({400,200,0},{500,64,0});
+		//CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
 
 		//end
 
@@ -110,7 +109,7 @@ namespace TinyEngine
 		{
 			gameObject->FixedUpdate();
 		}
-		collisionManager.CheckCollision();
+		collisionManager.CheckCollision(1.0f/timeStep);
 	}
 
 	void TinyGameEngine::Update()

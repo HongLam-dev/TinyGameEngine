@@ -35,8 +35,8 @@ namespace TinyEngine {
 	}
 
 	void Rigidbody2D::ApplyVelocity() {
-		Vector3 newPosition = GetOwner().GetComponent<Transform>()->GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
-		previousPostion = newPosition;
+		Vector3 newPosition = GetTransform().GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
+		previousPostion = GetTransform().GetPosition();
 		transform->SetPosition(newPosition);
 	}
 

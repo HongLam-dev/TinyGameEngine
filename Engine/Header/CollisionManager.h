@@ -13,7 +13,7 @@ namespace TinyEngine{
 	class CollisionManager : public IComponentObserver
 	{
     public:
-        void CheckCollision();
+        void CheckCollision(float fixedDeltaTime);
         void OnComponentAdded(Component& component) override;
         void OnComponentRemoved(Component& component) override;
         const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
@@ -39,8 +39,8 @@ namespace TinyEngine{
         };
         bool CheckOverlapX(const Bounds& a, const Bounds& b);
         bool CheckOverlapY(const Bounds& a, const Bounds& b);
-        bool ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b);
-		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
+        bool ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);
+		void CollisionCallback(BoxCollider2D& collider, BoxCollider2D& other);
         void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);
 
 		std::vector<BoxCollider2D*> colliders;

@@ -3,7 +3,7 @@ namespace TinyEngine {
 	class BoxCollider2D;
 	class Transform;
 	class GameObject;
-	class Collision;
+	struct Collision;
 	class Component
 	{
 	public:

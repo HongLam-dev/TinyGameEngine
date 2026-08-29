@@ -15,7 +15,8 @@ void PlayerController::Update()
 {
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
 	{
-		rb->AddForce({ 0,-20,0 });
+		//direction = Vector3::Down;
+		rb->AddForce({ 0,-200,0 });
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
 	{
@@ -36,7 +37,7 @@ void PlayerController::Update()
 
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
 	{
-		//rb->SetGravityScale(1);
+		rb->SetGravityScale(1);
 	}
 }
 
