@@ -18,7 +18,7 @@ namespace TinyEngine {
 		virtual void FixedUpdate() {};
 		virtual void OnCollisionEnter(const Collision& collision){}
 		virtual void OnCollisionStay(const Collision& collision){}
-		virtual void OnCollisionExit( const Collision& collision){}
+		virtual void OnCollisionExit(BoxCollider2D& other){}
 		virtual void OnTriggerEnter(BoxCollider2D& other){}
 		virtual void OnTriggerStay(BoxCollider2D& other){}
 		virtual void OnTriggerExit(BoxCollider2D& other){}

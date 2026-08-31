@@ -16,7 +16,7 @@ public:
 	void Start() override;
 	void OnCollisionEnter(const Collision& collision) override;
 	void OnCollisionStay(const Collision& collision) override;
-	void OnCollisionExit(const Collision& collision) override;
+	void OnCollisionExit(BoxCollider2D& other) override;
 private:
 	Transform* transform = nullptr;
 	Rigidbody2D* rb = nullptr;

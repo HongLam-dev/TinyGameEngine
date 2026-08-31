@@ -14,7 +14,7 @@ namespace TinyEngine {
 
 	void Rigidbody2D::Start()
 	{
-		transform = GetOwner().GetComponent<Transform>();
+		transform = &GetTransform();
 		previousPostion = transform->GetPosition();
 		std::vector<BoxCollider2D*> colliders = GetOwner().GetAllComponentsOfType<BoxCollider2D>();
 		for (auto* collider : colliders)
@@ -35,13 +35,18 @@ namespace TinyEngine {
 	}
 
 	void Rigidbody2D::ApplyVelocity() {
-		Vector3 newPosition = GetTransform().GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
-		previousPostion = GetTransform().GetPosition();
+		Vector3 newPosition = transform->GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
+		previousPostion = transform->GetPosition();
 		transform->SetPosition(newPosition);
 	}
 
 	void Rigidbody2D::AddImpulse(Vector3 force) {
 
+	}
+
+	void Rigidbody2D::SetPosition(Vector3 pos) {
+		previousPostion = pos;
+		transform->SetPosition(pos);
 	}
 
 	void Rigidbody2D::AddForce(Vector3 force) {

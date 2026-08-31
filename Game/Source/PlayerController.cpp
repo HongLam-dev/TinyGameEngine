@@ -16,7 +16,7 @@ void PlayerController::Update()
 	if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
 	{
 		//direction = Vector3::Down;
-		rb->AddForce({ 0,-200,0 });
+		rb->AddForce({ 0,-20,0 });
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
 	{
@@ -56,6 +56,6 @@ void PlayerController::OnCollisionEnter(const Collision& collision) {
 void PlayerController::OnCollisionStay(const Collision& collision) {
 	std::cout << "Stay";
 }
-void PlayerController::OnCollisionExit(const Collision& collision) {
+void PlayerController::OnCollisionExit(BoxCollider2D& other) {
 	std::cout << "Exit";
 }

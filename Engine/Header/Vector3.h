@@ -99,6 +99,11 @@ namespace TinyEngine{
             z *= factor;
             return *this;
         }
+
+        float Dot(const Vector3& other)
+        {
+            return x * other.x + y * other.y + z * other.z;
+        }
     };
 
     inline const Vector3 Vector3::Zero{ 0.0f, 0.0f, 0.0f };

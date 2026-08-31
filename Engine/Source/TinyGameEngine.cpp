@@ -40,7 +40,7 @@ namespace TinyEngine
 			playerRef.AddComponent<Rigidbody2D>();
 
 		rb.SetGravityScale(0.0f);
-		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
+		//rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 
 		renderer.SetSprite(sprite);
 

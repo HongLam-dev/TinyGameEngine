@@ -13,7 +13,7 @@ namespace TinyEngine {
 		void SetRigidbody();
 		void NotifyCollisionEnter(const Collision& collision);
 		void NotifyCollisionStay(const Collision& collision);
-		void NotifyCollisionExit(const Collision& collision);
+		void NotifyCollisionExit(BoxCollider2D& other);
 		void NotifyTriggerEnter(BoxCollider2D& other);
 		void NotifyTriggerStay(BoxCollider2D& other);
 		void NotifyTriggerExit(BoxCollider2D& other);

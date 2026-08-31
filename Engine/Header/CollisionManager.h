@@ -37,11 +37,26 @@ namespace TinyEngine{
             }
             auto operator<=>(const CollisionPair&) const = default;
         };
+
+        struct ContinuousCollision
+        {
+            float enterTime;
+            float exitTime;
+            BoxCollider2D& a;
+            BoxCollider2D& b;
+            ContinuousCollision(float enter,float exit ,BoxCollider2D& a, BoxCollider2D& b):enterTime(enter), exitTime(exit), a(a), b(b)
+            {}
+        };
+
+        const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b, const Vector3& aPos,const Vector3& bPos);
         bool CheckOverlapX(const Bounds& a, const Bounds& b);
         bool CheckOverlapY(const Bounds& a, const Bounds& b);
-        bool ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);
-		void CollisionCallback(BoxCollider2D& collider, BoxCollider2D& other);
+        ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);
+		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
         void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);
+        void CollisionCallback(BoxCollider2D& a, BoxCollider2D& b,const Collision& aCollision, const Collision& bCollision);
+        void TriggerCallback(BoxCollider2D& a, BoxCollider2D& b);
+        void ExitCallback(BoxCollider2D& a, BoxCollider2D& b);
 
 		std::vector<BoxCollider2D*> colliders;
         std::set<CollisionPair> previousPairs;

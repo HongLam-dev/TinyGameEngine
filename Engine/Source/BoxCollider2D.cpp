@@ -45,10 +45,10 @@ namespace TinyEngine {
 			component->OnCollisionStay(collision);
 		}
 	}
-	void BoxCollider2D::NotifyCollisionExit(const Collision& collision) {
+	void BoxCollider2D::NotifyCollisionExit(BoxCollider2D& other) {
 		for (auto* component : GetOwner().GetAllComponents())
 		{
-			component->OnCollisionExit(collision);
+			component->OnCollisionExit(other);
 		}
 	}
 	void BoxCollider2D::NotifyTriggerEnter(BoxCollider2D& other) {
