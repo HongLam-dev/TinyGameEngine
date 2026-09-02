@@ -30,15 +30,23 @@ void PlayerController::Update()
 	{
 		direction = Vector3::Left;
 	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::B))
+	{
+		rb->AddForce({ 0,200,0 });
+	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
+	{
+		rb->SetGravityScale(1);
+	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::R))
+	{
+		rb->SetGravityScale(0);
+	}
 	else
 	{
 		direction = Vector3::Zero;
 	}
 
-	if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
-	{
-		rb->SetGravityScale(1);
-	}
 }
 
 
@@ -51,11 +59,11 @@ void PlayerController::FixedUpdate()
 }
 
 void PlayerController::OnCollisionEnter(const Collision& collision) {
-	std::cout << "Enter";
+	//std::cout << "Enter \n";
 }
 void PlayerController::OnCollisionStay(const Collision& collision) {
-	std::cout << "Stay";
+//	std::cout << "Stay \n";
 }
 void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-	std::cout << "Exit";
+//	std::cout << "Exit \n";
 }

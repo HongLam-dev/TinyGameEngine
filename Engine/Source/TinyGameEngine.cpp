@@ -40,21 +40,23 @@ namespace TinyEngine
 			playerRef.AddComponent<Rigidbody2D>();
 
 		rb.SetGravityScale(0.0f);
-		//rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
+		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 
 		renderer.SetSprite(sprite);
 
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
-				PixelsToWorld(250),
-				PixelsToWorld(400),
+				PixelsToWorld(200),
+				PixelsToWorld(100),
 				0
 				});
 		//end
 		
 		//boxes
-		CreateASimpleBox({400,200,0},{500,64,0});
+		CreateASimpleBox({200,200,0},{500,64,0});
+		CreateASimpleBox({ 200,300,0 }, { 500,64,0 });
+		CreateASimpleBox({ 200,400,0 }, { 500,64,0 });
 		//CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
 
 		//end

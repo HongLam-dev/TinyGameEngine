@@ -42,13 +42,13 @@ namespace TinyEngine{
         {
             float enterTime;
             float exitTime;
-            BoxCollider2D& a;
-            BoxCollider2D& b;
-            ContinuousCollision(float enter,float exit ,BoxCollider2D& a, BoxCollider2D& b):enterTime(enter), exitTime(exit), a(a), b(b)
+            BoxCollider2D* a;
+            BoxCollider2D* b;
+            ContinuousCollision(float enter,float exit ,BoxCollider2D& a, BoxCollider2D& b):enterTime(enter), exitTime(exit), a(&a), b(&b)
             {}
         };
 
-        const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b, const Vector3& aPos,const Vector3& bPos);
+        const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b);
         bool CheckOverlapX(const Bounds& a, const Bounds& b);
         bool CheckOverlapY(const Bounds& a, const Bounds& b);
         ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);

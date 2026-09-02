@@ -24,6 +24,7 @@ namespace TinyEngine{
 
             return *this / length;
         }
+
         float Magnitude() const
         {
             return std::sqrt(x * x + y * y + z * z);
@@ -84,13 +85,6 @@ namespace TinyEngine{
             return *this;
         }
 
-        Vector3& operator*=(const Vector3& other)
-        {
-            x *= other.x;
-            y *= other.y;
-            z *= other.z;
-            return *this;
-        }
 
         Vector3& operator*=(const float& factor)
         {

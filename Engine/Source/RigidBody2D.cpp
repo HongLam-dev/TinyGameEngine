@@ -45,7 +45,7 @@ namespace TinyEngine {
 	}
 
 	void Rigidbody2D::SetPosition(Vector3 pos) {
-		previousPostion = pos;
+		previousPostion = transform->GetPosition();
 		transform->SetPosition(pos);
 	}
 
