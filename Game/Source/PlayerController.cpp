@@ -59,11 +59,21 @@ void PlayerController::FixedUpdate()
 }
 
 void PlayerController::OnCollisionEnter(const Collision& collision) {
-	//std::cout << "Enter \n";
+	std::cout << "Enter \n";
 }
 void PlayerController::OnCollisionStay(const Collision& collision) {
-//	std::cout << "Stay \n";
+	std::cout << "Stay \n";
 }
 void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-//	std::cout << "Exit \n";
+	std::cout << "Exit \n";
+}
+
+void PlayerController::OnTriggerEnter(BoxCollider2D& other) {
+	std::cout << " trigger Enter \n";
+}
+void PlayerController::OnTriggerStay(BoxCollider2D& other) {
+	std::cout << " trigger Stay \n";
+}
+void PlayerController::OnTriggerExit(BoxCollider2D& other) {
+	std::cout << " trigger  Exit \n";
 }

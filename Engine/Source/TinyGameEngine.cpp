@@ -41,7 +41,7 @@ namespace TinyEngine
 
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-
+	//	collider.SetIsTrigger(true);
 		renderer.SetSprite(sprite);
 
 
