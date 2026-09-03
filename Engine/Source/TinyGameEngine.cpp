@@ -9,6 +9,7 @@
 #include "BoxCollider2D.h"
 #include "RigidBody2D.h"
 #include "EngineSettings.h"
+#include "PingPong.h"
 namespace TinyEngine
 {
 
@@ -38,29 +39,25 @@ namespace TinyEngine
 
 		Rigidbody2D& rb =
 			playerRef.AddComponent<Rigidbody2D>();
-
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-		collider.SetIsTrigger(true);
+	//	collider.SetIsTrigger(true);
 		renderer.SetSprite(sprite);
-
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
-				PixelsToWorld(200),
+				PixelsToWorld(400),
 				PixelsToWorld(100),
 				0
 				});
 		//end
 		
 		//boxes
-		CreateASimpleBox({200,200,0},{500,64,0});
-		//CreateASimpleBox({ 200,300,0 }, { 500,64,0 });
-		//CreateASimpleBox({ 200,400,0 }, { 500,64,0 });
-		//CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
-
+		CreateASimpleBox({400,400,0},{500,64,0});
+		//CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
+		//CreateASimpleBox({ 400,400,0 }, { 500,64,0 });
+		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 });
 		//end
-
 
 		StartObject();
 		float accumulatedTimeStep = 0;
@@ -150,10 +147,10 @@ namespace TinyEngine
 	}
 
 	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size) {
-		GameObject& playerRef = CreateGameObject();
+		GameObject& objectRef = CreateGameObject();
 
 		BoxCollider2D& collider =
-			playerRef.AddComponent<BoxCollider2D>();
+			objectRef.AddComponent<BoxCollider2D>();
 
 		collider.SetSize({
 			PixelsToWorld(size.x),
@@ -161,12 +158,33 @@ namespace TinyEngine
 			PixelsToWorld(size.z)
 			});
 
-
-		playerRef.GetComponent<Transform>()
+		objectRef.GetComponent<Transform>()
 			->SetPosition({
 				PixelsToWorld(position.x),
 				PixelsToWorld(position.y),
 				position.z
+				});
+		return objectRef;
+	}
+	GameObject& TinyGameEngine::CreateAPingPongBox(const Vector3& position, const Vector3& size) {
+		GameObject& playerRef = CreateGameObject();
+
+		BoxCollider2D& collider =
+			playerRef.AddComponent<BoxCollider2D>();
+
+		collider.SetSize({
+			PixelsToWorld(64),
+			PixelsToWorld(64),
+			PixelsToWorld(0)
+			});
+		PingPongAroundCenter& pingpong = playerRef.AddComponent<PingPongAroundCenter>();
+		pingpong.Initialize({ 1,0,0 }, 3);
+
+		playerRef.GetComponent<Transform>()
+			->SetPosition({
+				PixelsToWorld(400),
+				PixelsToWorld(100),
+				0
 				});
 		return playerRef;
 	}

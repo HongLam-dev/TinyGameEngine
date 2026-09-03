@@ -42,9 +42,11 @@ namespace TinyEngine{
         {
             float enterTime;
             float exitTime;
+            bool hasCollision;;
             BoxCollider2D* a;
             BoxCollider2D* b;
-            ContinuousCollision(float enter,float exit ,BoxCollider2D& a, BoxCollider2D& b):enterTime(enter), exitTime(exit), a(&a), b(&b)
+            ContinuousCollision(float enter,float exit ,bool hasCollision,BoxCollider2D& a, BoxCollider2D& b)
+                :enterTime(enter), exitTime(exit),hasCollision(hasCollision), a(&a), b(&b)
             {}
         };
 

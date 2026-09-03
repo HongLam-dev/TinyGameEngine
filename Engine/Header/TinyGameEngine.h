@@ -18,6 +18,7 @@ namespace TinyEngine
 		void StartObject();
 		GameObject& CreateGameObject();
 		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size);
+		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size);
 		float GetDeltaTime() const { return deltaTime; };
 		float GetFixedDeltaTime() const { return 1.0f/timeStep; };
 	private:

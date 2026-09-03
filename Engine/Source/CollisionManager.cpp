@@ -89,12 +89,15 @@ namespace TinyEngine {
 			else {
 				tEnter= fixedDeltaTime + 1;
 			}
-
 			tExit = tExitX < tExitY ? tExitX : tExitY;
 		}
+		bool hasCollision = false;
+		if (tExit > 0 && tEnter < fixedDeltaTime && tEnter >= 0 && tEnter < tExit)
+			hasCollision = true;
 
 
-		return ContinuousCollision(tEnter,tExit,a,b);
+
+		return ContinuousCollision(tEnter,tExit,hasCollision,a,b);
 	}
 
 	void CollisionManager::CheckCollision(float fixedDeltaTime)
@@ -118,7 +121,8 @@ namespace TinyEngine {
 		{
 			float t = 0;
 			int trytime = 0;
-			while (t <= fixedDeltaTime&&!collisionResults.empty())
+			bool allResolved = false;
+			while (t <= fixedDeltaTime&&!collisionResults.empty()&&!allResolved)
 			{
 				if (trytime > 100)
 				{
@@ -135,7 +139,7 @@ namespace TinyEngine {
 				for (size_t i=0 ; i<collisionResults.size();i++ )
 				{
 					ContinuousCollision& result = collisionResults[i];
-					if (result.enterTime < t || result.enterTime>fixedDeltaTime|| result.exitTime <= 0)
+					if (!result.hasCollision)
 					{
 						if(result.enterTime > fixedDeltaTime)
 							t = result.enterTime;
@@ -182,7 +186,7 @@ namespace TinyEngine {
 						if (a.GetRigidbody())
 						{
 							a.SetPosition(a.GetPosition() + (aVelocity * (fixedDeltaTime - t)));
-						//	std::cout << "current velocity: y:" << aVelocity.y << " x:" << aVelocity.x << '\n';
+							//	std::cout << "current velocity: y:" << aVelocity.y << " x:" << aVelocity.x << '\n';
 							a.GetRigidbody()->SetVelocity(aVelocity);
 						}
 						if (b.GetRigidbody())
@@ -222,7 +226,8 @@ namespace TinyEngine {
 					else {
 						TriggerCallback(a,b);
 					}
-					
+					if (i == collisionResults.size() - 1)
+						allResolved = true;
 				}
 			}
 
