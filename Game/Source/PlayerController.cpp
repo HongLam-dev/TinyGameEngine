@@ -34,11 +34,15 @@ void PlayerController::Update()
 	{
 		rb->AddForce({ 0,200,0 });
 	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::V))
+	{
+		rb->AddForce({ 0,-200,0 });
+	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
 	{
 		rb->SetGravityScale(1);
 	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::R))
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
 	{
 		rb->SetGravityScale(0);
 	}

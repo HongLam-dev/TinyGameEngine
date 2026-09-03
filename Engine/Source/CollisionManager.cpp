@@ -82,8 +82,14 @@ namespace TinyEngine {
 				tExitY = tEnterY;
 				tEnterY = temp;
 			}
+			if (tEnterX >= 0 && tEnterY >= 0)
+			{
+				tEnter = tEnterX > tEnterY ? tEnterX : tEnterY;
+			}
+			else {
+				tEnter= fixedDeltaTime + 1;
+			}
 
-			tEnter = tEnterX > tEnterY ? tEnterX : tEnterY;
 			tExit = tExitX < tExitY ? tExitX : tExitY;
 		}
 
@@ -112,9 +118,15 @@ namespace TinyEngine {
 		{
 			float t = 0;
 			int trytime = 0;
-			while (t <= fixedDeltaTime&&!collisionResults.empty()&&trytime<100)
+			while (t <= fixedDeltaTime&&!collisionResults.empty())
 			{
+				if (trytime > 100)
+				{
+					std::cout << "try time exceeded \n";
+					break;
+				}
 				trytime++;
+
 				std::sort(collisionResults.begin(), collisionResults.end(),
 					[](const ContinuousCollision& a, const ContinuousCollision& b)
 					{
@@ -129,7 +141,7 @@ namespace TinyEngine {
 							t = result.enterTime;
 						continue;
 					}
-				//	std::cout << result.enterTime << '\n';
+			//		std::cout << result.enterTime << '\n';
 					t = result.enterTime;
 					BoxCollider2D& a = *result.a;
 					BoxCollider2D& b = *result.b;
@@ -213,9 +225,25 @@ namespace TinyEngine {
 					
 				}
 			}
+
+			for (size_t i = 0; i < collisionResults.size(); i++)
+			{
+				ContinuousCollision& result = collisionResults[i];
+				if (result.exitTime<0 || result.exitTime>fixedDeltaTime)
+					continue;
+
+				BoxCollider2D& a = *result.a;
+				BoxCollider2D& b = *result.b;
+
+				if (result.a->GetIsTrigger() || result.b->GetIsTrigger())
+				{
+					ExitCallback(a, b);
+				}
+			}
+
 		}
 	
-	/*	for (size_t i = 0; i < colliders.size(); i++)
+		for (size_t i = 0; i < colliders.size(); i++)
 		{
 			for (size_t j = i + 1; j < colliders.size(); j++)
 			{
@@ -223,7 +251,7 @@ namespace TinyEngine {
 				BoxCollider2D& b = *colliders[j];
 				DiscreteCollisionDetect(a, b);
 			}
-		}*/
+		}
 		
 	}
 

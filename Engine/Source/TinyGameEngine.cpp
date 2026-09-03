@@ -41,7 +41,7 @@ namespace TinyEngine
 
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-	//	collider.SetIsTrigger(true);
+		collider.SetIsTrigger(true);
 		renderer.SetSprite(sprite);
 
 
@@ -55,8 +55,8 @@ namespace TinyEngine
 		
 		//boxes
 		CreateASimpleBox({200,200,0},{500,64,0});
-		CreateASimpleBox({ 200,300,0 }, { 500,64,0 });
-		CreateASimpleBox({ 200,400,0 }, { 500,64,0 });
+		//CreateASimpleBox({ 200,300,0 }, { 500,64,0 });
+		//CreateASimpleBox({ 200,400,0 }, { 500,64,0 });
 		//CreateASimpleBox({ 600,500,0 }, { 64,64,0 });
 
 		//end
