@@ -12,7 +12,7 @@ namespace TinyEngine {
     public:
 	    void Render(Window& window, const Transform& transform);
         SpriteRenderer(GameObject& owner):Component(owner) {}
-        void SetTexture(sf::Texture& texture)
+        void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)
             {

@@ -10,6 +10,8 @@
 #include "RigidBody2D.h"
 #include "EngineSettings.h"
 #include "PingPong.h"
+#include "Animation.h"
+#include "Animator.h"
 namespace TinyEngine
 {
 
@@ -19,7 +21,7 @@ namespace TinyEngine
 
 		sf::Texture texture;
 
-		if (!texture.loadFromFile("Assets/player.png"))
+		if (!texture.loadFromFile("Assets/PlayerRun.png"))
 			return;
 		SpriteRenderer& renderer =
 			playerRef.AddComponent<SpriteRenderer>();
@@ -43,17 +45,32 @@ namespace TinyEngine
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
-				PixelsToWorld(400),
-				PixelsToWorld(100),
+				PixelsToWorld(300),
+				PixelsToWorld(300),
 				0
 				});
+		playerRef.GetComponent<Transform>()
+			->SetScale({0.6,0.6,0.6});
+
+		//player animation
+		Animation playerAni(texture);
+
+		playerAni.AddKey({{{ 53,38 },{ 100, 300 }},0});
+		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.3f });
+		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.6f });
+		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.9f });
+		playerAni.AddKey({ {{ 560,38 },{ 100, 300 }},1.2f });
+		playerAni.AddKey({ {{ 675,38 },{ 140, 300 }},1.5f });
+
+		Animator& animator = playerRef.AddComponent<Animator>();
+		animator.SetAnimation(playerAni);
 		//end
 		
 		//boxes
 		//CreateASimpleBox({400,200,0},{500,64,0});
-		CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
-		CreateASimpleBox({ 400,400,0 }, { 500,64,0 });
-		CreateAPingPongBox({ 400,200,0 }, { 64,64,0 });
+		//CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
+		CreateASimpleBox({400,500,0 }, { 800,64,0 });
+		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 });
 		//end
 
 		StartObject();

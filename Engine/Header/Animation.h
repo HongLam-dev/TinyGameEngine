@@ -12,15 +12,21 @@ namespace TinyEngine {
 			float playTime = 0;
 		};
 	public:
+		Animation(const sf::Texture& texture):texture(texture){}
+
 		void SetUpDefaultAnimation(std::vector<sf::IntRect> rects, int fps);
 		void AddKey(AnimationKey key);
-		sf::IntRect GetCurrentFrame(int index) const { return frames[index].textureRect; }
-		int GetKeyCount() const { return frames.size(); }
+		void AddKeys(const std::vector<AnimationKey>& keys);
+		const sf::Texture& GetTexture() const { return texture; }
+		std::size_t GetKeyCount() const{return frames.size();}
 		float GetFramePlayTime(int index) const { return frames[index].playTime; }
 		float GetTransitionTime() const { return transitionTime; }
-		sf::IntRect GetFrameRect(int index) { return frames[index].textureRect; }
+		const sf::IntRect& GetFrameRect(int index) const
+		{
+			return frames[index].textureRect;
+		}
 	private:
-		const sf::Texture* texture=nullptr;
+		const sf::Texture& texture;
 		std::vector<AnimationKey> frames;
 		float transitionTime = 0.5f;
 	};

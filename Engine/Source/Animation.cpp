@@ -15,11 +15,19 @@ namespace TinyEngine {
 
 	void Animation::AddKey(AnimationKey key)
 	{
-		frames.push_back(key);
+		AddKeys({key});
+	}
+
+	void  Animation::AddKeys(const std::vector<AnimationKey>& keys) {
+		for (auto& key : keys)
+		{
+			frames.push_back(key);
+		}
+
 		std::sort(frames.begin(), frames.end(),
 			[](const AnimationKey& a, const AnimationKey& b)
 			{
-				return a.playTime< b.playTime;
+				return a.playTime < b.playTime;
 			});
 	}
 }
