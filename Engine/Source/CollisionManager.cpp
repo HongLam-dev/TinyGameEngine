@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
 
 namespace TinyEngine {
 
@@ -168,10 +169,9 @@ namespace TinyEngine {
 						CollisionCallback(a, b, collisions[0], collisions[1]);
 
 						float velocityAlongNormalA = collisions[0].normal.Dot(aVelocity);
-						//std::cout << "normal y:" << collisions[0].normal.y << " x:" << collisions[0].normal.x << '\n';
-						//std::cout << "vy:" << aVelocity.y << " vx:" << aVelocity.x << '\n';
 						float velocityAlongNormalB = collisions[1].normal.Dot(bVelocity);
-
+					//	std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
+					//	std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
 						if (velocityAlongNormalA < 0)
 						{
 							Vector3 normalVelocity = collisions[0].normal * velocityAlongNormalA;
@@ -186,7 +186,6 @@ namespace TinyEngine {
 						if (a.GetRigidbody())
 						{
 							a.SetPosition(a.GetPosition() + (aVelocity * (fixedDeltaTime - t)));
-							//	std::cout << "current velocity: y:" << aVelocity.y << " x:" << aVelocity.x << '\n';
 							a.GetRigidbody()->SetVelocity(aVelocity);
 						}
 						if (b.GetRigidbody())
@@ -254,6 +253,9 @@ namespace TinyEngine {
 			{
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
+				if (!a.GetRigidbody() && !b.GetRigidbody())
+					return;
+
 				DiscreteCollisionDetect(a, b);
 			}
 		}
@@ -288,6 +290,13 @@ namespace TinyEngine {
 			separation.y = bb.min.y - ba.max.y;
 			contactPoint.y = ba.min.y + ((separation.y) / 2);
 		}
+		constexpr float epsilon = 0.00001f;
+		if (std::abs(separation.x) < epsilon)
+			separation.x = 0.0f;
+
+		if (std::abs(separation.y) < epsilon)
+			separation.y = 0.0f;
+
 		Vector3 normal = Vector3::Zero;
 		if (separation.x != 0 && separation.y != 0)
 		{
@@ -301,18 +310,18 @@ namespace TinyEngine {
 			normal = correctionVector.Normalize();
 		}
 		else {
-			if (separation.x == 0)
+			if (separation.y == 0)
 			{
-				if(direction.x>0)
-					normal = { 1,0, 0 };
-				else
-					normal = { -1,0, 0 };
-			}
-			else if(separation.y == 0){
 				if (direction.y > 0)
 					normal = { 0,1, 0 };
 				else
 					normal = { 0,-1, 0 };
+			}
+			else if(separation.x == 0){
+				if (direction.x > 0)
+					normal = { 1,0, 0 };
+				else
+					normal = { -1,0, 0 };
 			}
 		}
 

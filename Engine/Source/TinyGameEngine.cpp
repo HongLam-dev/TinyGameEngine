@@ -45,22 +45,22 @@ namespace TinyEngine
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
-				PixelsToWorld(300),
+				PixelsToWorld(200),
 				PixelsToWorld(300),
 				0
 				});
 		playerRef.GetComponent<Transform>()
-			->SetScale({0.6,0.6,0.6});
+			->SetScale({0.6f,0.6f,0.6f});
 
 		//player animation
 		Animation playerAni(texture);
 
 		playerAni.AddKey({{{ 53,38 },{ 100, 300 }},0});
-		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.3f });
-		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.6f });
-		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.9f });
-		playerAni.AddKey({ {{ 560,38 },{ 100, 300 }},1.2f });
-		playerAni.AddKey({ {{ 675,38 },{ 140, 300 }},1.5f });
+		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.1f });
+		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.2f });
+		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.3f });
+		playerAni.AddKey({ {{ 560,38 },{ 100, 300 }},0.4f });
+		playerAni.AddKey({ {{ 675,38 },{ 140, 300 }},0.5f });
 
 		Animator& animator = playerRef.AddComponent<Animator>();
 		animator.SetAnimation(playerAni);
@@ -68,8 +68,8 @@ namespace TinyEngine
 		
 		//boxes
 		//CreateASimpleBox({400,200,0},{500,64,0});
-		//CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
-		CreateASimpleBox({400,500,0 }, { 800,64,0 });
+		CreateASimpleBox({ 400,300,0 }, {64,64,0 });
+		CreateASimpleBox({400,500,0 }, { 700,64,0 });
 		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 });
 		//end
 
@@ -187,9 +187,9 @@ namespace TinyEngine
 			playerRef.AddComponent<BoxCollider2D>();
 
 		collider.SetSize({
-			PixelsToWorld(64),
-			PixelsToWorld(64),
-			PixelsToWorld(0)
+			PixelsToWorld(size.x),
+			PixelsToWorld(size.y),
+			PixelsToWorld(size.z)
 			});
 		PingPongAroundCenter& pingpong = playerRef.AddComponent<PingPongAroundCenter>();
 		pingpong.Initialize({ 1,0,0 }, 3);

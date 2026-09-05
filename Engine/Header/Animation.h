@@ -28,6 +28,6 @@ namespace TinyEngine {
 	private:
 		const sf::Texture& texture;
 		std::vector<AnimationKey> frames;
-		float transitionTime = 0.5f;
+		float transitionTime = 0.05f;
 	};
 }

@@ -29,7 +29,7 @@ public:
 private:
 	Transform* transform = nullptr;
 	float moveSpeed = 5.0f;
-	Vector3 direction;
+	Vector3 direction=Vector3::Zero;
 	Vector3 center=Vector3::Zero;
-	float radius;
+	float radius=5.0f;
 };

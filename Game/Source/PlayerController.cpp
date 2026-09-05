@@ -30,13 +30,21 @@ void PlayerController::Update()
 	{
 		direction = Vector3::Left;
 	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::B))
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::K))
 	{
 		rb->AddForce({ 0,200,0 });
 	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::V))
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::I))
 	{
 		rb->AddForce({ 0,-200,0 });
+	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
+	{
+		rb->AddForce({ 200,0,0 });
+	}
+	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::J))
+	{
+		rb->AddForce({ -200,0,0 });
 	}
 	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
 	{
