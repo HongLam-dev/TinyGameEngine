@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 namespace TinyEngine {
-	class Animation 
+	class Animation
 	{
 	public:
 		struct AnimationKey
@@ -12,15 +12,16 @@ namespace TinyEngine {
 			float playTime = 0;
 		};
 	public:
-		void Play(float deltaTime);
 		void SetUpDefaultAnimation(std::vector<sf::IntRect> rects, int fps);
 		void AddKey(AnimationKey key);
-		sf::IntRect GetCurrentFrame() const { return frames[currentFrame].textureRect; }
+		sf::IntRect GetCurrentFrame(int index) const { return frames[index].textureRect; }
+		int GetKeyCount() const { return frames.size(); }
+		float GetFramePlayTime(int index) const { return frames[index].playTime; }
+		float GetTransitionTime() const { return transitionTime; }
+		sf::IntRect GetFrameRect(int index) { return frames[index].textureRect; }
 	private:
 		const sf::Texture* texture=nullptr;
 		std::vector<AnimationKey> frames;
-		int currentFrame = 0;
 		float transitionTime = 0.5f;
-		float elapsedTime = 0;
 	};
 }

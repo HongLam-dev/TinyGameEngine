@@ -21,9 +21,6 @@ namespace TinyEngine
 
 		if (!texture.loadFromFile("Assets/player.png"))
 			return;
-
-		sf::Sprite sprite(texture);
-
 		SpriteRenderer& renderer =
 			playerRef.AddComponent<SpriteRenderer>();
 
@@ -42,7 +39,7 @@ namespace TinyEngine
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 	//	collider.SetIsTrigger(true);
-		renderer.SetSprite(sprite);
+		renderer.SetTexture(texture);
 
 		playerRef.GetComponent<Transform>()
 			->SetPosition({
@@ -53,10 +50,10 @@ namespace TinyEngine
 		//end
 		
 		//boxes
-		CreateASimpleBox({400,400,0},{500,64,0});
-		//CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
-		//CreateASimpleBox({ 400,400,0 }, { 500,64,0 });
-		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 });
+		//CreateASimpleBox({400,200,0},{500,64,0});
+		CreateASimpleBox({ 400,300,0 }, { 500,64,0 });
+		CreateASimpleBox({ 400,400,0 }, { 500,64,0 });
+		CreateAPingPongBox({ 400,200,0 }, { 64,64,0 });
 		//end
 
 		StartObject();

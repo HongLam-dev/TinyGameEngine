@@ -8,6 +8,8 @@ namespace TinyEngine {
         Window& window,
         const Transform& transform)
     {
+        if (!sprite.get())
+            return;
         const Vector3 position = transform.GetPosition();
         sprite->setPosition({
             WorldToPixels(position.x),
@@ -34,8 +36,4 @@ namespace TinyEngine {
 
         window.Draw(*sprite);
     }
-	void SpriteRenderer::SetSprite(sf::Sprite& sprite)
-	{
-		this->sprite = &sprite;
-	}
 }

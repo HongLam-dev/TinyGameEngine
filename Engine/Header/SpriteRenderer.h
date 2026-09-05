@@ -11,10 +11,24 @@ namespace TinyEngine {
     {
     public:
 	    void Render(Window& window, const Transform& transform);
-	    void SetSprite(sf::Sprite& sprite);
         SpriteRenderer(GameObject& owner):Component(owner) {}
+        void SetTexture(sf::Texture& texture)
+        {
+            if (sprite == nullptr)
+            {
+                sprite = std::make_unique<sf::Sprite>(texture);
+            }
+            else
+                sprite->setTexture(texture);
+        }
+        void SetTextureRect(const sf::IntRect& rect)
+        {
+            if (sprite == nullptr)
+                return;
+            sprite->setTextureRect(rect);
+        }
     private:
-	    sf::Sprite* sprite = nullptr;;
+        std::unique_ptr< sf::Sprite> sprite;
     };
 
 }
