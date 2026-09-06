@@ -12,6 +12,8 @@
 #include "PingPong.h"
 #include "Animation.h"
 #include "Animator.h"
+#include "Camera.h"
+#include "CameraFollow.h"
 namespace TinyEngine
 {
 
@@ -43,14 +45,13 @@ namespace TinyEngine
 	//	collider.SetIsTrigger(true);
 		renderer.SetTexture(texture);
 
-		playerRef.GetComponent<Transform>()
-			->SetPosition({
+		Transform& playerTranform = *playerRef.GetComponent<Transform>();
+		playerTranform.SetPosition({
 				PixelsToWorld(200),
 				PixelsToWorld(300),
 				0
 				});
-		playerRef.GetComponent<Transform>()
-			->SetScale({0.6f,0.6f,0.6f});
+		playerTranform.SetScale({0.6f,0.6f,0.6f});
 
 		//player animation
 		Animation playerAni(texture);
@@ -66,6 +67,15 @@ namespace TinyEngine
 		animator.SetAnimation(playerAni);
 		//end
 		
+		//Camera
+		GameObject& camObj= CreateGameObject();
+		Camera& camera= camObj.AddComponent<Camera>();
+		mainCamera = &camera;
+		CameraFollow& camFollow = camObj.AddComponent<CameraFollow>();
+		camFollow.SetTarget(playerTranform);
+
+		//end camera
+
 		//boxes
 		//CreateASimpleBox({400,200,0},{500,64,0});
 		CreateASimpleBox({ 400,300,0 }, {64,64,0 });
@@ -140,11 +150,13 @@ namespace TinyEngine
 
 		for (auto& gameObject : gameObjects)
 		{
-			gameObject->Render(window);
+			if(mainCamera)
+				gameObject->Render(window,*mainCamera);
 		}
 		for (auto& collider : collisionManager.GetColliders())
 		{
-			window.DrawCollider(*collider);
+			if (mainCamera)
+				window.DrawCollider(*collider,*mainCamera);
 		}
 
 		window.Display();

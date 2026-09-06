@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "GameObject.h"
 #include "CollisionManager.h"
+#include "Camera.h"
 
 namespace TinyEngine
 {
@@ -16,6 +17,7 @@ namespace TinyEngine
 		void Render(TinyEngine::Window& window);
 		void Run(TinyEngine::Window& window);
 		void StartObject();
+		Camera& GetMainCamera() { return *mainCamera; };
 		GameObject& CreateGameObject();
 		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size);
 		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size);
@@ -25,6 +27,7 @@ namespace TinyEngine
 		int targetFPS = 60;
 		int timeStep = 60;
 		float deltaTime = 0;
+		Camera* mainCamera=nullptr;
 		CollisionManager collisionManager;
 		sf::Clock clock;
 		std::vector<std::unique_ptr<GameObject>> gameObjects;

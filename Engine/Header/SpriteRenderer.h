@@ -4,13 +4,14 @@
 #include "Transform.h"
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
+#include "Camera.h"
 
 namespace TinyEngine {
 
     class SpriteRenderer : public Component
     {
     public:
-	    void Render(Window& window, const Transform& transform);
+	    void Render(Window& window, const Camera& camera, const Transform& transform);
         SpriteRenderer(GameObject& owner):Component(owner) {}
         void SetTexture(const sf::Texture& texture)
         {

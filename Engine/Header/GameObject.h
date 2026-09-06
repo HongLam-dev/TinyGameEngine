@@ -5,18 +5,19 @@
 #include "Component.h"
 #include "Transform.h"
 #include "Vector3.h"
-#include "Window.h"
 #include "IComponentObserver.h"
 namespace TinyEngine {
 
 	class TinyGameEngine;
+	class Camera;
+	class Window;
 	class GameObject {
 	public:
 		GameObject(TinyGameEngine& engine) : transform(*this), engine(engine) {}
 		void Update();
 		void FixedUpdate();
 		void Start();
-		void Render(Window& window);
+		void Render(Window& window,const Camera& camera);
 		TinyGameEngine& GetEngineContext() const { return engine; };
 		void AddComponentObserver(IComponentObserver& observer);
 		void RemoveComponentObserver(IComponentObserver& observer);

@@ -3,6 +3,7 @@
 #include "Bounds.h"
 #include "EngineSettings.h"
 #include "Vector3.h"
+#include "Camera.h"
 #include <iostream>
 namespace TinyEngine
 {
@@ -37,14 +38,13 @@ namespace TinyEngine
 
 	void Window::SetPosition(const Vector3& position)
 	{
-		
-		sfmlWindow.setPosition({
+			sfmlWindow.setPosition({
 			 static_cast<int>(position.x),
 	static_cast<int>(position.y)
 			});
 	}
 
-	void TinyEngine::Window::DrawCollider(const BoxCollider2D& collider)
+	void TinyEngine::Window::DrawCollider(const BoxCollider2D& collider, const Camera& camera)
 	{
 		const Bounds bounds = collider.GetBounds();
 
@@ -66,11 +66,29 @@ namespace TinyEngine
 			height / 2.0f
 			});
 
-		const Vector3 position = collider.GetPosition();
+		Vector3 camPosition = collider.GetPosition()- camera.GetPosition();
+		Vector3 relativePixels{
+		WorldToPixels(camPosition.x),
+		WorldToPixels(camPosition.y),
+		0.f
+			};
+		sf::Vector2u windowSize = sfmlWindow.getSize();
+
+		Vector3 windowCenter{
+			windowSize.x / 2.f,
+			windowSize.y / 2.f,
+			0.f
+		};
+
+		Vector3 objectScreenPosition{
+			windowCenter.x + relativePixels.x,
+			windowCenter.y + relativePixels.y,
+			0.f
+		};
 
 		rectangle.setPosition({
-			WorldToPixels(position.x),
-			WorldToPixels(position.y)
+			objectScreenPosition.x,
+			objectScreenPosition.y
 			});
 
 		rectangle.setFillColor(sf::Color::Transparent);
