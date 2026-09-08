@@ -13,7 +13,7 @@ namespace TinyEngine {
 	class Window;
 	class GameObject {
 	public:
-		GameObject(TinyGameEngine& engine) : transform(*this), engine(engine) {}
+		GameObject(TinyGameEngine& engine);
 		void Update();
 		void FixedUpdate();
 		void Start();
@@ -22,7 +22,7 @@ namespace TinyEngine {
 		void AddComponentObserver(IComponentObserver& observer);
 		void RemoveComponentObserver(IComponentObserver& observer);
 		void RemoveComponent(Component* component);
-		Transform& GetTransform() { return transform; }
+		Transform& GetTransform() { return *transform; }
 
 		template <typename T>
 			requires std::derived_from<T, Component>
@@ -49,10 +49,6 @@ namespace TinyEngine {
 					return requiredComponent;
 				}
 			}
-			if (auto* requiredComponent = dynamic_cast<T*>(&transform))
-			{
-				return requiredComponent;
-			}
 
 			return nullptr;
 		}
@@ -67,10 +63,6 @@ namespace TinyEngine {
 				{
 					return requiredComponent;
 				}
-			}
-			if (auto* requiredComponent = dynamic_cast<const T*>(&transform))
-			{
-				return requiredComponent;
 			}
 
 			return nullptr;
@@ -104,9 +96,9 @@ namespace TinyEngine {
 
 			return result;
 		}
-
+	protected:
+		Transform* transform = nullptr;
 	private:
-		Transform transform;
 		std::vector<std::unique_ptr<Component>> components;
 		TinyGameEngine& engine;
 

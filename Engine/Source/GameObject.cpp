@@ -4,6 +4,9 @@
 
 namespace TinyEngine
 {
+	GameObject::GameObject(TinyGameEngine& engine) : engine(engine) {
+		transform = &AddComponent<Transform>();
+	}
 	void GameObject::Update()
 	{
 		for (auto& component : components)
@@ -18,7 +21,7 @@ namespace TinyEngine
 		{
 			if (auto* renderer = dynamic_cast<SpriteRenderer*>(component.get()))
 			{
-				renderer->Render(window, camera,transform);
+				renderer->Render(window, camera,*transform);
 			}
 		}
 	}
