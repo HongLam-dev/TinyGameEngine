@@ -89,10 +89,15 @@ namespace TinyEngine
 		//end image
 
 		//boxes
+		sf::Texture crateText;
+
+		if (!crateText.loadFromFile("Assets/Crate.png"))
+			return;
+		
 		//CreateASimpleBox({400,200,0},{500,64,0});
-		CreateASimpleBox({ 400,300,0 }, {64,64,0 });
-		CreateASimpleBox({400,500,0 }, { 700,64,0 });
-		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 });
+		CreateASimpleBox({ 400,300,0 }, {64,64,0 },&crateText);
+		CreateASimpleBox({400,500,0 }, { 700,64,0 }, &crateText);
+		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 },nullptr);
 		//end
 
 		StartObject();
@@ -191,9 +196,15 @@ namespace TinyEngine
 		return uiObject;
 	}
 
-	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size) {
+	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
 		GameObject& objectRef = CreateGameObject();
 
+		if (boxTexture)
+		{
+			SpriteRenderer& renderer =
+				objectRef.AddComponent<SpriteRenderer>();
+			renderer.SetTexture(*boxTexture);
+		}
 		BoxCollider2D& collider =
 			objectRef.AddComponent<BoxCollider2D>();
 
@@ -211,26 +222,18 @@ namespace TinyEngine
 				});
 		return objectRef;
 	}
-	GameObject& TinyGameEngine::CreateAPingPongBox(const Vector3& position, const Vector3& size) {
-		GameObject& playerRef = CreateGameObject();
+	GameObject& TinyGameEngine::CreateAPingPongBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
+		GameObject& boxRef = CreateASimpleBox(position,size,boxTexture);
 
-		BoxCollider2D& collider =
-			playerRef.AddComponent<BoxCollider2D>();
-
-		collider.SetSize({
-			PixelsToWorld(size.x),
-			PixelsToWorld(size.y),
-			PixelsToWorld(size.z)
-			});
-		PingPongAroundCenter& pingpong = playerRef.AddComponent<PingPongAroundCenter>();
+		PingPongAroundCenter& pingpong = boxRef.AddComponent<PingPongAroundCenter>();
 		pingpong.Initialize({ 1,0,0 }, 3);
 
-		playerRef.GetComponent<Transform>()
+		boxRef.GetComponent<Transform>()
 			->SetPosition({
 				PixelsToWorld(400),
 				PixelsToWorld(100),
 				0
 				});
-		return playerRef;
+		return boxRef;
 	}
 }

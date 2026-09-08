@@ -22,8 +22,8 @@ namespace TinyEngine
 		Camera& GetMainCamera() { return *mainCamera; };
 		GameObject& CreateGameObject();
 		UIObject& CreateUIObject();
-		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size);
-		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size);
+		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size , sf::Texture* boxTexture = nullptr);
+		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture = nullptr);
 		float GetDeltaTime() const { return deltaTime; };
 		float GetFixedDeltaTime() const { return 1.0f/timeStep; };
 	private:
