@@ -1,18 +1,13 @@
 #pragma once
-#include "Window.h"
-#include "Transform.h"
 #include <SFML/Graphics.hpp>
-#include "GameObject.h"
-#include "Camera.h"
+#include "Window.h"
 #include "RenderableComponent.h"
 
 namespace TinyEngine {
-
-    class SpriteRenderer : public RenderableComponent
-    {
-    public:
-	    void Render(Window& window, const Camera& camera);
-        SpriteRenderer(GameObject& owner):RenderableComponent(owner) {}
+	class Image:public RenderableComponent
+	{
+	public:
+		Image(GameObject& owner): RenderableComponent(owner){}
         void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)
@@ -28,8 +23,8 @@ namespace TinyEngine {
                 return;
             sprite->setTextureRect(rect);
         }
-    private:
-        std::unique_ptr< sf::Sprite> sprite;
-    };
-
+        void Render(Window& window);
+	private:
+		std::unique_ptr<sf::Sprite> sprite = nullptr;
+	};
 }

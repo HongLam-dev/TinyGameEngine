@@ -5,4 +5,5 @@ namespace TinyEngine {
 	UIObject::UIObject(TinyGameEngine& engine) :GameObject(engine) {
 		transform = &AddComponent<UITransform>();
 	}
+
 }

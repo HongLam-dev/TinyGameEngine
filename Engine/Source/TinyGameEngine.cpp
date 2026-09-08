@@ -14,6 +14,8 @@
 #include "Animator.h"
 #include "Camera.h"
 #include "CameraFollow.h"
+#include "Image.h"
+#include "UIObject.h"
 namespace TinyEngine
 {
 
@@ -21,9 +23,12 @@ namespace TinyEngine
 	{
 		GameObject& playerRef = CreateGameObject();
 
-		sf::Texture texture;
+		sf::Texture playerRunSheet;
+		sf::Texture placeHolderTex;
 
-		if (!texture.loadFromFile("Assets/PlayerRun.png"))
+		if (!playerRunSheet.loadFromFile("Assets/PlayerRun.png"))
+			return;
+		if (!placeHolderTex.loadFromFile("Assets/player.png"))
 			return;
 		SpriteRenderer& renderer =
 			playerRef.AddComponent<SpriteRenderer>();
@@ -42,21 +47,21 @@ namespace TinyEngine
 			playerRef.AddComponent<Rigidbody2D>();
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-	//	collider.SetIsTrigger(true);
-		renderer.SetTexture(texture);
+		//	collider.SetIsTrigger(true);
+		renderer.SetTexture(playerRunSheet);
 
 		Transform& playerTranform = *playerRef.GetComponent<Transform>();
 		playerTranform.SetPosition({
 				PixelsToWorld(200),
 				PixelsToWorld(300),
 				0
-				});
-		playerTranform.SetScale({0.6f,0.6f,0.6f});
+			});
+		playerTranform.SetScale({ 0.6f,0.6f,0.6f });
 
 		//player animation
-		Animation playerAni(texture);
+		Animation playerAni(playerRunSheet);
 
-		playerAni.AddKey({{{ 53,38 },{ 100, 300 }},0});
+		playerAni.AddKey({ {{ 53,38 },{ 100, 300 }},0 });
 		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.1f });
 		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.2f });
 		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.3f });
@@ -66,15 +71,22 @@ namespace TinyEngine
 		Animator& animator = playerRef.AddComponent<Animator>();
 		animator.SetAnimation(playerAni);
 		//end
-		
+
 		//Camera
-		GameObject& camObj= CreateGameObject();
-		Camera& camera= camObj.AddComponent<Camera>();
+		GameObject& camObj = CreateGameObject();
+		Camera& camera = camObj.AddComponent<Camera>();
 		mainCamera = &camera;
 		CameraFollow& camFollow = camObj.AddComponent<CameraFollow>();
 		camFollow.SetTarget(playerTranform);
 
 		//end camera
+		//Create Image
+		UIObject& imageObj = CreateUIObject();
+		Image& image = imageObj.AddComponent<Image>();
+		image.SetTexture(placeHolderTex);
+		Transform& imageTransform = imageObj.GetTransform();
+		imageTransform.SetPosition({200, 200, 0});
+		//end image
 
 		//boxes
 		//CreateASimpleBox({400,200,0},{500,64,0});
@@ -170,6 +182,15 @@ namespace TinyEngine
 		gameObjects.push_back(std::move(go));
 
 		return *gameObjects.back();
+	}
+	UIObject& TinyGameEngine::CreateUIObject()
+	{
+		auto go = std::make_unique<UIObject>(*this);
+		UIObject& uiObject = *go;
+
+		gameObjects.push_back(std::move(go));
+
+		return uiObject;
 	}
 
 	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size) {

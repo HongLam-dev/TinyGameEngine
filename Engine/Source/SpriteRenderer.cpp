@@ -5,13 +5,11 @@
 #include "Camera.h"
 #include <iostream>
 namespace TinyEngine {
-    void SpriteRenderer::Render(
-        Window& window,const Camera& camera,
-        const Transform& transform)
+    void SpriteRenderer::Render(Window& window,const Camera& camera)
     {
         if (!sprite.get())
             return;
-
+        Transform transform = GetTransform();
         Vector3 camPosition = transform.GetPosition() - camera.GetPosition();
         Vector3 relativePixels{
         WorldToPixels(camPosition.x),

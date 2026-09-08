@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "CollisionManager.h"
 #include "Camera.h"
+#include "UIObject.h"
 
 namespace TinyEngine
 {
@@ -19,6 +20,7 @@ namespace TinyEngine
 		void StartObject();
 		Camera& GetMainCamera() { return *mainCamera; };
 		GameObject& CreateGameObject();
+		UIObject& CreateUIObject();
 		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size);
 		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size);
 		float GetDeltaTime() const { return deltaTime; };
