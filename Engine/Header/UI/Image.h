@@ -2,12 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include "Window.h"
 #include "RenderableComponent.h"
+#include "UIRenderable.h"
 
 namespace TinyEngine {
-	class Image:public RenderableComponent
+	class Image:public UIRenderable
 	{
 	public:
-		Image(GameObject& owner): RenderableComponent(owner){}
+		Image(GameObject& owner): UIRenderable(owner){}
         void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)
@@ -23,7 +24,7 @@ namespace TinyEngine {
                 return;
             sprite->setTextureRect(rect);
         }
-        void Render(Window& window);
+        void Render(Window& window) override;
 	private:
 		std::unique_ptr<sf::Sprite> sprite = nullptr;
 	};

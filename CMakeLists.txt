@@ -56,7 +56,7 @@ add_executable (TinyGameEngine "Game/main.cpp"
 "Engine/Source/UI/UIObject.cpp" 
  "Engine/Header/UI/Image.h"
  "Engine/Header/RenderableComponent.h" 
- "Engine/Source/UI/Image.cpp")
+ "Engine/Source/UI/Image.cpp" "Engine/Header/UI/UIRenderable.h" "Engine/Header/RenderManager.h" "Engine/Source/RenderManager.cpp")
 
 target_include_directories(TinyGameEngine PRIVATE
     Engine/Header

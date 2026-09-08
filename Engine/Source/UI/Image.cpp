@@ -1,6 +1,5 @@
 #include "Image.h"
 #include "Window.h"
-#include "EngineSettings.h"
 #include <iostream>
 
 namespace TinyEngine{

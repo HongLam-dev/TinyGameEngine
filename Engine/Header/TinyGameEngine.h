@@ -7,6 +7,7 @@
 #include "CollisionManager.h"
 #include "Camera.h"
 #include "UIObject.h"
+#include "RenderManager.h"
 
 namespace TinyEngine
 {
@@ -31,6 +32,7 @@ namespace TinyEngine
 		float deltaTime = 0;
 		Camera* mainCamera=nullptr;
 		CollisionManager collisionManager;
+		RenderManager renderManager;
 		sf::Clock clock;
 		std::vector<std::unique_ptr<GameObject>> gameObjects;
 	};

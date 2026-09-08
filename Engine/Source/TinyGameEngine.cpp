@@ -85,7 +85,7 @@ namespace TinyEngine
 		Image& image = imageObj.AddComponent<Image>();
 		image.SetTexture(placeHolderTex);
 		Transform& imageTransform = imageObj.GetTransform();
-		imageTransform.SetPosition({200, 200, 0});
+		imageTransform.SetPosition({700, 500, 0});
 		//end image
 
 		//boxes
@@ -160,11 +160,7 @@ namespace TinyEngine
 	
 		window.Clear();
 
-		for (auto& gameObject : gameObjects)
-		{
-			if(mainCamera)
-				gameObject->Render(window,*mainCamera);
-		}
+		renderManager.Render(window,*mainCamera);
 		for (auto& collider : collisionManager.GetColliders())
 		{
 			if (mainCamera)
@@ -178,16 +174,18 @@ namespace TinyEngine
 		auto go = std::make_unique<GameObject>(*this);
 
 		go->AddComponentObserver(collisionManager);
+		go->AddComponentObserver(renderManager);
 
 		gameObjects.push_back(std::move(go));
 
 		return *gameObjects.back();
 	}
+
 	UIObject& TinyGameEngine::CreateUIObject()
 	{
 		auto go = std::make_unique<UIObject>(*this);
 		UIObject& uiObject = *go;
-
+		go->AddComponentObserver(renderManager);
 		gameObjects.push_back(std::move(go));
 
 		return uiObject;

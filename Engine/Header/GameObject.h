@@ -17,7 +17,6 @@ namespace TinyEngine {
 		void Update();
 		void FixedUpdate();
 		void Start();
-		void Render(Window& window,const Camera& camera);
 		TinyGameEngine& GetEngineContext() const { return engine; };
 		void AddComponentObserver(IComponentObserver& observer);
 		void RemoveComponentObserver(IComponentObserver& observer);

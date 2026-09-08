@@ -16,21 +16,6 @@ namespace TinyEngine
 		}
 	}
 
-	void GameObject::Render(Window& window,const Camera& camera)
-	{
-		for (auto& component : components)
-		{
-			if (auto* renderer = dynamic_cast<SpriteRenderer*>(component.get()))
-			{
-				renderer->Render(window,camera);
-			}
-			else if(auto* image = dynamic_cast<Image*>(component.get()))
-			{
-				image->Render(window);
-			}
-		}
-	}
-
 	void GameObject::FixedUpdate()
 	{
 		for (auto& component : components)
