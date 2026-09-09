@@ -5,15 +5,12 @@
 #include <iostream>
 #include "GameObject.h"
 #include "SpriteRenderer.h"
-#include "PlayerController.h"
 #include "BoxCollider2D.h"
 #include "RigidBody2D.h"
 #include "EngineSettings.h"
-#include "PingPong.h"
 #include "Animation.h"
 #include "Animator.h"
 #include "Camera.h"
-#include "CameraFollow.h"
 #include "Image.h"
 #include "UIObject.h"
 namespace TinyEngine
@@ -21,85 +18,6 @@ namespace TinyEngine
 
 	void TinyGameEngine::Run(TinyEngine::Window& window)
 	{
-		GameObject& playerRef = CreateGameObject();
-
-		sf::Texture playerRunSheet;
-		sf::Texture placeHolderTex;
-
-		if (!playerRunSheet.loadFromFile("Assets/PlayerRun.png"))
-			return;
-		if (!placeHolderTex.loadFromFile("Assets/player.png"))
-			return;
-		SpriteRenderer& renderer =
-			playerRef.AddComponent<SpriteRenderer>();
-
-		BoxCollider2D& collider =
-			playerRef.AddComponent<BoxCollider2D>();
-
-		collider.SetSize({
-			PixelsToWorld(64),
-			PixelsToWorld(64),
-			PixelsToWorld(0)
-			});
-		playerRef.AddComponent<PlayerController>();
-
-		Rigidbody2D& rb =
-			playerRef.AddComponent<Rigidbody2D>();
-		rb.SetGravityScale(0.0f);
-		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-		//	collider.SetIsTrigger(true);
-		renderer.SetTexture(playerRunSheet);
-
-		Transform& playerTranform = *playerRef.GetComponent<Transform>();
-		playerTranform.SetPosition({
-				PixelsToWorld(200),
-				PixelsToWorld(300),
-				0
-			});
-		playerTranform.SetScale({ 0.6f,0.6f,0.6f });
-
-		//player animation
-		Animation playerAni(playerRunSheet);
-
-		playerAni.AddKey({ {{ 53,38 },{ 100, 300 }},0 });
-		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.1f });
-		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.2f });
-		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.3f });
-		playerAni.AddKey({ {{ 560,38 },{ 100, 300 }},0.4f });
-		playerAni.AddKey({ {{ 675,38 },{ 140, 300 }},0.5f });
-
-		Animator& animator = playerRef.AddComponent<Animator>();
-		animator.SetAnimation(playerAni);
-		//end
-
-		//Camera
-		GameObject& camObj = CreateGameObject();
-		Camera& camera = camObj.AddComponent<Camera>();
-		mainCamera = &camera;
-		CameraFollow& camFollow = camObj.AddComponent<CameraFollow>();
-		camFollow.SetTarget(playerTranform);
-
-		//end camera
-		//Create Image
-		UIObject& imageObj = CreateUIObject();
-		Image& image = imageObj.AddComponent<Image>();
-		image.SetTexture(placeHolderTex);
-		Transform& imageTransform = imageObj.GetTransform();
-		imageTransform.SetPosition({700, 500, 0});
-		//end image
-
-		//boxes
-		sf::Texture crateText;
-
-		if (!crateText.loadFromFile("Assets/Crate.png"))
-			return;
-		
-		//CreateASimpleBox({400,200,0},{500,64,0});
-		CreateASimpleBox({ 400,300,0 }, {64,64,0 },&crateText);
-		CreateASimpleBox({400,500,0 }, { 700,64,0 }, &crateText);
-		CreateAPingPongBox({ 400,300,0 }, { 64,64,0 },nullptr);
-		//end
-
 		StartObject();
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
@@ -196,44 +114,4 @@ namespace TinyEngine
 		return uiObject;
 	}
 
-	GameObject& TinyGameEngine::CreateASimpleBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
-		GameObject& objectRef = CreateGameObject();
-
-		if (boxTexture)
-		{
-			SpriteRenderer& renderer =
-				objectRef.AddComponent<SpriteRenderer>();
-			renderer.SetTexture(*boxTexture);
-		}
-		BoxCollider2D& collider =
-			objectRef.AddComponent<BoxCollider2D>();
-
-		collider.SetSize({
-			PixelsToWorld(size.x),
-			PixelsToWorld(size.y),
-			PixelsToWorld(size.z)
-			});
-
-		objectRef.GetComponent<Transform>()
-			->SetPosition({
-				PixelsToWorld(position.x),
-				PixelsToWorld(position.y),
-				position.z
-				});
-		return objectRef;
-	}
-	GameObject& TinyGameEngine::CreateAPingPongBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
-		GameObject& boxRef = CreateASimpleBox(position,size,boxTexture);
-
-		PingPongAroundCenter& pingpong = boxRef.AddComponent<PingPongAroundCenter>();
-		pingpong.Initialize({ 1,0,0 }, 3);
-
-		boxRef.GetComponent<Transform>()
-			->SetPosition({
-				PixelsToWorld(400),
-				PixelsToWorld(100),
-				0
-				});
-		return boxRef;
-	}
 }

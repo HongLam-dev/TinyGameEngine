@@ -11,67 +11,75 @@ endif()
 
 project ("TinyGameEngine")
 
-find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
+find_package(SFML CONFIG REQUIRED COMPONENTS Graphics Window System)
 
-# Add source to this project's executable.
-add_executable (TinyGameEngine "Game/main.cpp" 
-"Engine/Source/TinyGameEngine.cpp"
-"Engine/Source/Input.cpp" 
-"Engine/Source/Window.cpp" 
-"Engine/Source/Component.cpp"
-"Engine/Header/SpriteRenderer.h"
-"Engine/Source/SpriteRenderer.cpp"
-"Engine/Header/GameObject.h" 
-"Engine/Source/GameObject.cpp"
-"Engine/Header/Transform.h" 
-"Engine/Source/Transform.cpp"
-"Engine/Header/Vector3.h"
-"Game/Header/PlayerController.h"
-"Game/Source/PlayerController.cpp"
-"Engine/Header/CollisionManager.h"
-"Engine/Source/CollisionManager.cpp"
-"Engine/Header/BoxCollider2D.h" 
-"Engine/Source/BoxCollider2D.cpp" 
-"Engine/Header/Bounds.h" 
-"Editor/Gizmo.h" 
-"Engine/Header/Rigidbody2D.h" 
-"Engine/Source/Rigidbody2D.cpp"
-"Engine/Header/EngineSettings.h"
-"Engine/Header/IComponentObserver.h"
-"Engine/Header/Collision.h"
-"Game/Header/PingPong.h" 
-"Game/Source/PingPong.cpp" 
-"Engine/Header/Animation.h"
-"Engine/Source/Animation.cpp"
-"Engine/Header/Animator.h"
-"Engine/Source/Animator.cpp" 
-"Engine/Header/Camera.h"
-"Engine/Source/Camera.cpp"
-"Game/Header/CameraFollow.h"
-"Game/Source/CameraFollow.cpp"
-"Engine/Header/Vector2.h"
-"Engine/Header/UI/UITransform.h"
-"Engine/Source/UI/UITransform.cpp"
-"Engine/Header/UI/UIObject.h"
-"Engine/Source/UI/UIObject.cpp" 
- "Engine/Header/UI/Image.h"
- "Engine/Header/RenderableComponent.h" 
- "Engine/Source/UI/Image.cpp" "Engine/Header/UI/UIRenderable.h" "Engine/Header/RenderManager.h" "Engine/Source/RenderManager.cpp")
-
-target_include_directories(TinyGameEngine PRIVATE
+add_library(TinyGameEngine
+    "Engine/Source/TinyGameEngine.cpp"
+    "Engine/Source/Input.cpp"
+    "Engine/Source/Window.cpp"
+    "Engine/Source/Component.cpp"
+    "Engine/Source/SpriteRenderer.cpp"
+    "Engine/Source/GameObject.cpp"
+    "Engine/Source/Transform.cpp"
+    "Engine/Source/CollisionManager.cpp"
+    "Engine/Source/BoxCollider2D.cpp"
+    "Engine/Source/Rigidbody2D.cpp"
+    "Engine/Source/Animation.cpp"
+    "Engine/Source/Animator.cpp"
+    "Engine/Source/Camera.cpp"
+    "Engine/Source/UI/UITransform.cpp"
+    "Engine/Source/UI/UIObject.cpp"
+    "Engine/Source/UI/Image.cpp"
+    "Engine/Source/RenderManager.cpp"
+    "Engine/Header/Vector3.h"
+    "Engine/Header/Vector2.h"
+)
+target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
     Engine/Header/UI
-    Game/Header
 )
-
-target_link_libraries(TinyGameEngine PRIVATE
+target_link_libraries(TinyGameEngine PUBLIC
     SFML::Graphics
     SFML::Window
     SFML::System
 )
 
+# Add source to this project's executable.
+add_executable (TinyGame
+"Game/main.cpp"
+"Game/Header/PlayerController.h"
+"Game/Source/PlayerController.cpp"
+"Game/Header/PingPong.h" 
+"Game/Source/PingPong.cpp" 
+"Game/Header/CameraFollow.h"
+"Game/Source/CameraFollow.cpp")
+
+target_include_directories(TinyGame PRIVATE
+    Game/Header
+)
+
+target_link_libraries(TinyGame PRIVATE
+    TinyGameEngine
+)
+
+add_executable(TinyGameEditor
+    "Editor/main.cpp"
+)
+find_package(ImGui-SFML CONFIG REQUIRED)
+
+target_include_directories(TinyGameEditor PRIVATE
+    Editor/Header
+)
+
+target_link_libraries(TinyGameEditor PRIVATE
+    TinyGameEngine
+    ImGui-SFML::ImGui-SFML
+)
+
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET TinyGameEngine PROPERTY CXX_STANDARD 20)
+set_property(TARGET TinyGameEngine PROPERTY CXX_STANDARD 20)
+set_property(TARGET TinyGame PROPERTY CXX_STANDARD 20)
+set_property(TARGET TinyGameEditor PROPERTY CXX_STANDARD 20)
 endif()
 
 # TODO: Add tests and install targets if needed.

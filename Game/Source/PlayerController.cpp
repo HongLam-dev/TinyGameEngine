@@ -5,87 +5,90 @@
 #include "TinyGameEngine.h"
 #include "BoxCollider2D.h"
 #include <iostream>
+using namespace TinyEngine;
 
-void PlayerController::Start() {
-	transform = GetOwner().GetComponent<Transform>();
-	rb = GetOwner().GetComponent<Rigidbody2D>();
-}
-
-void PlayerController::Update()
-{
-	if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
-	{
-		//direction = Vector3::Down;
-		rb->AddForce({ 0,-20,0 });
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
-	{
-		direction = Vector3::Right;
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::S))
-	{
-		direction = Vector3::Up;
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::A))
-	{
-		direction = Vector3::Left;
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::K))
-	{
-		rb->AddForce({ 0,200,0 });
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::I))
-	{
-		rb->AddForce({ 0,-200,0 });
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
-	{
-		rb->AddForce({ 200,0,0 });
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::J))
-	{
-		rb->AddForce({ -200,0,0 });
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
-	{
-		rb->SetGravityScale(1);
-	}
-	else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
-	{
-		rb->SetGravityScale(0);
-	}
-	else
-	{
-		direction = Vector3::Zero;
+namespace TinyGame {
+	void PlayerController::Start() {
+		transform = GetOwner().GetComponent<Transform>();
+		rb = GetOwner().GetComponent<Rigidbody2D>();
 	}
 
-}
-
-
-void PlayerController::FixedUpdate()
-{
-	if (rb!=nullptr)
+	void PlayerController::Update()
 	{
-		rb->SetVelocity(direction*moveSpeed);
+		if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
+		{
+			//direction = Vector3::Down;
+			rb->AddForce({ 0,-20,0 });
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
+		{
+			direction = Vector3::Right;
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::S))
+		{
+			direction = Vector3::Up;
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::A))
+		{
+			direction = Vector3::Left;
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::K))
+		{
+			rb->AddForce({ 0,200,0 });
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::I))
+		{
+			rb->AddForce({ 0,-200,0 });
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
+		{
+			rb->AddForce({ 200,0,0 });
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::J))
+		{
+			rb->AddForce({ -200,0,0 });
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
+		{
+			rb->SetGravityScale(1);
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
+		{
+			rb->SetGravityScale(0);
+		}
+		else
+		{
+			direction = Vector3::Zero;
+		}
+
 	}
-}
 
-void PlayerController::OnCollisionEnter(const Collision& collision) {
-	std::cout << "Enter \n";
-}
-void PlayerController::OnCollisionStay(const Collision& collision) {
-	std::cout << "Stay \n";
-}
-void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-	std::cout << "Exit \n";
-}
 
-void PlayerController::OnTriggerEnter(BoxCollider2D& other) {
-	std::cout << " trigger Enter \n";
-}
-void PlayerController::OnTriggerStay(BoxCollider2D& other) {
-	std::cout << " trigger Stay \n";
-}
-void PlayerController::OnTriggerExit(BoxCollider2D& other) {
-	std::cout << " trigger  Exit \n";
+	void PlayerController::FixedUpdate()
+	{
+		if (rb != nullptr)
+		{
+			rb->SetVelocity(direction * moveSpeed);
+		}
+	}
+
+	void PlayerController::OnCollisionEnter(const Collision& collision) {
+		std::cout << "Enter \n";
+	}
+	void PlayerController::OnCollisionStay(const Collision& collision) {
+		std::cout << "Stay \n";
+	}
+	void PlayerController::OnCollisionExit(BoxCollider2D& other) {
+		std::cout << "Exit \n";
+	}
+
+	void PlayerController::OnTriggerEnter(BoxCollider2D& other) {
+		std::cout << " trigger Enter \n";
+	}
+	void PlayerController::OnTriggerStay(BoxCollider2D& other) {
+		std::cout << " trigger Stay \n";
+	}
+	void PlayerController::OnTriggerExit(BoxCollider2D& other) {
+		std::cout << " trigger  Exit \n";
+	}
 }

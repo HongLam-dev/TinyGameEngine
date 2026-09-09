@@ -4,32 +4,32 @@
 #include "Transform.h"
 #include "RigidBody2D.h"
 #include "BoxCollider2D.h"
-using namespace TinyEngine;
-
-class PingPongAroundCenter : public Component
-{
-public:
-	using Component::Component;
-	PingPongAroundCenter(GameObject& owner) :
-		Component(owner) {}
-	void Update() override;
-	void FixedUpdate() override;
-	void Start() override;
-	void Initialize(Vector3 direction,float radius, float moveSpeed=5.0f) {
-		this->radius = radius;
-		this->direction = direction;
-		this->moveSpeed = moveSpeed;
-	}
-	void OnCollisionEnter(const Collision& collision) override;
-	void OnCollisionStay(const Collision& collision) override;
-	void OnCollisionExit(BoxCollider2D& other) override;
-	void OnTriggerEnter(BoxCollider2D& other) override;
-	void OnTriggerStay(BoxCollider2D& other) override;
-	void OnTriggerExit(BoxCollider2D& other) override;
-private:
-	Transform* transform = nullptr;
-	float moveSpeed = 5.0f;
-	Vector3 direction=Vector3::Zero;
-	Vector3 center=Vector3::Zero;
-	float radius=5.0f;
-};
+namespace TinyGame {
+	class PingPongAroundCenter : public TinyEngine::Component
+	{
+	public:
+		using Component::Component;
+		PingPongAroundCenter(TinyEngine::GameObject& owner) :
+			Component(owner) {}
+		void Update() override;
+		void FixedUpdate() override;
+		void Start() override;
+		void Initialize(TinyEngine::Vector3 direction, float radius, float moveSpeed = 5.0f) {
+			this->radius = radius;
+			this->direction = direction;
+			this->moveSpeed = moveSpeed;
+		}
+		void OnCollisionEnter(const TinyEngine::Collision& collision) override;
+		void OnCollisionStay(const TinyEngine::Collision& collision) override;
+		void OnCollisionExit(TinyEngine::BoxCollider2D& other) override;
+		void OnTriggerEnter(TinyEngine::BoxCollider2D& other) override;
+		void OnTriggerStay(TinyEngine::BoxCollider2D& other) override;
+		void OnTriggerExit(TinyEngine::BoxCollider2D& other) override;
+	private:
+		TinyEngine::Transform* transform = nullptr;
+		float moveSpeed = 5.0f;
+		TinyEngine::Vector3 direction = TinyEngine::Vector3::Zero;
+		TinyEngine::Vector3 center = TinyEngine::Vector3::Zero;
+		float radius = 5.0f;
+	};
+}

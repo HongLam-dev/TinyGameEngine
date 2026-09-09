@@ -19,11 +19,10 @@ namespace TinyEngine
 		void Render(TinyEngine::Window& window);
 		void Run(TinyEngine::Window& window);
 		void StartObject();
-		Camera& GetMainCamera() { return *mainCamera; };
-		GameObject& CreateGameObject();
+		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
 		UIObject& CreateUIObject();
-		GameObject& CreateASimpleBox(const Vector3& position, const Vector3& size , sf::Texture* boxTexture = nullptr);
-		GameObject& CreateAPingPongBox(const Vector3& position, const Vector3& size, sf::Texture* boxTexture = nullptr);
+		GameObject& CreateGameObject();
+		Camera& GetMainCamera() { return *mainCamera; };
 		float GetDeltaTime() const { return deltaTime; };
 		float GetFixedDeltaTime() const { return 1.0f/timeStep; };
 	private:
