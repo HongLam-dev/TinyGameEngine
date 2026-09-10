@@ -5,22 +5,22 @@
 
 namespace TinyEngine
 {
-	GameObject::GameObject(TinyGameEngine& engine) : engine(engine) {
+	GameObject::GameObject() {
 		transform = &AddComponent<Transform>();
 	}
-	void GameObject::Update()
+	void GameObject::Update(float deltaTime)
 	{
 		for (auto& component : components)
 		{
-			component->Update();
+			component->Update(deltaTime);
 		}
 	}
 
-	void GameObject::FixedUpdate()
+	void GameObject::FixedUpdate(float fixedDeltaTime)
 	{
 		for (auto& component : components)
 		{
-			component->FixedUpdate();
+			component->FixedUpdate(fixedDeltaTime);
 		}
 	}
 

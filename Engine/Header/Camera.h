@@ -9,7 +9,7 @@ namespace TinyEngine {
 	public:
 		Camera(GameObject& owner):Component(owner) {}
 		
-		void Update() override;
+		void Update(float deltaTime) override;
 		void SetPosition(const Vector3& pos) { GetTransform().SetPosition(pos); }
 		const Vector3& GetPosition() const { return GetTransform().GetPosition(); }
 	private:

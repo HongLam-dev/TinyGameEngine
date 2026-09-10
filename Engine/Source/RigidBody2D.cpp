@@ -23,7 +23,7 @@ namespace TinyEngine {
 		}
 	}
 
-	void Rigidbody2D::FixedUpdate() {
+	void Rigidbody2D::FixedUpdate(float fixedDeltaTime) {
 		ApplyGravity();
 
 		Vector3 acceleration = accumulatedForce / mass;
@@ -31,11 +31,11 @@ namespace TinyEngine {
 		velocity += acceleration;
 		accumulatedForce = Vector3::Zero;
 
-		ApplyVelocity();
+		ApplyVelocity(fixedDeltaTime);
 	}
 
-	void Rigidbody2D::ApplyVelocity() {
-		Vector3 newPosition = transform->GetPosition() + velocity * GetOwner().GetEngineContext().GetFixedDeltaTime();
+	void Rigidbody2D::ApplyVelocity(float fixedDeltaTime) {
+		Vector3 newPosition = transform->GetPosition() + velocity *fixedDeltaTime;
 		previousPostion = transform->GetPosition();
 		transform->SetPosition(newPosition);
 	}

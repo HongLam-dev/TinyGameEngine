@@ -18,7 +18,7 @@ namespace TinyEngine
 
 	void TinyGameEngine::Run(TinyEngine::Window& window)
 	{
-		StartObject();
+		Start();
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{
@@ -35,12 +35,12 @@ namespace TinyEngine
 
 			if (deltaTime >= 1.0 / targetFPS)
 			{	
-				Update();
+				Update(deltaTime);
 			}
 
 			while (accumulatedTimeStep >= 1.0 / timeStep)
 			{
-				FixedUpdate();
+				FixedUpdate(1.0f/timeStep);
 
 				accumulatedTimeStep -= 1.0f / timeStep;
 			}
@@ -53,65 +53,40 @@ namespace TinyEngine
 		}
 	}
 	
-	void TinyGameEngine::StartObject()
+	void TinyGameEngine::Start()
 	{
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->Start();
-		}
+		sceneManager.Start();
 	}
 
-	void TinyGameEngine::FixedUpdate()
+	void TinyGameEngine::FixedUpdate(float fixedDeltaTime)
 	{
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->FixedUpdate();
-		}
-		collisionManager.CheckCollision(1.0f/timeStep);
+		sceneManager.FixedUpdate(fixedDeltaTime);
 	}
 
-	void TinyGameEngine::Update()
+	void TinyGameEngine::Update(float deltaTime)
 	{
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->Update();
-		}
+		sceneManager.Update(deltaTime);
 	}
 
 	void TinyGameEngine::Render(TinyEngine::Window& window)
 	{
 	
 		window.Clear();
+		Scene* activeScene = sceneManager.GetActiveScene();
+		if (!activeScene)
+			return;
 
-		renderManager.Render(window,*mainCamera);
-		for (auto& collider : collisionManager.GetColliders())
+		Camera* mainCamera = activeScene->GetMainCamera();
+		if (!mainCamera)
+			return;
+
+		renderManager.Render(window, *mainCamera);
+		for (auto& collider : activeScene->GetCollidersInScene())
 		{
-			if (mainCamera)
-				window.DrawCollider(*collider,*mainCamera);
+			window.DrawCollider(*collider,*mainCamera);
 		}
 
 		window.Display();
-	}
-	GameObject& TinyGameEngine::CreateGameObject()
-	{
-		auto go = std::make_unique<GameObject>(*this);
-
-		go->AddComponentObserver(collisionManager);
-		go->AddComponentObserver(renderManager);
-
-		gameObjects.push_back(std::move(go));
-
-		return *gameObjects.back();
-	}
-
-	UIObject& TinyGameEngine::CreateUIObject()
-	{
-		auto go = std::make_unique<UIObject>(*this);
-		UIObject& uiObject = *go;
-		go->AddComponentObserver(renderManager);
-		gameObjects.push_back(std::move(go));
-
-		return uiObject;
 	}
 
 }

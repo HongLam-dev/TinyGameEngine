@@ -11,7 +11,7 @@ namespace TinyEngine {
 		void SetAnimation(const Animation& animation);
 		void Play(const Animation& animation, float deltaTime);
 		void Start() override;
-		void Update() override;
+		void Update(float deltaTime) override;
 	private:
 		float timer = 0;
 		int currentFrame = 0;

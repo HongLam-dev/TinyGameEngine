@@ -8,16 +8,14 @@
 #include "IComponentObserver.h"
 namespace TinyEngine {
 
-	class TinyGameEngine;
 	class Camera;
 	class Window;
 	class GameObject {
 	public:
-		GameObject(TinyGameEngine& engine);
-		void Update();
-		void FixedUpdate();
+		GameObject();
+		void Update(float deltaTime);
+		void FixedUpdate(float fixedDeltaTime);
 		void Start();
-		TinyGameEngine& GetEngineContext() const { return engine; };
 		void AddComponentObserver(IComponentObserver& observer);
 		void RemoveComponentObserver(IComponentObserver& observer);
 		void RemoveComponent(Component* component);
@@ -99,7 +97,6 @@ namespace TinyEngine {
 		Transform* transform = nullptr;
 	private:
 		std::vector<std::unique_ptr<Component>> components;
-		TinyGameEngine& engine;
 
 		void NotifyComponentAdded(Component& component);
 		void NotifyComponentRemoved(Component& component);

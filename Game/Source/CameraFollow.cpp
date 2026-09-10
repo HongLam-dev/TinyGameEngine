@@ -3,7 +3,7 @@
 using namespace TinyEngine;
 
 namespace TinyGame {
-	void CameraFollow::Update()
+	void CameraFollow::Update(float deltaTime)
 	{
 		if (target != nullptr)
 		{

@@ -11,8 +11,8 @@ namespace TinyGame {
 		using Component::Component;
 		PingPongAroundCenter(TinyEngine::GameObject& owner) :
 			Component(owner) {}
-		void Update() override;
-		void FixedUpdate() override;
+		void Update(float deltaTime) override;
+		void FixedUpdate(float deltaTime) override;
 		void Start() override;
 		void Initialize(TinyEngine::Vector3 direction, float radius, float moveSpeed = 5.0f) {
 			this->radius = radius;

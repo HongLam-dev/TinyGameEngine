@@ -31,6 +31,8 @@ add_library(TinyGameEngine
     "Engine/Source/UI/UIObject.cpp"
     "Engine/Source/UI/Image.cpp"
     "Engine/Source/RenderManager.cpp"
+    "Engine/Source/Scene.cpp"
+    "Engine/Source/SceneManager.cpp"
     "Engine/Header/Vector3.h"
     "Engine/Header/Vector2.h"
 )

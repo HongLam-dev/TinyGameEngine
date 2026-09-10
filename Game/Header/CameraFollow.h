@@ -7,7 +7,7 @@ namespace TinyGame {
 	public:
 		CameraFollow(TinyEngine::GameObject& owner):Component(owner) {};
 		void SetTarget(TinyEngine::Transform& target) { this->target = &target; }
-		void Update() override;
+		void Update(float deltaTime) override;
 	private:
 		TinyEngine::Transform* target = nullptr;
 	};

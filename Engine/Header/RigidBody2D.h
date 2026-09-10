@@ -18,8 +18,8 @@ namespace TinyEngine {
 		void ApplyGravity();
 		void AddImpulse(Vector3 force);
 		void AddForce(Vector3 force);
-		void ApplyVelocity();
-		void FixedUpdate() override;
+		void ApplyVelocity(float fixedDeltaTime);
+		void FixedUpdate(float fixedDeltaTime) override;
 		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }

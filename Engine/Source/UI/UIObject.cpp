@@ -2,7 +2,7 @@
 #include "UITransform.h"
 
 namespace TinyEngine {
-	UIObject::UIObject(TinyGameEngine& engine) :GameObject(engine) {
+	UIObject::UIObject() {
 		transform = &AddComponent<UITransform>();
 	}
 

@@ -10,8 +10,8 @@ namespace TinyGame {
 	public:
 		using Component::Component;
 		PlayerController(TinyEngine::GameObject& owner) :Component(owner) {}
-		void Update() override;
-		void FixedUpdate() override;
+		void Update(float deltaTime) override;
+		void FixedUpdate(float fixedDeltaTime) override;
 		void Start() override;
 		void OnCollisionEnter(const TinyEngine::Collision& collision) override;
 		void OnCollisionStay(const TinyEngine::Collision& collision) override;

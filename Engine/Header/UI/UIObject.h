@@ -5,7 +5,7 @@
 namespace TinyEngine {
 	class UIObject : public GameObject {
 	public:
-		UIObject(TinyGameEngine& engine);
+		UIObject();
 	private:
 	};
 }

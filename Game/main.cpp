@@ -10,12 +10,11 @@
 #include "Camera.h"
 #include "EngineSettings.h"
 #include "Vector3.h"
+#include "Scene.h"
 using namespace TinyEngine;
 
-
-
-GameObject& CreateASimpleBox(TinyGameEngine& engine, const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
-	GameObject& objectRef = engine.CreateGameObject();
+GameObject& CreateASimpleBox(Scene& scene,TinyGameEngine& engine, const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
+	GameObject& objectRef = scene.CreateSceneObject({&engine.GetRenderManager()});
 
 	if (boxTexture)
 	{
@@ -41,8 +40,8 @@ GameObject& CreateASimpleBox(TinyGameEngine& engine, const Vector3& position, co
 	return objectRef;
 }
 
-GameObject& CreateAPingPongBox(TinyGameEngine& engine, const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
-GameObject& boxRef = CreateASimpleBox(engine,position, size, boxTexture);
+GameObject& CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
+GameObject& boxRef = CreateASimpleBox(scene,engine,position, size, boxTexture);
 
 	TinyGame::PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
 	pingpong.Initialize({ 1,0,0 }, 3);
@@ -57,24 +56,13 @@ GameObject& boxRef = CreateASimpleBox(engine,position, size, boxTexture);
 }
 
 
-GameObject& CreateCamera(TinyGameEngine& engine) {
-	GameObject& camObj = engine.CreateGameObject();
-	Camera& camera = camObj.AddComponent<Camera>();
-	return camObj;
-}
-GameObject& CreateMainCamera(TinyGameEngine& engine) {
-	GameObject& camObj = CreateCamera(engine);
-	engine.SetCamera(*camObj.GetComponent<Camera>());
-	return camObj;
-}
-
 int main()
 {
 	TinyEngine::TinyGameEngine engine;
 	TinyEngine::Window winow;
 
-
-	GameObject& playerRef = engine.CreateGameObject();
+	Scene* activeScene = engine.GetActiveScene();
+	GameObject& playerRef = activeScene->CreateSceneObject({&engine.GetRenderManager()});
 
 	sf::Texture playerRunSheet;
 	sf::Texture placeHolderTex;
@@ -126,7 +114,7 @@ int main()
 	//end
 
 	//Create Image
-	UIObject& imageObj = engine.CreateUIObject();
+	UIObject& imageObj = activeScene->CreateUIObject({ &engine.GetRenderManager() });
 	Image& image = imageObj.AddComponent<Image>();
 	image.SetTexture(placeHolderTex);
 	Transform& imageTransform = imageObj.GetTransform();
@@ -134,7 +122,7 @@ int main()
 	//end image
 
 	//Camera
-	GameObject& camObj = CreateMainCamera(engine);
+	GameObject& camObj = activeScene->CreateMainCamera({ &engine.GetRenderManager() });
 	TinyGame::CameraFollow& camFollow = camObj.AddComponent<TinyGame::CameraFollow>();
 	camFollow.SetTarget(playerTranform);
 
@@ -146,9 +134,9 @@ int main()
 		return 0;
 
 	//CreateASimpleBox({400,200,0},{500,64,0});
-	CreateASimpleBox(engine,{ 400,300,0 }, { 64,64,0 }, &crateText);
-	CreateASimpleBox(engine, { 400,500,0 }, { 700,64,0 }, &crateText);
-	CreateAPingPongBox(engine, { 400,300,0 }, { 64,64,0 }, &crateText);
+	CreateASimpleBox(*activeScene,engine,{ 400,300,0 }, { 64,64,0 }, &crateText);
+	CreateASimpleBox(*activeScene, engine, { 400,500,0 }, { 700,64,0 }, &crateText);
+	CreateAPingPongBox(*activeScene, engine, { 400,300,0 }, { 64,64,0 }, &crateText);
 	//end
 
 

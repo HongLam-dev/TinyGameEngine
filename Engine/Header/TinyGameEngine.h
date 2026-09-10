@@ -8,31 +8,26 @@
 #include "Camera.h"
 #include "UIObject.h"
 #include "RenderManager.h"
+#include "SceneManager.h"
 
 namespace TinyEngine
 {
 	class TinyGameEngine
 	{
 	public:
-		void FixedUpdate();
-		void Update();
+		void Start();
+		void FixedUpdate(float fixedDeltaTime);
+		void Update(float deltaTime);
 		void Render(TinyEngine::Window& window);
 		void Run(TinyEngine::Window& window);
-		void StartObject();
-		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
-		UIObject& CreateUIObject();
-		GameObject& CreateGameObject();
-		Camera& GetMainCamera() { return *mainCamera; };
-		float GetDeltaTime() const { return deltaTime; };
-		float GetFixedDeltaTime() const { return 1.0f/timeStep; };
+		RenderManager& GetRenderManager() { return renderManager; };
+		Scene* GetActiveScene() { return sceneManager.GetActiveScene(); }
 	private:
 		int targetFPS = 60;
 		int timeStep = 60;
 		float deltaTime = 0;
-		Camera* mainCamera=nullptr;
-		CollisionManager collisionManager;
 		RenderManager renderManager;
+		SceneManager sceneManager;
 		sf::Clock clock;
-		std::vector<std::unique_ptr<GameObject>> gameObjects;
 	};
 }

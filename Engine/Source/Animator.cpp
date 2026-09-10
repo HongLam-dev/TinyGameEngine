@@ -37,10 +37,10 @@ namespace TinyEngine {
 			renderer->SetTexture(animation.GetTexture());
 	}
 
-	void Animator::Update() {
+	void Animator::Update(float deltaTime) {
 		if (currentAnimation != nullptr&&renderer!=nullptr)
 		{	
-			Play(*currentAnimation, GetOwner().GetEngineContext().GetDeltaTime());
+			Play(*currentAnimation, deltaTime);
 			renderer->SetTextureRect(currentAnimation->GetFrameRect(currentFrame));
 		}
 	}

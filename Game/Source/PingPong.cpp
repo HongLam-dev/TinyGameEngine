@@ -15,7 +15,7 @@ namespace TinyGame {
         center = transform->GetPosition();
     }
 
-    void PingPongAroundCenter::Update()
+    void PingPongAroundCenter::Update(float deltaTime)
     {
         Vector3 position = transform->GetPosition();
 
@@ -34,9 +34,9 @@ namespace TinyGame {
 
     }
 
-    void PingPongAroundCenter::FixedUpdate()
+    void PingPongAroundCenter::FixedUpdate(float fixedDeltaTime)
     {
-        transform->SetPosition(transform->GetPosition() + direction * moveSpeed * GetOwner().GetEngineContext().GetFixedDeltaTime());
+        transform->SetPosition(transform->GetPosition() + direction * moveSpeed *fixedDeltaTime);
     }
 
     void PingPongAroundCenter::OnCollisionEnter(const Collision& collision) {

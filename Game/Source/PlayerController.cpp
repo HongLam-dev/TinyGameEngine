@@ -13,7 +13,7 @@ namespace TinyGame {
 		rb = GetOwner().GetComponent<Rigidbody2D>();
 	}
 
-	void PlayerController::Update()
+	void PlayerController::Update(float deltaTime)
 	{
 		if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
 		{
@@ -64,7 +64,7 @@ namespace TinyGame {
 	}
 
 
-	void PlayerController::FixedUpdate()
+	void PlayerController::FixedUpdate(float fixedDeltaTime)
 	{
 		if (rb != nullptr)
 		{

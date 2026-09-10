@@ -4,6 +4,6 @@
 
 namespace TinyEngine {
 
-	void Camera::Update() {
+	void Camera::Update(float deltaTime) {
 	}
 }

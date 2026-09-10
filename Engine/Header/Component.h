@@ -14,8 +14,8 @@ namespace TinyEngine {
 		GameObject& GetOwner();
 		Transform& GetTransform() const;
 		virtual void Start() {};
-		virtual void Update() {};
-		virtual void FixedUpdate() {};
+		virtual void Update(float deltaTime) {};
+		virtual void FixedUpdate(float fixedDeltaTime) {};
 		virtual void OnCollisionEnter(const Collision& collision){}
 		virtual void OnCollisionStay(const Collision& collision){}
 		virtual void OnCollisionExit(BoxCollider2D& other){}
