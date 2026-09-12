@@ -11,15 +11,18 @@ namespace TinyGame {
 	{
 	public:
 		SceneManager(TinyEngine::TinyGameEngine& engine, TinyEngine::TextureManager& textureManager);
+		~SceneManager();
 		TinyEngine::Scene* GetActiveScene(){ return activeScene.get(); };
-		void LoadExampleScene();
-		void LoadScene(std::string sceneToLoad);
+		static void LoadExampleScene1();
+		static void LoadExampleScene2();
+		static void LoadScene(std::string sceneToLoad);
 	private:
 		std::vector<std::unique_ptr<TinyEngine::GameObject>> persistentObjects;
 		std::unique_ptr<TinyEngine::Scene> activeScene=nullptr;
 		TinyEngine::TinyGameEngine& engine;
 		TinyEngine::TextureManager& textureManager;
-		SceneBuilder sceneBuilder;
+		inline static SceneManager* instance = nullptr;
+
 	};
 
 }

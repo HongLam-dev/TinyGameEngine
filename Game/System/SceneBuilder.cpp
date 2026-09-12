@@ -18,7 +18,7 @@
 using namespace TinyEngine;
 
 namespace TinyGame {
-	void SceneBuilder::BuildExampleScene(TinyEngine::TinyGameEngine& engine,
+	void SceneBuilder::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
 		TinyEngine::Scene& emptyScene,
 		TinyEngine::TextureManager& textureManager
 	) {
@@ -101,6 +101,37 @@ namespace TinyGame {
 		//end
 
 	}
+
+	void SceneBuilder::BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
+		TinyEngine::Scene& emptyScene,
+		TinyEngine::TextureManager& textureManager
+	) {
+		sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
+
+		if (!placeHolderTex)
+			return;
+		//Create Image
+		UIObject& imageObj = emptyScene.CreateUIObject({ &engine.GetRenderManager() });
+		Image& image = imageObj.AddComponent<Image>();
+		image.SetTexture(*placeHolderTex);
+		Transform& imageTransform = imageObj.GetTransform();
+		imageTransform.SetPosition({ 50, 500, 0 });
+		//end image
+		//boxes
+		sf::Texture* crateText = textureManager.GetTexture("Assets/Crate.png");
+
+		if (!crateText)
+			return;
+
+		//CreateASimpleBox({400,200,0},{500,64,0});
+		CreateASimpleBox(emptyScene, engine, { 400,200,0 }, { 64,64,0 }, crateText);
+		CreateASimpleBox(emptyScene, engine, { 400,600,0 }, { 700,64,0 }, crateText);
+		CreateAPingPongBox(emptyScene, engine, { 400,100,0 }, { 64,64,0 }, crateText);
+		CreateAPingPongBox(emptyScene, engine, { 400,500,0 }, { 64,64,0 }, crateText);
+		//end
+
+	}
+
 
 	GameObject& SceneBuilder::CreateASimpleBox(Scene& scene,
 		TinyEngine::TinyGameEngine& engine,

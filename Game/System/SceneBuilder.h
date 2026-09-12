@@ -18,19 +18,24 @@ namespace TinyGame {
 	class SceneBuilder
 	{
 	public:
-		TinyEngine::GameObject& CreateASimpleBox(TinyEngine::Scene& scene,
+		SceneBuilder() = delete;
+		static TinyEngine::GameObject& CreateASimpleBox(TinyEngine::Scene& scene,
 			TinyEngine::TinyGameEngine& engine,
 			const TinyEngine::Vector3& position, 
 			const TinyEngine::Vector3& size, 
 			sf::Texture* boxTexture);
 
-		TinyEngine::GameObject& CreateAPingPongBox(TinyEngine::Scene& scene,
+		static TinyEngine::GameObject& CreateAPingPongBox(TinyEngine::Scene& scene,
 			TinyEngine::TinyGameEngine& engine,
 			const TinyEngine::Vector3& position,
 			const TinyEngine::Vector3& size,
 			sf::Texture* boxTexture);
 
-		void BuildExampleScene(TinyEngine::TinyGameEngine& engine,
+		static void BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
+			TinyEngine::Scene& emptyScene,
+			TinyEngine::TextureManager& textureManager
+		);
+		static void BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
 			TinyEngine::Scene& emptyScene,
 			TinyEngine::TextureManager& textureManager
 		);
