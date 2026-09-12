@@ -16,8 +16,9 @@
 namespace TinyEngine
 {
 
-	void TinyGameEngine::Run(TinyEngine::Window& window)
+	void TinyGameEngine::RunScene( Scene& sceneToRun)
 	{
+		activeScene = &sceneToRun;
 		Start();
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
@@ -55,26 +56,23 @@ namespace TinyEngine
 	
 	void TinyGameEngine::Start()
 	{
-		sceneManager.Start();
+		activeScene->Start();
 	}
 
 	void TinyGameEngine::FixedUpdate(float fixedDeltaTime)
 	{
-		sceneManager.FixedUpdate(fixedDeltaTime);
+		activeScene->FixedUpdate(fixedDeltaTime);
 	}
 
 	void TinyGameEngine::Update(float deltaTime)
 	{
-		sceneManager.Update(deltaTime);
+		activeScene->Update(deltaTime);
 	}
 
 	void TinyGameEngine::Render(TinyEngine::Window& window)
 	{
 	
 		window.Clear();
-		Scene* activeScene = sceneManager.GetActiveScene();
-		if (!activeScene)
-			return;
 
 		Camera* mainCamera = activeScene->GetMainCamera();
 		if (!mainCamera)

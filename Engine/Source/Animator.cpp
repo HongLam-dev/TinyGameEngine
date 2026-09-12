@@ -6,10 +6,6 @@ namespace TinyEngine {
 
 	void Animator::Start() {
 		renderer = GetOwner().GetComponent<SpriteRenderer>();
-		if (currentAnimation != nullptr && renderer != nullptr)
-		{
-			renderer->SetTexture(currentAnimation->GetTexture());
-		}
 	}
 
 	void Animator::Play(const Animation& animation,float deltaTime)
@@ -31,17 +27,28 @@ namespace TinyEngine {
 		}
 	}
 
-	void Animator::SetAnimation(const Animation& animation) {
-		currentAnimation = &animation; 
-		if(renderer != nullptr)
-			renderer->SetTexture(animation.GetTexture());
+	void Animator::SetAnimation(std::string name) {
+		currentAnimation = name;
+		if (renderer != nullptr && animations.contains(name))
+			renderer->SetTexture(animations.at(name).GetTexture());
+		else
+			std::cout<<"Animation "<<name << " not found\n";
 	}
 
 	void Animator::Update(float deltaTime) {
-		if (currentAnimation != nullptr&&renderer!=nullptr)
+		if (animations.contains(currentAnimation) && renderer != nullptr)
 		{	
-			Play(*currentAnimation, deltaTime);
-			renderer->SetTextureRect(currentAnimation->GetFrameRect(currentFrame));
+			Play(animations.at(currentAnimation), deltaTime);
+			renderer->SetTextureRect(animations.at(currentAnimation).GetCurrentFrameRect(currentFrame));
+		}
+		else
+		{
+			std::cout << "Animation " << currentAnimation << " not found \n";
 		}
 	}
+
+	void Animator::AddAnimation(std::string name, Animation&& animation) {
+		animations.emplace(std::move(name), std::move(animation));
+	}
+	
 }

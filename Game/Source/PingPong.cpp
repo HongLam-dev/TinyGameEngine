@@ -21,12 +21,12 @@ namespace TinyGame {
 
         float distance = (position - center).Dot(direction);
 
-        if (distance >= radius)
+        if (distance > radius)
         {
             transform->SetPosition(center + direction * radius);
             direction = direction * (-1);
         }
-        else if (distance <= -radius)
+        else if (distance < -radius)
         {
             transform->SetPosition(center - direction * radius);
             direction = direction * (-1);

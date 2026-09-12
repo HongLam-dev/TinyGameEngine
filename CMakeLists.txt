@@ -32,7 +32,7 @@ add_library(TinyGameEngine
     "Engine/Source/UI/Image.cpp"
     "Engine/Source/RenderManager.cpp"
     "Engine/Source/Scene.cpp"
-    "Engine/Source/SceneManager.cpp"
+    "Engine/Source/TextureManager.cpp"
     "Engine/Header/Vector3.h"
     "Engine/Header/Vector2.h"
 )
@@ -49,6 +49,10 @@ target_link_libraries(TinyGameEngine PUBLIC
 # Add source to this project's executable.
 add_executable (TinyGame
 "Game/main.cpp"
+"Game/System/SceneManager.h"
+"Game/System/SceneManager.cpp"
+"Game/System/SceneBuilder.h"
+"Game/System/SceneBuilder.cpp"
 "Game/Header/PlayerController.h"
 "Game/Source/PlayerController.cpp"
 "Game/Header/PingPong.h" 
@@ -57,6 +61,7 @@ add_executable (TinyGame
 "Game/Source/CameraFollow.cpp")
 
 target_include_directories(TinyGame PRIVATE
+    Game/System
     Game/Header
 )
 
