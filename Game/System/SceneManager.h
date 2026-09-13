@@ -13,9 +13,9 @@ namespace TinyGame {
 	public:
 		SceneManager(TinyEngine::TinyGameEngine& engine, TinyEngine::TextureManager& textureManager);
 		~SceneManager();
-		TinyEngine::Scene* GetActiveScene(){ return activeScene.get(); };
 		static void LoadExampleScene1();
 		static void LoadExampleScene2();
+		static void LoadNewScene();
 		static void LoadScene(std::string sceneToLoad);
 	private:
 		std::vector<std::unique_ptr<TinyEngine::GameObject>> persistentObjects;

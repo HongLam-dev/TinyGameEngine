@@ -23,6 +23,9 @@ namespace TinyEngine {
 		void UnregisterCollider(BoxCollider2D& collider);
 		void RegisterRenderer(RenderableComponent& renderer);
 		void UnregisterRenderer(RenderableComponent& renderer);
+		void Destroy(Component& component);
+		void Destroy();
+		void OnDestroy();
 		template <typename T>
 			requires std::derived_from<T, Component>
 		T& AddComponent()

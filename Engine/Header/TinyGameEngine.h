@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <functional>
 #include "Window.h"
 #include "Input.h"
 #include "GameObject.h"
@@ -9,22 +10,26 @@
 #include "UIObject.h"
 #include "Scene.h"
 #include "RenderableComponent.h"
+
 namespace TinyEngine
 {
 	class TinyGameEngine
 	{
 	public:
 		TinyGameEngine(Window& window):window(window) {};
-		void Start();
 		void FixedUpdate(float fixedDeltaTime);
 		void Update(float deltaTime);
 		void Render(TinyEngine::Window& window);
-		void RunScene( Scene& sceneToRun);
+		void Run();
+		void ActivateScene(Scene& sceneToActive);
 		void RegisterRenderer(RenderableComponent& renderer);
 		void UnregisterRenderer(RenderableComponent& renderer);
 		void RegisterCollider(BoxCollider2D& collider);
 		void UnregisterCollider(BoxCollider2D& collider);
+		void DestroyGameObject(GameObject& gameObject);
 		RenderManager& GetRenderManager() { return renderManager; };
+		void EnqueueAction(std::function<void()> action) { deferredActions.push_back(action); }
+		void HandleReferredActions();
 	private:
 		Window& window;
 		int targetFPS = 60;
@@ -34,5 +39,6 @@ namespace TinyEngine
 		Scene* activeScene=nullptr;
 		std::vector<std::unique_ptr<GameObject>> persistentOjects;
 		sf::Clock clock;
+		std::vector<std::function<void()>> deferredActions;
 	};
 }

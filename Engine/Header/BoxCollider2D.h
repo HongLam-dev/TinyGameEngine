@@ -28,6 +28,7 @@ namespace TinyEngine {
 			this->isTrigger = isTrigger;
 		}
 		bool GetIsTrigger() { return isTrigger; };
+		void OnDestroy() override;
 	private:
 		Vector3 size{1,1,1};
 		Vector3 offset = Vector3::Zero;

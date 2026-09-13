@@ -61,4 +61,29 @@ namespace TinyEngine
 	void GameObject::UnregisterCollider(BoxCollider2D& collider) {
 		engine.UnregisterCollider(collider);
 	}
+	void GameObject::Destroy(Component& component) {
+		auto it = std::find_if(
+			components.begin(),
+			components.end(),
+			[&component](const std::unique_ptr<Component>& c)
+			{
+				return c.get() == &component;
+			}
+		);
+
+		if (it != components.end())
+		{
+			component.OnDestroy();
+			components.erase(it);
+		}
+	}
+	void  GameObject::Destroy() {
+		engine.DestroyGameObject(*this);
+	}
+	void  GameObject::OnDestroy() {
+		for (auto& component : components)
+		{
+			component->OnDestroy();
+		}
+	}
 }

@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "TinyGameEngine.h"
 #include "BoxCollider2D.h"
+#include "SceneManager.h"
 #include <iostream>
 using namespace TinyEngine;
 
@@ -51,6 +52,14 @@ namespace TinyGame {
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::G))
 		{
 			rb->SetGravityScale(1);
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::Num1))
+		{
+			SceneManager::LoadExampleScene1();
+		}
+		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::Num2))
+		{
+			SceneManager::LoadExampleScene2();
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
 		{

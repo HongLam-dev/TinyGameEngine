@@ -13,6 +13,9 @@ namespace TinyEngine {
 		const GameObject& GetOwner() const;
 		GameObject& GetOwner();
 		Transform& GetTransform() const;
+		void Destroy(Component& component);
+		void Destroy(GameObject& gameObject);
+		virtual void OnDestroy() {};
 		virtual void Start() {};
 		virtual void Update(float deltaTime) {};
 		virtual void FixedUpdate(float fixedDeltaTime) {};

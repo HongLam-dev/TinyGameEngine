@@ -70,4 +70,7 @@ namespace TinyEngine {
 			component->OnTriggerExit(other);
 		}
 	}
+	void BoxCollider2D::OnDestroy() {
+		GetOwner().UnregisterCollider(*this);
+	}
 }

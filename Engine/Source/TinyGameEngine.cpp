@@ -16,10 +16,8 @@
 namespace TinyEngine
 {
 
-	void TinyGameEngine::RunScene( Scene& sceneToRun)
+	void TinyGameEngine::Run()
 	{
-		activeScene = &sceneToRun;
-		Start();
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{
@@ -50,43 +48,66 @@ namespace TinyEngine
 			{
 				Render(window);
 				deltaTime = 0;
+				HandleReferredActions();
 			}
 		}
 	}
-	
-	void TinyGameEngine::Start()
-	{
-		activeScene->Start();
+	void  TinyGameEngine::HandleReferredActions() {
+		for (auto& action : deferredActions)
+		{
+			action();
+		}
 	}
 
 	void TinyGameEngine::FixedUpdate(float fixedDeltaTime)
 	{
-		activeScene->FixedUpdate(fixedDeltaTime);
+		for (auto& object : persistentOjects)
+		{
+			object->FixedUpdate(fixedDeltaTime);
+		}
+		if(activeScene)
+		{
+			activeScene->FixedUpdate(fixedDeltaTime);
+		}
 	}
 
 	void TinyGameEngine::Update(float deltaTime)
 	{
-		activeScene->Update(deltaTime);
+		for (auto& object : persistentOjects)
+		{
+			object->Update(deltaTime);
+		}
+
+		if(activeScene)
+		{
+			activeScene->Update(deltaTime);
+		}
 	}
 
 	void TinyGameEngine::Render(TinyEngine::Window& window)
 	{
 	
 		window.Clear();
-
-		Camera* mainCamera = activeScene->GetMainCamera();
-		if (!mainCamera)
-			return;
-
-		renderManager.Render(window, *mainCamera);
-		for (auto& collider : activeScene->GetCollidersInScene())
+		if (activeScene)
 		{
-			window.DrawCollider(*collider,*mainCamera);
+			Camera* mainCamera = activeScene->GetMainCamera();
+			if (!mainCamera)
+				return;
+
+			renderManager.Render(window, *mainCamera);
+			for (auto& collider : activeScene->GetCollidersInScene())
+			{
+				window.DrawCollider(*collider, *mainCamera);
+			}
 		}
 
 		window.Display();
 	}
 
+	void TinyGameEngine::ActivateScene(Scene& scene) {
+		activeScene = &scene;
+		scene.Start();
+	}
 
 	void TinyGameEngine::RegisterRenderer(RenderableComponent& renderer) {
 		renderManager.RegisterRenderer(renderer);
@@ -99,5 +120,26 @@ namespace TinyEngine
 	}
 	void TinyGameEngine::UnregisterCollider(BoxCollider2D& collider) {
 		activeScene->UnregisterCollider(collider);
+	}
+
+	void TinyGameEngine::DestroyGameObject(GameObject& gameObject) {
+		auto it = std::find_if(
+			persistentOjects.begin(),
+			persistentOjects.end(),
+			[&gameObject](const std::unique_ptr<GameObject>& c)
+			{
+				return c.get() == &gameObject;
+			}
+		);
+
+		if (it != persistentOjects.end())
+		{
+			gameObject.OnDestroy();
+			persistentOjects.erase(it);
+		}
+		else
+		{
+			activeScene->DestroySceneObject(gameObject);
+		}
 	}
 }

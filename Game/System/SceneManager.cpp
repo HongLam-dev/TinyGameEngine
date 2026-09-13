@@ -19,20 +19,39 @@ namespace TinyGame {
 	{
 		if (!instance)
 			throw std::runtime_error("No SceneManager instance exists");
+		if (instance->activeScene)
+		{
+			instance->activeScene->Unload();
+		}
+
 		instance->activeScene = std::make_unique<TinyEngine::Scene>();
 
 		SceneBuilder::BuildExampleScene1(instance->engine,
 			*instance->activeScene,
 			instance->textureManager);
+		instance->engine.ActivateScene(*instance->activeScene);
 	}
 	void SceneManager::LoadExampleScene2()
 	{
 		if (!instance)
 			throw std::runtime_error("No SceneManager instance exists");
+		if (instance->activeScene)
+		{
+			instance->activeScene->Unload();
+		}
+		instance->engine.EnqueueAction(LoadNewScene);
+	}
+	void SceneManager::LoadNewScene() {
+		if (!instance)
+			throw std::runtime_error("No SceneManager instance exists");
+		if (instance->activeScene)
+		{
+			instance->activeScene->Unload();
+		}
 		instance->activeScene = std::make_unique<TinyEngine::Scene>();
-
 		SceneBuilder::BuildExampleScene2(instance->engine,
 			*instance->activeScene,
 			instance->textureManager);
+		instance->engine.ActivateScene(*instance->activeScene);
 	}
 }

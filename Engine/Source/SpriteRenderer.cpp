@@ -61,4 +61,8 @@ namespace TinyEngine {
 
         window.Draw(*sprite);
     }
+
+    void SpriteRenderer::OnDestroy() {
+        GetOwner().UnregisterRenderer(*this);
+    }
 }

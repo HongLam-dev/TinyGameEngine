@@ -10,7 +10,6 @@
 #include "Camera.h"
 #include "EngineSettings.h"
 #include "Vector3.h"
-#include "Scene.h"
 #include "TextureManager.h"
 #include "SceneManager.h"
 
@@ -24,11 +23,6 @@ int main()
 
 	TinyGame::SceneManager sceneManager(engine,textureManager);
 	TinyGame::SceneManager::LoadExampleScene1();
-
-	TinyEngine::Scene* activeScene = sceneManager.GetActiveScene();
-	if (!activeScene)
-		return 1;
-
-	engine.RunScene(*activeScene);
+	engine.Run();
 	return 0;
 }

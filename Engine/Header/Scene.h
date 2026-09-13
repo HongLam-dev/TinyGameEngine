@@ -18,9 +18,11 @@ namespace TinyEngine {
 		GameObject& CreateCamera(TinyGameEngine& engine);
 		void RegisterCollider(BoxCollider2D& collider);
 		void UnregisterCollider(BoxCollider2D& collider);
+		void DestroySceneObject(GameObject& object);
+		void Start();
 		void Update(float deltaTime);
 		void FixedUpdate(float fixedDeltaTime);
-		void Start();
+		void Unload();
 	private:
 		CollisionManager collisionManager;
 		Camera* mainCamera = nullptr;

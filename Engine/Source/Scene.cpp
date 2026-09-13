@@ -3,6 +3,29 @@
 
 namespace TinyEngine {
 
+	void  Scene::Unload() {
+		for (auto& object : sceneObjects)
+		{
+			object->OnDestroy();
+		}
+	}
+	void Scene::DestroySceneObject(GameObject& object) {
+		auto it = std::find_if(
+			sceneObjects.begin(),
+			sceneObjects.end(),
+			[&object](const std::unique_ptr<GameObject>& c)
+			{
+				return c.get() == &object;
+			}
+		);
+
+		if (it != sceneObjects.end())
+		{
+			object.OnDestroy();
+			sceneObjects.erase(it);
+		}
+	}
+
 	void Scene::RegisterCollider(BoxCollider2D& collider) {
 		collisionManager.RegisterCollider(collider);
 	}

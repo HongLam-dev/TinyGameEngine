@@ -1,6 +1,13 @@
 #include "GameObject.h"
 namespace TinyEngine
 {
+	void Component::Destroy(Component& component) {
+		component.GetOwner().Destroy(component);
+	}
+	void Component::Destroy(GameObject& gameObject) {
+		gameObject.Destroy();
+	}
+
 	const GameObject& Component::GetOwner() const
 	{
 		return owner;
