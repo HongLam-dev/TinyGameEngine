@@ -27,6 +27,7 @@ namespace TinyEngine
 		void RegisterCollider(BoxCollider2D& collider);
 		void UnregisterCollider(BoxCollider2D& collider);
 		void DestroyGameObject(GameObject& gameObject);
+		void DontDestroyOnload(GameObject& gameObject);
 		RenderManager& GetRenderManager() { return renderManager; };
 		void EnqueueAction(std::function<void()> action) { deferredActions.push_back(action); }
 		void HandleReferredActions();
@@ -40,5 +41,7 @@ namespace TinyEngine
 		std::vector<std::unique_ptr<GameObject>> persistentOjects;
 		sf::Clock clock;
 		std::vector<std::function<void()>> deferredActions;
+		std::vector<GameObject*> objectsToDestroy;
+		std::vector<GameObject*> objectsToMakePersistent;
 	};
 }

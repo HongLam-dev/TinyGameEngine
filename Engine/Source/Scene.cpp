@@ -25,6 +25,24 @@ namespace TinyEngine {
 			sceneObjects.erase(it);
 		}
 	}
+	std::unique_ptr<GameObject> Scene::RemoveSceneObject(GameObject& gameObject) {
+
+		auto it = std::find_if(
+			sceneObjects.begin(),
+			sceneObjects.end(),
+			[&gameObject](const std::unique_ptr<GameObject>& current)
+			{
+				return current.get() == &gameObject;
+			});
+
+		if (it == sceneObjects.end())
+			return nullptr;
+
+		std::unique_ptr<GameObject> result = std::move(*it);
+		sceneObjects.erase(it);
+
+		return result;
+	}
 
 	void Scene::RegisterCollider(BoxCollider2D& collider) {
 		collisionManager.RegisterCollider(collider);

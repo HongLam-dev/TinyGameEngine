@@ -23,6 +23,7 @@ namespace TinyEngine {
 		void UnregisterCollider(BoxCollider2D& collider);
 		void RegisterRenderer(RenderableComponent& renderer);
 		void UnregisterRenderer(RenderableComponent& renderer);
+		void DontDestroyOnload(GameObject& gameObject);
 		void Destroy(Component& component);
 		void Destroy();
 		void OnDestroy();
@@ -100,6 +101,8 @@ namespace TinyEngine {
 	protected:
 		Transform* transform = nullptr;
 	private:
+		bool destroyOnLoad = true;
+		bool destroyed = false;
 		TinyGameEngine& engine;
 		std::vector<std::unique_ptr<Component>> components;
 	};

@@ -52,12 +52,6 @@ namespace TinyEngine
 			}
 		}
 	}
-	void  TinyGameEngine::HandleReferredActions() {
-		for (auto& action : deferredActions)
-		{
-			action();
-		}
-	}
 
 	void TinyGameEngine::FixedUpdate(float fixedDeltaTime)
 	{
@@ -142,4 +136,33 @@ namespace TinyEngine
 			activeScene->DestroySceneObject(gameObject);
 		}
 	}
+
+	void TinyGameEngine::DontDestroyOnload(GameObject& gameObject) {
+		objectsToMakePersistent.push_back(&gameObject);
+	}
+
+	void  TinyGameEngine::HandleReferredActions() {
+		for (auto& action : deferredActions)
+		{
+			action();
+		}
+		deferredActions.clear();
+
+		for (auto& object : objectsToDestroy)
+		{
+			if (object)
+				DestroyGameObject(*object);
+		}
+
+		objectsToDestroy.clear();
+
+		for (auto& object : objectsToMakePersistent)
+		{
+			if(object)
+				persistentOjects.push_back(std::move(activeScene->RemoveSceneObject(*object)));
+		}
+
+		objectsToMakePersistent.clear();
+	}
+
 }

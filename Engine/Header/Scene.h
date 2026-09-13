@@ -16,6 +16,7 @@ namespace TinyEngine {
 		UIObject& CreateUIObject(TinyGameEngine& engine);
 		GameObject& CreateMainCamera(TinyGameEngine& engine);
 		GameObject& CreateCamera(TinyGameEngine& engine);
+		std::unique_ptr<GameObject> RemoveSceneObject(GameObject& gameObject);
 		void RegisterCollider(BoxCollider2D& collider);
 		void UnregisterCollider(BoxCollider2D& collider);
 		void DestroySceneObject(GameObject& object);

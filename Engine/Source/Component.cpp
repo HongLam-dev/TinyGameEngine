@@ -21,4 +21,11 @@ namespace TinyEngine
 	Transform& Component::GetTransform() const {
 		return owner.GetTransform();
 	}
+
+	void Component::DontDestroyOnload(GameObject& gameObject) {
+		GetOwner().DontDestroyOnload(gameObject);
+	}
+	void Component::DontDestroyOnload(Component& component) {
+		GetOwner().DontDestroyOnload(component.GetOwner());
+	}
 }

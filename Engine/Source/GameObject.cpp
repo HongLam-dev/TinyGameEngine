@@ -77,13 +77,22 @@ namespace TinyEngine
 			components.erase(it);
 		}
 	}
+
 	void  GameObject::Destroy() {
 		engine.DestroyGameObject(*this);
 	}
+
 	void  GameObject::OnDestroy() {
 		for (auto& component : components)
 		{
 			component->OnDestroy();
 		}
+	}
+
+	void GameObject::DontDestroyOnload(GameObject& gameObject) {
+		if (!destroyOnLoad)
+			return;
+		destroyOnLoad = false;
+		engine.DontDestroyOnload(gameObject);
 	}
 }
