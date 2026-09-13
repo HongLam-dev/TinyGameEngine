@@ -7,6 +7,7 @@ namespace TinyEngine {
 	}
 	
 	void BoxCollider2D::Start() {
+		GetOwner().RegisterCollider(*this);
 		SetRigidbody();
 	}
 

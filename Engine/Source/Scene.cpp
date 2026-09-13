@@ -2,28 +2,25 @@
 #include "GameObject.h"
 
 namespace TinyEngine {
-	GameObject& Scene::CreateSceneObject(std::vector<IComponentObserver*> observers)
-	{
-		auto go = std::make_unique<GameObject>();
-		go->AddComponentObserver(collisionManager);
-		for (auto& observer: observers)
-		{
-			go->AddComponentObserver(*observer);
-		}
 
+	void Scene::RegisterCollider(BoxCollider2D& collider) {
+		collisionManager.RegisterCollider(collider);
+	}
+	void Scene::UnregisterCollider(BoxCollider2D& collider) {
+		collisionManager.UnregisterCollider(collider);
+	}
+	GameObject& Scene::CreateSceneObject(TinyGameEngine& engine)
+	{
+		auto go = std::make_unique<GameObject>(engine);
 		sceneObjects.push_back(std::move(go));
 
 		return *sceneObjects.back();
 	}
 
-	UIObject& Scene::CreateUIObject(std::vector<IComponentObserver*> observers)
+	UIObject& Scene::CreateUIObject(TinyGameEngine& engine)
 	{
-		auto go = std::make_unique<UIObject>();
+		auto go = std::make_unique<UIObject>(engine);
 		UIObject& uiObject = *go;
-		for (auto& observer : observers)
-		{
-			go->AddComponentObserver(*observer);
-		}
 		sceneObjects.push_back(std::move(go));
 
 		return uiObject;
@@ -53,13 +50,13 @@ namespace TinyEngine {
 			gameObject->Update(deltaTime);
 		}
 	}
-	GameObject& Scene::CreateCamera(std::vector<IComponentObserver*> observers) {
-		GameObject& camObj = CreateSceneObject(observers);
+	GameObject& Scene::CreateCamera(TinyGameEngine& engine) {
+		GameObject& camObj = CreateSceneObject(engine);
 		Camera& camera = camObj.AddComponent<Camera>();
 		return camObj;
 	}
-	GameObject& Scene::CreateMainCamera(std::vector<IComponentObserver*> observers) {
-		GameObject& camObj = CreateCamera(observers);
+	GameObject& Scene::CreateMainCamera(TinyGameEngine& engine) {
+		GameObject& camObj = CreateCamera(engine);
 		SetCamera(*camObj.GetComponent<Camera>());
 		return camObj;
 	}

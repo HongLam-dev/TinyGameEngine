@@ -5,22 +5,24 @@
 #include "Component.h"
 #include "Transform.h"
 #include "Vector3.h"
-#include "IComponentObserver.h"
+#include "RenderableComponent.h"
 namespace TinyEngine {
 
 	class Camera;
 	class Window;
+	class TinyGameEngine;
 	class GameObject {
 	public:
-		GameObject();
+		GameObject(TinyGameEngine& engine);
 		void Update(float deltaTime);
 		void FixedUpdate(float fixedDeltaTime);
 		void Start();
-		void AddComponentObserver(IComponentObserver& observer);
-		void RemoveComponentObserver(IComponentObserver& observer);
 		void RemoveComponent(Component* component);
 		Transform& GetTransform() { return *transform; }
-
+		void RegisterCollider(BoxCollider2D& collider);
+		void UnregisterCollider(BoxCollider2D& collider);
+		void RegisterRenderer(RenderableComponent& renderer);
+		void UnregisterRenderer(RenderableComponent& renderer);
 		template <typename T>
 			requires std::derived_from<T, Component>
 		T& AddComponent()
@@ -31,7 +33,6 @@ namespace TinyEngine {
 
 			components.push_back(std::move(component));
 
-			NotifyComponentAdded(ref);
 			return ref;
 		}
 
@@ -96,11 +97,7 @@ namespace TinyEngine {
 	protected:
 		Transform* transform = nullptr;
 	private:
+		TinyGameEngine& engine;
 		std::vector<std::unique_ptr<Component>> components;
-
-		void NotifyComponentAdded(Component& component);
-		void NotifyComponentRemoved(Component& component);
-
-		std::vector<IComponentObserver*> observers;
 	};
 }

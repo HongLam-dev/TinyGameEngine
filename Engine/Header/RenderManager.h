@@ -4,15 +4,14 @@
 #include "Camera.h"
 #include "SpriteRenderer.h"
 #include "UIRenderable.h"
-#include "IComponentObserver.h"
 
 namespace TinyEngine {
-	class RenderManager:public IComponentObserver
+	class RenderManager
 	{
 	public:
 		void Render(Window& window, const Camera& camera);
-		void OnComponentAdded(Component& component);
-		void OnComponentRemoved(Component& component);
+		void RegisterRenderer(RenderableComponent& renderer);
+		void UnregisterRenderer(RenderableComponent& renderer);
 	private:
 		std::vector<UIRenderable*> uiRenderables;
 		std::vector<SpriteRenderer*> spriteRenderers;

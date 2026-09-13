@@ -13,6 +13,7 @@ namespace TinyEngine {
     public:
 	    void Render(Window& window, const Camera& camera);
         SpriteRenderer(GameObject& owner):RenderableComponent(owner) {}
+        void Start() override;
         void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)

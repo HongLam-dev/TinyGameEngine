@@ -1,11 +1,12 @@
 #include "GameObject.h"
 #include "SpriteRenderer.h"
+#include "TinyGameEngine.h"
 #include "Image.h"
 #include <iostream>
 
 namespace TinyEngine
 {
-	GameObject::GameObject() {
+	GameObject::GameObject(TinyGameEngine& engine): engine(engine) {
 		transform = &AddComponent<Transform>();
 	}
 	void GameObject::Update(float deltaTime)
@@ -32,33 +33,6 @@ namespace TinyEngine
 		}
 	}
 
-
-	void GameObject::NotifyComponentAdded(Component& component)
-	{
-		for (IComponentObserver* observer : observers)
-		{
-			observer->OnComponentAdded(component);
-		}
-	}
-
-	void GameObject::NotifyComponentRemoved(Component& component)
-	{
-		for (IComponentObserver* observer : observers)
-		{
-			observer->OnComponentRemoved(component);
-		}
-	}
-
-	void GameObject::AddComponentObserver(IComponentObserver& observer)
-	{
-		observers.push_back(&observer);
-	}
-
-	void GameObject::RemoveComponentObserver(IComponentObserver& observer)
-	{
-		std::erase(observers, &observer);
-	}
-
 	void GameObject::RemoveComponent(Component* component)
 	{
 		auto it = std::find_if(
@@ -71,9 +45,20 @@ namespace TinyEngine
 
 		if (it != components.end())
 		{
-			NotifyComponentRemoved(**it);
-
 			components.erase(it);
 		}
+	}
+
+	void GameObject::RegisterRenderer(RenderableComponent& renderer) {
+		engine.RegisterRenderer(renderer);
+	}
+	void GameObject::UnregisterRenderer(RenderableComponent& renderer) {
+		engine.UnregisterRenderer(renderer);
+	}
+	void GameObject::RegisterCollider(BoxCollider2D& collider) {
+		engine.RegisterCollider(collider);
+	}
+	void GameObject::UnregisterCollider(BoxCollider2D& collider) {
+		engine.UnregisterCollider(collider);
 	}
 }

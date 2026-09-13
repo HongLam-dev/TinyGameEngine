@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "UIObject.h"
 #include "Scene.h"
+#include "RenderableComponent.h"
 namespace TinyEngine
 {
 	class TinyGameEngine
@@ -19,6 +20,10 @@ namespace TinyEngine
 		void Update(float deltaTime);
 		void Render(TinyEngine::Window& window);
 		void RunScene( Scene& sceneToRun);
+		void RegisterRenderer(RenderableComponent& renderer);
+		void UnregisterRenderer(RenderableComponent& renderer);
+		void RegisterCollider(BoxCollider2D& collider);
+		void UnregisterCollider(BoxCollider2D& collider);
 		RenderManager& GetRenderManager() { return renderManager; };
 	private:
 		Window& window;

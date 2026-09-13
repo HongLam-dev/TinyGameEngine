@@ -22,7 +22,7 @@ namespace TinyGame {
 		TinyEngine::Scene& emptyScene,
 		TinyEngine::TextureManager& textureManager
 	) {
-		GameObject& playerRef = emptyScene.CreateSceneObject({ &engine.GetRenderManager() });
+		GameObject& playerRef = emptyScene.CreateSceneObject(engine);
 
 		sf::Texture* playerRunSheet=textureManager.GetTexture("Assets/PlayerRun.png");
 		sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
@@ -75,7 +75,7 @@ namespace TinyGame {
 		//end
 
 		//Create Image
-		UIObject& imageObj = emptyScene.CreateUIObject({ &engine.GetRenderManager() });
+		UIObject& imageObj = emptyScene.CreateUIObject(engine);
 		Image& image = imageObj.AddComponent<Image>();
 		image.SetTexture(*placeHolderTex);
 		Transform& imageTransform = imageObj.GetTransform();
@@ -83,7 +83,7 @@ namespace TinyGame {
 		//end image
 
 		//Camera
-		GameObject& camObj = emptyScene.CreateMainCamera({ &engine.GetRenderManager() });
+		GameObject& camObj = emptyScene.CreateMainCamera(engine);
 		CameraFollow& camFollow = camObj.AddComponent<TinyGame::CameraFollow>();
 		camFollow.SetTarget(playerTranform);
 
@@ -111,7 +111,7 @@ namespace TinyGame {
 		if (!placeHolderTex)
 			return;
 		//Create Image
-		UIObject& imageObj = emptyScene.CreateUIObject({ &engine.GetRenderManager() });
+		UIObject& imageObj = emptyScene.CreateUIObject(engine);
 		Image& image = imageObj.AddComponent<Image>();
 		image.SetTexture(*placeHolderTex);
 		Transform& imageTransform = imageObj.GetTransform();
@@ -138,7 +138,7 @@ namespace TinyGame {
 		const Vector3& position, 
 		const Vector3& size, 
 		sf::Texture* boxTexture) {
-		GameObject& objectRef = scene.CreateSceneObject({ &engine.GetRenderManager() });
+		GameObject& objectRef = scene.CreateSceneObject(engine);
 
 		if (boxTexture)
 		{

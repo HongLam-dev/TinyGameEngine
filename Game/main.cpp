@@ -23,7 +23,7 @@ int main()
 	TinyEngine::TextureManager textureManager;
 
 	TinyGame::SceneManager sceneManager(engine,textureManager);
-	sceneManager.LoadExampleScene();
+	TinyGame::SceneManager::LoadExampleScene1();
 
 	TinyEngine::Scene* activeScene = sceneManager.GetActiveScene();
 	if (!activeScene)

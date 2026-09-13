@@ -3,19 +3,18 @@
 #include "BoxCollider2D.h"
 #include "RigidBody2D.h"
 #include "Vector3.h"
-#include "IComponentObserver.h"
 #include <vector>
 #include "Bounds.h"
 #include <set>
 
 namespace TinyEngine{
 
-	class CollisionManager : public IComponentObserver
+	class CollisionManager
 	{
     public:
         void CheckCollision(float fixedDeltaTime);
-        void OnComponentAdded(Component& component) override;
-        void OnComponentRemoved(Component& component) override;
+        void RegisterCollider(BoxCollider2D& collider);
+        void UnregisterCollider(BoxCollider2D& collider);
         const std::vector<BoxCollider2D*>& GetColliders() const { return colliders; };
 	private:
         struct CollisionPair

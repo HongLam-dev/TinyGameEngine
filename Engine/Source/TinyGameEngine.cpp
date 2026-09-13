@@ -87,4 +87,17 @@ namespace TinyEngine
 		window.Display();
 	}
 
+
+	void TinyGameEngine::RegisterRenderer(RenderableComponent& renderer) {
+		renderManager.RegisterRenderer(renderer);
+	}
+	void TinyGameEngine::UnregisterRenderer(RenderableComponent& renderer) {
+		renderManager.UnregisterRenderer(renderer);
+	}
+	void TinyGameEngine::RegisterCollider(BoxCollider2D& collider) {
+		activeScene->RegisterCollider(collider);
+	}
+	void TinyGameEngine::UnregisterCollider(BoxCollider2D& collider) {
+		activeScene->UnregisterCollider(collider);
+	}
 }

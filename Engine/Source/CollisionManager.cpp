@@ -13,15 +13,15 @@
 
 namespace TinyEngine {
 
-	void CollisionManager::OnComponentAdded(Component& component)
-	{
-		if (auto* collider = dynamic_cast<BoxCollider2D*>(&component))
-		{
-			colliders.push_back(collider);
-		}
+	void  CollisionManager::RegisterCollider(BoxCollider2D& collider) {
+			colliders.push_back(&collider);
 	}
-	void CollisionManager::OnComponentRemoved(Component& component) {
-
+	void  CollisionManager::UnregisterCollider(BoxCollider2D& collider) {
+		auto it = std::find(colliders.begin(), colliders.end(), &collider);
+		if (it != colliders.end())
+		{
+			colliders.erase(it);
+		}
 	}
 
 	CollisionManager::ContinuousCollision CollisionManager::ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime)

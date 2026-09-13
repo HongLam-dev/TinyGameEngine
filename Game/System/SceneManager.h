@@ -5,6 +5,7 @@
 #include "TinyGameEngine.h"
 #include "SceneBuilder.h"
 #include "TextureManager.h"
+#include "RenderableComponent.h"
 
 namespace TinyGame {
 	class SceneManager
