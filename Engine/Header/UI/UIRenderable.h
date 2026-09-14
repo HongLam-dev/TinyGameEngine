@@ -6,7 +6,7 @@ namespace TinyEngine {
 	class UIRenderable: public RenderableComponent
 	{
 	public:
-		UIRenderable(GameObject& owner):RenderableComponent(owner) {};
+		UIRenderable(GameObject& owner) :RenderableComponent(owner) { GetOwner().RegisterRenderer(*this); };
 		virtual void Render(Window& window)=0;
 	private:
 

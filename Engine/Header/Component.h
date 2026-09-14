@@ -18,6 +18,7 @@ namespace TinyEngine {
 		void DontDestroyOnload(GameObject& gameObject);
 		void DontDestroyOnload(Component& component);
 		virtual void OnDestroy() {};
+		virtual void Awake() {};
 		virtual void Start() {};
 		virtual void Update(float deltaTime) {};
 		virtual void FixedUpdate(float fixedDeltaTime) {};

@@ -21,16 +21,16 @@ namespace TinyEngine
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{
+			float elapsedTime = clock.restart().asSeconds();
+			deltaTime += elapsedTime;
+			accumulatedTimeStep += elapsedTime;
+
 			while (const std::optional event = window.PollEvent())
 			{
 				if (event->is<sf::Event::Closed>())
 					window.Close();
 				Input::Get().ProcessEvent(*event);
 			}
-
-			float elapsedTime = clock.restart().asSeconds();
-			deltaTime += elapsedTime;
-			accumulatedTimeStep += elapsedTime;
 
 			if (deltaTime >= 1.0 / targetFPS)
 			{	
@@ -49,6 +49,7 @@ namespace TinyEngine
 				Render(window);
 				deltaTime = 0;
 				HandleReferredActions();
+				Input::Get().SyncKeyState();
 			}
 		}
 	}
@@ -59,10 +60,7 @@ namespace TinyEngine
 		{
 			object->FixedUpdate(fixedDeltaTime);
 		}
-		if(activeScene)
-		{
-			activeScene->FixedUpdate(fixedDeltaTime);
-		}
+		activeScene->FixedUpdate(fixedDeltaTime);
 		collisionManager.CheckCollision(fixedDeltaTime);
 	}
 
@@ -72,31 +70,22 @@ namespace TinyEngine
 		{
 			object->Update(deltaTime);
 		}
-
-		if(activeScene)
-		{
-			activeScene->Update(deltaTime);
-		}
+		activeScene->Update(deltaTime);
 	}
 
 	void TinyGameEngine::Render(TinyEngine::Window& window)
 	{
 	
 		window.Clear();
-		if (activeScene)
+		Camera* mainCamera = activeScene->GetMainCamera();
+		if (mainCamera)
 		{
-			Camera* mainCamera = activeScene->GetMainCamera();
-			if (mainCamera)
+			renderManager.Render(window, *mainCamera);
+			for (auto& collider :collisionManager.GetColliders())
 			{
-				renderManager.Render(window, *mainCamera);
-				for (auto& collider :collisionManager.GetColliders())
-				{
-					window.DrawCollider(*collider, *mainCamera);
-				}
+				window.DrawCollider(*collider, *mainCamera);
 			}
-
 		}
-
 		window.Display();
 	}
 

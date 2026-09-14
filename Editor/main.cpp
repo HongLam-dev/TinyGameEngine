@@ -1,45 +1,58 @@
+#include "TinyGameEngine.h"
+#include "Window.h"
+#include "Scene.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include <iostream>
+
+using namespace TinyEngine;
+
+void DrawSceneWindow()
+{
+    ImGui::SetNextWindowSize(ImVec2(1280,300), ImGuiCond_FirstUseEver);
+
+    ImGui::Begin("Scene");
+
+    ImGui::End();
+}
+
 
 int main()
 {
-    sf::RenderWindow window(
-        sf::VideoMode({ 1280, 720 }),
-        "TinyGameEngine Editor"
-    );
+    Window window;
+    sf::RenderWindow* renderWindow = window.GetRenderWindow();
+    TinyGameEngine engine(window);
+    Scene emptyScene;
+    emptyScene.CreateMainCamera(engine);
 
-    ImGui::SFML::Init(window);
+    ImGui::SFML::Init(*renderWindow);
 
+    ImGui::GetIO().Fonts->AddFontDefault();
     sf::Clock deltaClock;
 
-    while (window.isOpen())
+    while (renderWindow->isOpen())
     {
-        while (const std::optional event = window.pollEvent())
+        while (const std::optional event = renderWindow->pollEvent())
         {
-            ImGui::SFML::ProcessEvent(window, *event);
+            ImGui::SFML::ProcessEvent(*renderWindow, *event);
 
             if (event->is<sf::Event::Closed>())
-                window.close();
+                renderWindow->close();
         }
 
         sf::Time deltaTime = deltaClock.restart();
 
-        ImGui::SFML::Update(window, deltaTime);
+        ImGui::SFML::Update(*renderWindow, deltaTime);
+        renderWindow->clear();
 
-        ImGui::Begin("Hello Editor");
+        DrawSceneWindow();
 
-        ImGui::Text("TinyGameEngine Editor");
-        ImGui::Text("It is alive.");
+        ImGui::SFML::Render(*renderWindow);
 
-        ImGui::End();
-
-        window.clear();
-
-        ImGui::SFML::Render(window);
-
-        window.display();
+        renderWindow->display();
     }
 
     ImGui::SFML::Shutdown();
 }
+

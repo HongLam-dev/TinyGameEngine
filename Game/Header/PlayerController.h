@@ -23,7 +23,6 @@ namespace TinyGame {
 		TinyEngine::Transform* transform = nullptr;
 		TinyEngine::Rigidbody2D* rb = nullptr;
 		float moveSpeed = 5.0f;
-		bool loadedScene=false;
 		TinyEngine::Vector3 direction = TinyEngine::Vector3::Zero;
 	};
 }

@@ -10,7 +10,7 @@ namespace TinyGame {
 	{
 		if (target != nullptr)
 		{
-			//GetTransform().SetPosition(target->GetPosition());
+			GetTransform().SetPosition(target->GetPosition());
 		}
 	}
 

@@ -10,9 +10,9 @@ namespace TinyEngine
 	public:
 
 		Window()
-			: sfmlWindow(sf::VideoMode({ 800, 600 }), "Tiny Game Engine")
+			: sfmlWindow(sf::VideoMode({ 1280, 720 }), "Tiny Game Engine")
 		{}
-
+		sf::RenderWindow* GetRenderWindow() { return &sfmlWindow; }
 		bool IsOpen();
 		void Close();
 		std::optional<sf::Event> PollEvent();

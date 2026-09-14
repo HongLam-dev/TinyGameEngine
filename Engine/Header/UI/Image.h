@@ -8,7 +8,7 @@ namespace TinyEngine {
 	class Image:public UIRenderable
 	{
 	public:
-		Image(GameObject& owner): UIRenderable(owner){}
+        using UIRenderable::UIRenderable;
         void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)

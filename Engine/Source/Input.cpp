@@ -19,6 +19,19 @@ namespace TinyEngine
 		}
 	}
 
+	bool Input::OnKeyDown(sf::Keyboard::Key key) {
+		size_t code = static_cast<std::size_t>(key);
+		if (!previousKeyStates[code] && keyStates[code])
+			return true;
+		return false;
+	}
+	bool Input::OnKeyUp(sf::Keyboard::Key key) {
+		size_t code = static_cast<std::size_t>(key);
+		if (previousKeyStates[code] && !keyStates[code])
+			return true;
+		return false;
+	}
+
 	bool Input::isKeyPressed(sf::Keyboard::Key key) {
 
 		return keyStates[static_cast<size_t>(key)];

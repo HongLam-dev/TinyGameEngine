@@ -13,7 +13,9 @@ namespace TinyEngine {
     public:
 	    void Render(Window& window, const Camera& camera);
         void OnDestroy() override;
-        SpriteRenderer(GameObject& owner):RenderableComponent(owner) {}
+        SpriteRenderer(GameObject& owner):RenderableComponent(owner) {
+            GetOwner().RegisterRenderer(*this);
+        }
         void SetTexture(const sf::Texture& texture)
         {
             if (sprite == nullptr)

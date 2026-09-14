@@ -4,10 +4,11 @@
 namespace TinyEngine {
 
 	BoxCollider2D::BoxCollider2D(GameObject& owner):Component(owner) {
-	}
-	
-	void BoxCollider2D::Start() {
 		GetOwner().RegisterCollider(*this);
+	}
+
+	void BoxCollider2D::Start() {
+		
 		SetRigidbody();
 	}
 

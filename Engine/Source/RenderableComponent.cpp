@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 namespace TinyEngine {
-	void RenderableComponent::Start() {
+	RenderableComponent::RenderableComponent(GameObject& owner) :Component(owner) {
 		GetOwner().RegisterRenderer(*this);
 	}
 	void RenderableComponent::OnDestroy() {

@@ -36,7 +36,6 @@ namespace TinyEngine {
 			T& ref = *component;
 
 			components.push_back(std::move(component));
-
 			return ref;
 		}
 
