@@ -117,6 +117,9 @@ namespace TinyGame {
 		Transform& imageTransform = imageObj.GetTransform();
 		imageTransform.SetPosition({ 50, 500, 0 });
 		//end image
+		//Camera
+		GameObject& camObj = emptyScene.CreateMainCamera(engine);
+		//end camera
 		//boxes
 		sf::Texture* crateText = textureManager.GetTexture("Assets/Crate.png");
 
@@ -124,10 +127,10 @@ namespace TinyGame {
 			return;
 
 		//CreateASimpleBox({400,200,0},{500,64,0});
-		CreateASimpleBox(emptyScene, engine, { 400,200,0 }, { 64,64,0 }, crateText);
-		CreateASimpleBox(emptyScene, engine, { 400,600,0 }, { 700,64,0 }, crateText);
-		CreateAPingPongBox(emptyScene, engine, { 400,100,0 }, { 64,64,0 }, crateText);
-		CreateAPingPongBox(emptyScene, engine, { 400,500,0 }, { 64,64,0 }, crateText);
+		CreateASimpleBox(emptyScene, engine, { 400,300,0 }, { 800,64,0 }, crateText);
+		CreateASimpleBox(emptyScene, engine, { 400,100,0 }, { 700,64,0 }, crateText);
+	//	CreateAPingPongBox(emptyScene, engine, { 400,200,0 }, { 64,64,0 }, crateText);
+	//	CreateAPingPongBox(emptyScene, engine, { 400,600,0 }, { 64,64,0 }, crateText);
 		//end
 
 	}

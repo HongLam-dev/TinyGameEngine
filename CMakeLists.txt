@@ -33,6 +33,7 @@ add_library(TinyGameEngine
     "Engine/Source/RenderManager.cpp"
     "Engine/Source/Scene.cpp"
     "Engine/Source/TextureManager.cpp"
+    "Engine/Source/RenderableComponent.cpp"
     "Engine/Header/Vector3.h"
     "Engine/Header/Vector2.h"
 )

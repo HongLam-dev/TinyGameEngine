@@ -35,10 +35,6 @@ namespace TinyGame {
 	{
 		if (!instance)
 			throw std::runtime_error("No SceneManager instance exists");
-		if (instance->activeScene)
-		{
-			instance->activeScene->Unload();
-		}
 		instance->engine.EnqueueAction(LoadNewScene);
 	}
 	void SceneManager::LoadNewScene() {

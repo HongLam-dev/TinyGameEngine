@@ -6,11 +6,6 @@
 #include <iostream>
 namespace TinyEngine {
 
-    void SpriteRenderer::Start()
-    {
-        GetOwner().RegisterRenderer(*this);
-    }
-
     void SpriteRenderer::Render(Window& window,const Camera& camera)
     {
         if (!sprite.get())

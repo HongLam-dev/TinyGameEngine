@@ -11,21 +11,17 @@ namespace TinyEngine {
 	public:
 		GameObject& CreateSceneObject(TinyGameEngine& engine);
 		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
-		const std::vector<BoxCollider2D*>& GetCollidersInScene() const { return collisionManager.GetColliders(); };
 		Camera* GetMainCamera() { return mainCamera; };
 		UIObject& CreateUIObject(TinyGameEngine& engine);
 		GameObject& CreateMainCamera(TinyGameEngine& engine);
 		GameObject& CreateCamera(TinyGameEngine& engine);
 		std::unique_ptr<GameObject> RemoveSceneObject(GameObject& gameObject);
-		void RegisterCollider(BoxCollider2D& collider);
-		void UnregisterCollider(BoxCollider2D& collider);
 		void DestroySceneObject(GameObject& object);
 		void Start();
 		void Update(float deltaTime);
 		void FixedUpdate(float fixedDeltaTime);
 		void Unload();
 	private:
-		CollisionManager collisionManager;
 		Camera* mainCamera = nullptr;
 		std::vector<std::unique_ptr<GameObject>> sceneObjects;
 	};

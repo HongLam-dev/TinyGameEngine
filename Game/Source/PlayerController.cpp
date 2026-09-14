@@ -56,11 +56,19 @@ namespace TinyGame {
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::Num1))
 		{
-			SceneManager::LoadExampleScene1();
+			if (!loadedScene)
+			{
+				SceneManager::LoadExampleScene1();
+				loadedScene = true;
+			}
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::Num2))
 		{
-			SceneManager::LoadExampleScene2();
+			if (!loadedScene)
+			{
+				SceneManager::LoadExampleScene2();
+				loadedScene = true;
+			}
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
 		{

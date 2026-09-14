@@ -44,12 +44,6 @@ namespace TinyEngine {
 		return result;
 	}
 
-	void Scene::RegisterCollider(BoxCollider2D& collider) {
-		collisionManager.RegisterCollider(collider);
-	}
-	void Scene::UnregisterCollider(BoxCollider2D& collider) {
-		collisionManager.UnregisterCollider(collider);
-	}
 	GameObject& Scene::CreateSceneObject(TinyGameEngine& engine)
 	{
 		auto go = std::make_unique<GameObject>(engine);
@@ -81,7 +75,6 @@ namespace TinyEngine {
 		{
 			gameObject->FixedUpdate(fixedDeltaTime);
 		}
-		collisionManager.CheckCollision(fixedDeltaTime);
 	}
 
 	void Scene::Update(float deltaTime)

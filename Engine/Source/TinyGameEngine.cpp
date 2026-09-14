@@ -63,6 +63,7 @@ namespace TinyEngine
 		{
 			activeScene->FixedUpdate(fixedDeltaTime);
 		}
+		collisionManager.CheckCollision(fixedDeltaTime);
 	}
 
 	void TinyGameEngine::Update(float deltaTime)
@@ -85,14 +86,15 @@ namespace TinyEngine
 		if (activeScene)
 		{
 			Camera* mainCamera = activeScene->GetMainCamera();
-			if (!mainCamera)
-				return;
-
-			renderManager.Render(window, *mainCamera);
-			for (auto& collider : activeScene->GetCollidersInScene())
+			if (mainCamera)
 			{
-				window.DrawCollider(*collider, *mainCamera);
+				renderManager.Render(window, *mainCamera);
+				for (auto& collider :collisionManager.GetColliders())
+				{
+					window.DrawCollider(*collider, *mainCamera);
+				}
 			}
+
 		}
 
 		window.Display();
@@ -110,31 +112,14 @@ namespace TinyEngine
 		renderManager.UnregisterRenderer(renderer);
 	}
 	void TinyGameEngine::RegisterCollider(BoxCollider2D& collider) {
-		activeScene->RegisterCollider(collider);
+		collisionManager.RegisterCollider(collider);
 	}
 	void TinyGameEngine::UnregisterCollider(BoxCollider2D& collider) {
-		activeScene->UnregisterCollider(collider);
+		collisionManager.UnregisterCollider(collider);
 	}
 
 	void TinyGameEngine::DestroyGameObject(GameObject& gameObject) {
-		auto it = std::find_if(
-			persistentOjects.begin(),
-			persistentOjects.end(),
-			[&gameObject](const std::unique_ptr<GameObject>& c)
-			{
-				return c.get() == &gameObject;
-			}
-		);
-
-		if (it != persistentOjects.end())
-		{
-			gameObject.OnDestroy();
-			persistentOjects.erase(it);
-		}
-		else
-		{
-			activeScene->DestroySceneObject(gameObject);
-		}
+		objectsToDestroy.push_back(&gameObject);
 	}
 
 	void TinyGameEngine::DontDestroyOnload(GameObject& gameObject) {
@@ -151,7 +136,26 @@ namespace TinyEngine
 		for (auto& object : objectsToDestroy)
 		{
 			if (object)
-				DestroyGameObject(*object);
+			{
+				auto it = std::find_if(
+					persistentOjects.begin(),
+					persistentOjects.end(),
+					[&object](const std::unique_ptr<GameObject>& c)
+					{
+						return c.get() == object;
+					}
+				);
+
+				if (it != persistentOjects.end())
+				{
+					object->OnDestroy();
+					persistentOjects.erase(it);
+				}
+				else
+				{
+					activeScene->DestroySceneObject(*object);
+				}
+			}
 		}
 
 		objectsToDestroy.clear();

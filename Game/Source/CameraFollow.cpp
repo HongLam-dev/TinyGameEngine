@@ -4,13 +4,13 @@ using namespace TinyEngine;
 
 namespace TinyGame {
 	void CameraFollow::Start() {
-		DontDestroyOnload(*this);
+	//	DontDestroyOnload(*this);
 	}
 	void CameraFollow::Update(float deltaTime)
 	{
 		if (target != nullptr)
 		{
-			GetTransform().SetPosition(target->GetPosition());
+			//GetTransform().SetPosition(target->GetPosition());
 		}
 	}
 

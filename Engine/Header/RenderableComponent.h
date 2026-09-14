@@ -6,7 +6,8 @@ namespace TinyEngine {
 	{
 	public:
 		RenderableComponent(GameObject& owner) :Component(owner) {}
-
+		void Start() override;
+		void OnDestroy() override;
 	private:
 
 	};

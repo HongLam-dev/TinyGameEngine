@@ -37,6 +37,7 @@ namespace TinyEngine
 		int timeStep = 60;
 		float deltaTime = 0;
 		RenderManager renderManager;
+		CollisionManager collisionManager;
 		Scene* activeScene=nullptr;
 		std::vector<std::unique_ptr<GameObject>> persistentOjects;
 		sf::Clock clock;
