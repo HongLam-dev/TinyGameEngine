@@ -6,22 +6,92 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <iostream>
+#include <TextureManager.h>
 
 using namespace TinyEngine;
 
-void DrawSceneWindow(const std::vector<GameObject*>& sceneObjects)
+void DrawHierachyWindow(const std::vector<GameObject*>& sceneObjects,GameObject*& selectedObject)
 {
-    ImGui::SetNextWindowSize(ImVec2(1280,300), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(300,1280), ImGuiCond_FirstUseEver);
 
     ImGui::Begin("Scene");
 
     for (GameObject* object : sceneObjects)
     {
-        ImGui::Text("%s", object->GetName().c_str());
+        if (ImGui::Selectable(
+            object->GetName().c_str(),
+            selectedObject == object))
+        {
+            selectedObject = object;
+        }
     }
 
     ImGui::End();
 }
+
+void DrawTransform(GameObject& gameObject) {
+    ImGui::Text("%s", "Transform------");
+
+    Transform& transform = gameObject.GetTransform();
+    Vector3 position = transform.GetPosition();
+    Vector3 rotation = transform.GetRotation();
+    Vector3 scale = transform.GetScale();
+
+    ImGui::DragFloat3("Position", &position.x);
+    ImGui::DragFloat3("Rotation", &rotation.x);
+    ImGui::DragFloat3("Scale", &scale.x);
+
+    transform.SetPosition(position);
+    transform.SetRotation(rotation);
+    transform.SetScale(scale);
+}
+
+void DrawInspectorWindow(GameObject*& selectedObject)
+{
+    ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
+
+    ImGui::Begin("Inspector");
+
+    if (selectedObject)
+    {
+        ImGui::Text("%s", selectedObject->GetName().c_str());
+        DrawTransform(*selectedObject);
+    }
+
+    ImGui::End();
+}
+
+GameObject& CreateASimpleBox(Scene& scene,
+    TinyEngine::TinyGameEngine& engine,
+    const Vector3& position,
+    const Vector3& size,
+    sf::Texture* boxTexture) {
+    GameObject& objectRef = scene.CreateSceneObject(engine);
+
+    if (boxTexture)
+    {
+        SpriteRenderer& renderer =
+            objectRef.AddComponent<SpriteRenderer>();
+        renderer.SetTexture(*boxTexture);
+    }
+    BoxCollider2D& collider =
+        objectRef.AddComponent<BoxCollider2D>();
+
+    collider.SetSize({
+        PixelsToWorld(size.x),
+        PixelsToWorld(size.y),
+        PixelsToWorld(size.z)
+        });
+
+    objectRef.GetComponent<Transform>()
+        ->SetPosition({
+            PixelsToWorld(position.x),
+            PixelsToWorld(position.y),
+            position.z
+            });
+    return objectRef;
+}
+
 
 
 int main()
@@ -30,13 +100,22 @@ int main()
     sf::RenderWindow* renderWindow = window.GetRenderWindow();
     TinyGameEngine engine(window);
 
+    TextureManager textureManager;
     Scene editingScene;
-    editingScene.CreateMainCamera(engine);
+    GameObject& mainCameraObj= editingScene.CreateMainCamera(engine);
     engine.ActivateScene(editingScene);
 
-    std::vector<GameObject*> sceneObjects = editingScene.GetSceneObjects();
     GameObject editorCameraObj(engine);
     Camera& editorCamera = editorCameraObj.AddComponent<Camera>();
+
+    sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
+
+    GameObject& anchor=CreateASimpleBox(editingScene,engine,{},{64,64,64},placeHolderTex);
+    anchor.SetName("Anchor");
+
+    std::vector<GameObject*> sceneObjects = editingScene.GetSceneObjects();
+
+    GameObject* selectedObject = &mainCameraObj;
 
     ImGui::SFML::Init(*renderWindow);
 
@@ -57,8 +136,9 @@ int main()
         renderWindow->clear();
 
         engine.Render(window,editorCamera);
-        DrawSceneWindow(sceneObjects);
+        DrawHierachyWindow(sceneObjects,selectedObject);
 
+        DrawInspectorWindow(selectedObject);
         ImGui::SFML::Render(*renderWindow);
 
         renderWindow->display();

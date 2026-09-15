@@ -23,11 +23,14 @@ namespace TinyEngine {
 		return GetBoundsAtPosition(GetTransform().GetPosition());
 	}
 
-	Bounds BoxCollider2D::GetBoundsAtPosition(Vector3 oldPosition) const {
+	Bounds BoxCollider2D::GetBoundsAtPosition(Vector3 position) const {
 		Bounds bounds;
-		Vector3 oldColliderPosition = oldPosition + offset;
-		bounds.max = Vector3(oldColliderPosition.x + size.x / 2, oldColliderPosition.y + size.y / 2, 0);
-		bounds.min = Vector3(oldColliderPosition.x - size.x / 2, oldColliderPosition.y - size.y / 2, 0);
+		Vector3 scale = GetTransform().GetScale();
+		Vector3 colliderPosition = position + offset;
+		float width = size.x * scale.x;
+		float height = size.y * scale.y;
+		bounds.max = Vector3(colliderPosition.x + width / 2, colliderPosition.y + width / 2, 0);
+		bounds.min = Vector3(colliderPosition.x - height / 2, colliderPosition.y - height / 2, 0);
 		return bounds;
 	}
 

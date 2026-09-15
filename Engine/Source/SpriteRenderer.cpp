@@ -57,6 +57,21 @@ namespace TinyEngine {
         window.Draw(*sprite);
     }
 
+    Bounds SpriteRenderer::GetBounds() {
+        Bounds bounds;
+        Vector3 position = GetTransform().GetPosition();
+        Vector3 scale = GetTransform().GetScale();
+        sf::Vector2i rectSize = sprite->getTextureRect().size;
+        float width = rectSize.x * scale.x;
+        float height = rectSize.y * scale.y;
+        bounds.min.x = position.x - (width/2.0f);
+        bounds.max.x = position.x + (width / 2.0f);
+        bounds.min.y = position.y - (height / 2.0f);
+        bounds.max.y = position.y + (height / 2.0f);
+
+        return bounds;
+    }
+
     void SpriteRenderer::OnDestroy() {
         GetOwner().UnregisterRenderer(*this);
     }
