@@ -46,10 +46,13 @@ namespace TinyEngine
 
 			if (deltaTime >= 1.0 / targetFPS)
 			{
-				Render(window);
-				deltaTime = 0;
+				window.Clear();
+				Render(window,*activeScene->GetMainCamera());
+				window.Display();
+
 				HandleReferredActions();
 				Input::Get().SyncKeyState();
+				deltaTime = 0;
 			}
 		}
 	}
@@ -73,20 +76,12 @@ namespace TinyEngine
 		activeScene->Update(deltaTime);
 	}
 
-	void TinyGameEngine::Render(TinyEngine::Window& window)
-	{
-	
-		window.Clear();
-		Camera* mainCamera = activeScene->GetMainCamera();
-		if (mainCamera)
-		{
-			renderManager.Render(window, *mainCamera);
-			for (auto& collider :collisionManager.GetColliders())
+	void TinyGameEngine::Render(TinyEngine::Window& window, Camera& camera) {
+			renderManager.Render(window, camera);
+			for (auto& collider : collisionManager.GetColliders())
 			{
-				window.DrawCollider(*collider, *mainCamera);
+				window.DrawCollider(*collider, camera);
 			}
-		}
-		window.Display();
 	}
 
 	void TinyGameEngine::ActivateScene(Scene& scene) {

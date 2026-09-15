@@ -19,7 +19,7 @@ namespace TinyEngine
 		TinyGameEngine(Window& window):window(window) {};
 		void FixedUpdate(float fixedDeltaTime);
 		void Update(float deltaTime);
-		void Render(TinyEngine::Window& window);
+		void Render(TinyEngine::Window& window, Camera& camera);
 		void Run();
 		void ActivateScene(Scene& sceneToActive);
 		void RegisterRenderer(RenderableComponent& renderer);

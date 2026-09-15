@@ -47,6 +47,8 @@ namespace TinyEngine {
 	GameObject& Scene::CreateSceneObject(TinyGameEngine& engine)
 	{
 		auto go = std::make_unique<GameObject>(engine);
+		go->SetName("NewGameObject");
+
 		sceneObjects.push_back(std::move(go));
 
 		return *sceneObjects.back();
@@ -84,14 +86,27 @@ namespace TinyEngine {
 			gameObject->Update(deltaTime);
 		}
 	}
+
 	GameObject& Scene::CreateCamera(TinyGameEngine& engine) {
 		GameObject& camObj = CreateSceneObject(engine);
 		Camera& camera = camObj.AddComponent<Camera>();
+		camObj.SetName("Camera");
 		return camObj;
 	}
+
 	GameObject& Scene::CreateMainCamera(TinyGameEngine& engine) {
 		GameObject& camObj = CreateCamera(engine);
 		SetCamera(*camObj.GetComponent<Camera>());
+		camObj.SetName("Main Camera");
 		return camObj;
+	}
+
+	std::vector<GameObject*> Scene::GetSceneObjects() {
+		std::vector<GameObject*> objects;
+		for (auto& object : sceneObjects)
+		{
+			objects.push_back(object.get());
+		}
+		return objects;
 	}
 }

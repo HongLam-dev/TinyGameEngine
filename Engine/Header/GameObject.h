@@ -27,6 +27,8 @@ namespace TinyEngine {
 		void Destroy(Component& component);
 		void Destroy();
 		void OnDestroy();
+		const std::string& GetName() const { return name; }
+		void SetName(const std::string& name) { this->name = name; }
 		template <typename T>
 			requires std::derived_from<T, Component>
 		T& AddComponent()
@@ -100,6 +102,7 @@ namespace TinyEngine {
 	protected:
 		Transform* transform = nullptr;
 	private:
+		std::string name="";
 		bool destroyOnLoad = true;
 		bool destroyed = false;
 		TinyGameEngine& engine;
