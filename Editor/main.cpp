@@ -1,6 +1,7 @@
 #include "TinyGameEngine.h"
 #include "Window.h"
 #include "Scene.h"
+#include "InputHandler.h"
 #include "EngineSettings.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
@@ -14,7 +15,7 @@ void DrawHierachyWindow(const std::vector<GameObject*>& sceneObjects,GameObject*
 {
     ImGui::SetNextWindowSize(ImVec2(300,1280), ImGuiCond_FirstUseEver);
 
-    ImGui::Begin("Scene");
+    ImGui::Begin("Scene (1234567890)");
 
     for (GameObject* object : sceneObjects)
     {
@@ -99,6 +100,7 @@ int main()
     Window window;
     sf::RenderWindow* renderWindow = window.GetRenderWindow();
     TinyGameEngine engine(window);
+    TinyEditor::InputHandler inputHandler;
 
     TextureManager textureManager;
     Scene editingScene;
@@ -120,12 +122,14 @@ int main()
     ImGui::SFML::Init(*renderWindow);
 
     ImGui::GetIO().Fonts->AddFontDefault();
+
     sf::Clock deltaClock;
     while (renderWindow->isOpen())
     {
         while (const std::optional event = renderWindow->pollEvent())
         {
             ImGui::SFML::ProcessEvent(*renderWindow, *event);
+            Input::Get().ProcessEvent(*event);
 
             if (event->is<sf::Event::Closed>())
                 renderWindow->close();
@@ -133,6 +137,7 @@ int main()
         sf::Time deltaTime = deltaClock.restart();
 
         ImGui::SFML::Update(*renderWindow, deltaTime);
+        inputHandler.HandleSceneInput(editorCameraObj,5, deltaTime.asSeconds());
         renderWindow->clear();
 
         engine.Render(window,editorCamera);
@@ -142,6 +147,7 @@ int main()
         ImGui::SFML::Render(*renderWindow);
 
         renderWindow->display();
+        Input::Get().EndFrame();
     }
 
     ImGui::SFML::Shutdown();

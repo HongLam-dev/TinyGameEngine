@@ -72,6 +72,8 @@ target_link_libraries(TinyGame PRIVATE
 
 add_executable(TinyGameEditor
     "Editor/main.cpp"
+    "Editor/Header/InputHandler.h"
+    "Editor/Source/InputHandler.cpp"
 )
 find_package(ImGui-SFML CONFIG REQUIRED)
 

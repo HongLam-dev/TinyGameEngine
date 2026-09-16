@@ -13,9 +13,18 @@ namespace TinyEngine
 		{
 			keyStates[static_cast<std::size_t>(keyPressed->code)] = false;
 		}
-		else if (event.is<sf::Event::MouseButtonPressed>())
+		else if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
 		{
-			// mouse event
+			mouseButtonStates[static_cast<std::size_t>(mousePressed->button)] = true;
+		}
+		else if (const auto* mouseReleased = event.getIf<sf::Event::MouseButtonReleased>())
+		{
+			mouseButtonStates[static_cast<std::size_t>(mouseReleased->button)] = false;
+		}
+		else if (const auto* mouseMoved = event.getIf<sf::Event::MouseMoved>())
+		{
+			mounseDelta = mousePosition - mouseMoved->position;
+			mousePosition = mouseMoved->position;
 		}
 	}
 
@@ -32,9 +41,33 @@ namespace TinyEngine
 		return false;
 	}
 
+	bool Input::OnMouseDown(sf::Mouse::Button button) {
+		size_t code = static_cast<std::size_t>(button);
+		if (!previousMouseButtonStates[code] && mouseButtonStates[code])
+			return true;
+		return false;
+	}
+	bool Input::OnMouseUp(sf::Mouse::Button button) {
+		size_t code = static_cast<std::size_t>(button);
+		if (previousMouseButtonStates[code] && !mouseButtonStates[code])
+			return true;
+		return false;
+	}
+	bool Input::IsMousePressed(sf::Mouse::Button button) {
+		return mouseButtonStates[static_cast<size_t>(button)];
+	}
+
 	bool Input::isKeyPressed(sf::Keyboard::Key key) {
 
 		return keyStates[static_cast<size_t>(key)];
+	}
+
+	void Input::EndFrame()
+	{ 
+		previousKeyStates = keyStates;
+		previousMouseButtonStates = mouseButtonStates;
+		mounseDelta.x = 0;
+		mounseDelta.y = 0;
 	}
 
 }

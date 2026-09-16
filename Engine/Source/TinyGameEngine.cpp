@@ -51,7 +51,7 @@ namespace TinyEngine
 				window.Display();
 
 				HandleReferredActions();
-				Input::Get().SyncKeyState();
+				Input::Get().EndFrame();
 				deltaTime = 0;
 			}
 		}

@@ -1,8 +1,8 @@
 {
-	"name": "tiny-engine",
-	"version": "0.1.0",
-	"dependencies": [
-		"sfml",
-		"imgui-sfml"
-	]
+  "name": "tiny-engine",
+  "version": "0.1.0",
+  "dependencies": [
+    "sfml",
+    "imgui-sfml"
+  ]
 }
