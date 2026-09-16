@@ -14,8 +14,9 @@ namespace TinyEditor {
 	class TinyGameEditor
 	{
 	public:
+		TinyGameEditor():engine(window) {};
 		void Run();
-		void DrawHierachyWindow(const std::vector<TinyEngine::GameObject*>& sceneObjects, TinyEngine::GameObject*& selectedObject);
+		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject);
 		void DrawTransform(TinyEngine::GameObject& gameObject);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
 		TinyEngine::GameObject& CreateASimpleBox(TinyEngine::Scene& scene,
@@ -24,6 +25,9 @@ namespace TinyEditor {
 			const TinyEngine::Vector3& size,
 			sf::Texture* boxTexture);
 	private:
-		
+		TinyEngine::Window window;
+		TinyEngine::TinyGameEngine engine;
+		TinyEngine::TextureManager textureManager;
+		std::unique_ptr< TinyEngine::Scene> editingScene;
 	};
 }

@@ -9,31 +9,27 @@
 #include <imgui-SFML.h>
 #include <iostream>
 #include <TextureManager.h>
+#include <memory>
 
 using namespace TinyEngine;
 
 namespace TinyEditor {
 
     void TinyGameEditor::Run() {
-        Window window;
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyGameEngine engine(window);
         TinyEditor::InputHandler inputHandler;
 
-        TextureManager textureManager;
-        Scene editingScene;
-        GameObject& mainCameraObj = editingScene.CreateMainCamera(engine);
-        engine.ActivateScene(editingScene);
+        editingScene = std::make_unique<Scene>();
+        GameObject& mainCameraObj = editingScene->CreateMainCamera(engine);
+        engine.ActivateScene(*editingScene);
 
         GameObject editorCameraObj(engine);
         Camera& editorCamera = editorCameraObj.AddComponent<Camera>();
 
         sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
 
-        GameObject& anchor = CreateASimpleBox(editingScene, engine, {}, { 64,64,64 }, placeHolderTex);
+        GameObject& anchor = CreateASimpleBox(*editingScene, engine, {}, { 64,64,64 }, placeHolderTex);
         anchor.SetName("Anchor");
-
-        std::vector<GameObject*> sceneObjects = editingScene.GetSceneObjects();
 
         GameObject* selectedObject = &mainCameraObj;
 
@@ -59,7 +55,7 @@ namespace TinyEditor {
             renderWindow->clear();
 
             engine.Render(window, editorCamera);
-            DrawHierachyWindow(sceneObjects, selectedObject);
+            DrawHierachyWindow(selectedObject);
 
             DrawInspectorWindow(selectedObject);
             ImGui::SFML::Render(*renderWindow);
@@ -71,7 +67,7 @@ namespace TinyEditor {
         ImGui::SFML::Shutdown();
     }
 
-    void TinyGameEditor::DrawHierachyWindow(const std::vector<GameObject*>& sceneObjects, GameObject*& selectedObject)
+    void TinyGameEditor::DrawHierachyWindow( GameObject*& selectedObject)
     {
         ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
 
@@ -82,7 +78,7 @@ namespace TinyEditor {
         {
             if (ImGui::MenuItem("Create Empty"))
             {
-                // Create GameObject
+                editingScene->CreateSceneObject(engine);
             }
 
             if (ImGui::MenuItem("Create Sprite"))
@@ -93,19 +89,18 @@ namespace TinyEditor {
             ImGui::EndPopup();
         }
 
-        for (GameObject* object : sceneObjects)
+        for (auto& object : editingScene->GetGameObjects())
         {
             if (ImGui::Selectable(
                 object->GetName().c_str(),
-                selectedObject == object))
+                selectedObject == object.get()))
             {
-                selectedObject = object;
+                selectedObject = object.get();
             }
         }
 
         ImGui::End();
     }
-
     void TinyGameEditor::DrawTransform(GameObject& gameObject) {
         ImGui::Text("%s", "Transform------");
 

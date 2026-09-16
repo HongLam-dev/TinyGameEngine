@@ -21,7 +21,7 @@ namespace TinyEngine {
 		void Update(float deltaTime);
 		void FixedUpdate(float fixedDeltaTime);
 		void Unload();
-		std::vector<GameObject*> GetSceneObjects();
+		const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const;
 	private:
 		Camera* mainCamera = nullptr;
 		std::vector<std::unique_ptr<GameObject>> sceneObjects;

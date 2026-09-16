@@ -101,12 +101,7 @@ namespace TinyEngine {
 		return camObj;
 	}
 
-	std::vector<GameObject*> Scene::GetSceneObjects() {
-		std::vector<GameObject*> objects;
-		for (auto& object : sceneObjects)
-		{
-			objects.push_back(object.get());
-		}
-		return objects;
+	const std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects() const {
+		return sceneObjects;
 	}
 }
