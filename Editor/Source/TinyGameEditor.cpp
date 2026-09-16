@@ -19,8 +19,8 @@ namespace TinyEditor {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
         TinyEditor::InputHandler inputHandler;
 
-        editingScene = std::make_unique<Scene>();
-        GameObject& mainCameraObj = editingScene->CreateMainCamera(engine);
+        editingScene = std::make_unique<Scene>(engine);
+        GameObject& mainCameraObj = editingScene->CreateMainCamera();
         engine.ActivateScene(*editingScene);
 
         GameObject editorCameraObj(engine);
@@ -28,7 +28,7 @@ namespace TinyEditor {
 
         sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
 
-        GameObject& anchor = CreateASimpleBox(*editingScene, engine, {}, { 64,64,64 }, placeHolderTex);
+        GameObject& anchor = editingScene->CreateASimpleBox({-3.0f,3.0f,0}, { 0.64f,0.64f,0 }, placeHolderTex);
         anchor.SetName("Anchor");
 
         GameObject* selectedObject = &mainCameraObj;
@@ -78,12 +78,12 @@ namespace TinyEditor {
         {
             if (ImGui::MenuItem("Create Empty"))
             {
-                editingScene->CreateSceneObject(engine);
+                editingScene->CreateSceneObject();
             }
 
-            if (ImGui::MenuItem("Create Sprite"))
+            if (ImGui::MenuItem("Create Rectangle"))
             {
-                // Create GameObject + SpriteRenderer
+                editingScene->CreateASimpleBox({},{ 0.64f,0.64f,0});
             }
 
             ImGui::EndPopup();
@@ -132,37 +132,4 @@ namespace TinyEditor {
 
         ImGui::End();
     }
-
-    GameObject& TinyGameEditor::CreateASimpleBox(Scene& scene,
-        TinyEngine::TinyGameEngine& engine,
-        const Vector3& position,
-        const Vector3& size,
-        sf::Texture* boxTexture) {
-        GameObject& objectRef = scene.CreateSceneObject(engine);
-
-        if (boxTexture)
-        {
-            SpriteRenderer& renderer =
-                objectRef.AddComponent<SpriteRenderer>();
-            renderer.SetTexture(*boxTexture);
-        }
-        BoxCollider2D& collider =
-            objectRef.AddComponent<BoxCollider2D>();
-
-        collider.SetSize({
-            PixelsToWorld(size.x),
-            PixelsToWorld(size.y),
-            PixelsToWorld(size.z)
-            });
-
-        objectRef.GetComponent<Transform>()
-            ->SetPosition({
-                PixelsToWorld(position.x),
-                PixelsToWorld(position.y),
-                position.z
-                });
-        return objectRef;
-    }
-
-
 }

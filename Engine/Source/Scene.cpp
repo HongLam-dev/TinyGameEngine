@@ -44,7 +44,7 @@ namespace TinyEngine {
 		return result;
 	}
 
-	GameObject& Scene::CreateSceneObject(TinyGameEngine& engine)
+	GameObject& Scene::CreateSceneObject()
 	{
 		auto go = std::make_unique<GameObject>(engine);
 		go->SetName("NewGameObject");
@@ -54,7 +54,7 @@ namespace TinyEngine {
 		return *sceneObjects.back();
 	}
 
-	UIObject& Scene::CreateUIObject(TinyGameEngine& engine)
+	UIObject& Scene::CreateUIObject()
 	{
 		auto go = std::make_unique<UIObject>(engine);
 		UIObject& uiObject = *go;
@@ -87,15 +87,47 @@ namespace TinyEngine {
 		}
 	}
 
-	GameObject& Scene::CreateCamera(TinyGameEngine& engine) {
-		GameObject& camObj = CreateSceneObject(engine);
+
+	GameObject& Scene::CreateASimpleBox(
+		const Vector3& position,
+		const Vector3& size,
+		sf::Texture* boxTexture) {
+		GameObject& objectRef = CreateSceneObject();
+
+		if (boxTexture)
+		{
+			SpriteRenderer& renderer =
+				objectRef.AddComponent<SpriteRenderer>();
+			renderer.SetTexture(*boxTexture);
+		}
+		BoxCollider2D& collider =
+			objectRef.AddComponent<BoxCollider2D>();
+
+		collider.SetSize({
+			size.x,
+			size.y,
+			size.z
+			});
+
+		objectRef.GetComponent<Transform>()
+			->SetPosition({
+				position.x,
+				position.y,
+				position.z
+				});
+		return objectRef;
+	}
+
+
+	GameObject& Scene::CreateCamera() {
+		GameObject& camObj = CreateSceneObject();
 		Camera& camera = camObj.AddComponent<Camera>();
 		camObj.SetName("Camera");
 		return camObj;
 	}
 
-	GameObject& Scene::CreateMainCamera(TinyGameEngine& engine) {
-		GameObject& camObj = CreateCamera(engine);
+	GameObject& Scene::CreateMainCamera() {
+		GameObject& camObj = CreateCamera();
 		SetCamera(*camObj.GetComponent<Camera>());
 		camObj.SetName("Main Camera");
 		return camObj;

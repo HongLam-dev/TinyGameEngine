@@ -24,7 +24,7 @@ namespace TinyGame {
 			instance->activeScene->Unload();
 		}
 
-		instance->activeScene = std::make_unique<TinyEngine::Scene>();
+		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
 
 		SceneBuilder::BuildExampleScene1(instance->engine,
 			*instance->activeScene,
@@ -44,7 +44,7 @@ namespace TinyGame {
 		{
 			instance->activeScene->Unload();
 		}
-		instance->activeScene = std::make_unique<TinyEngine::Scene>();
+		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
 		SceneBuilder::BuildExampleScene2(instance->engine,
 			*instance->activeScene,
 			instance->textureManager);
