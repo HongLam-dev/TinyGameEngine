@@ -29,8 +29,8 @@ namespace TinyEngine {
 		Vector3 colliderPosition = position + offset;
 		float width = size.x * scale.x;
 		float height = size.y * scale.y;
-		bounds.max = Vector3(colliderPosition.x + width / 2, colliderPosition.y + width / 2, 0);
-		bounds.min = Vector3(colliderPosition.x - height / 2, colliderPosition.y - height / 2, 0);
+		bounds.max = Vector3(colliderPosition.x + width / 2, colliderPosition.y + height / 2, 0);
+		bounds.min = Vector3(colliderPosition.x - width / 2, colliderPosition.y - height / 2, 0);
 		return bounds;
 	}
 
