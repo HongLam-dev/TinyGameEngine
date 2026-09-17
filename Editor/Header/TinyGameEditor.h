@@ -19,12 +19,15 @@ namespace TinyEditor {
 			Scene,
 			Other
 		};
-		TinyGameEditor() :engine(window) {};
+		TinyGameEditor() :engine(window), editorCameraObj(engine) {};
 		void Run();
 		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject, TinyEngine::GameObject*& renamingObject);
 		void DrawTransform(TinyEngine::GameObject& gameObject);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
+		void DrawMarker(sf::Vector2f  pixelPosition);
+		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 	private:
+		TinyEngine::GameObject editorCameraObj;
 		TinyEngine::Window window;
 		TinyEngine::TinyGameEngine engine;
 		TinyEngine::TextureManager textureManager;
@@ -32,5 +35,6 @@ namespace TinyEditor {
 		WorkingWindow workingWindow = WorkingWindow::Other;
 		char renameBuffer[128]{};
 		sf::Color sceneColor{ 55, 65, 80 };
+		TinyEngine::GameObject* selectedObject = nullptr;
 	};
 }

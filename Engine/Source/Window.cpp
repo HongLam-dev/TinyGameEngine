@@ -8,30 +8,30 @@
 namespace TinyEngine
 {
 
-	bool TinyEngine::Window::IsOpen()
+	bool Window::IsOpen()
 	{
 		return sfmlWindow.isOpen();
 	}
 
-	void TinyEngine::Window::Close()
+	void Window::Close()
 	{
 		sfmlWindow.close();
 	}
 
-	std::optional<sf::Event> TinyEngine::Window::PollEvent() {
+	std::optional<sf::Event> Window::PollEvent() {
 		return sfmlWindow.pollEvent();
 	}
-	void TinyEngine::Window::Display()
+	void Window::Display()
 	{
 		sfmlWindow.display();
 	}
 
-	void TinyEngine::Window::Clear()
+	void Window::Clear()
 	{
 		sfmlWindow.clear();
 	}
 
-	void TinyEngine::Window::Draw(const sf::Drawable& object)
+	void Window::Draw(const sf::Drawable& object)
 	{
 		sfmlWindow.draw(object);
 	}
@@ -44,7 +44,7 @@ namespace TinyEngine
 			});
 	}
 
-	void TinyEngine::Window::DrawCollider(const BoxCollider2D& collider, const Camera& camera)
+	void Window::DrawCollider(const BoxCollider2D& collider, const Camera& camera)
 	{
 		const Bounds bounds = collider.GetBounds();
 
@@ -66,25 +66,7 @@ namespace TinyEngine
 			height / 2.0f
 			});
 
-		Vector3 camPosition = collider.GetPosition()- camera.GetPosition();
-		Vector3 relativePixels{
-		WorldToPixels(camPosition.x),
-		WorldToPixels(camPosition.y),
-		0.f
-			};
-		sf::Vector2u windowSize = sfmlWindow.getSize();
-
-		Vector3 windowCenter{
-			windowSize.x / 2.f,
-			windowSize.y / 2.f,
-			0.f
-		};
-
-		Vector3 objectScreenPosition{
-			windowCenter.x + relativePixels.x,
-			windowCenter.y + relativePixels.y,
-			0.f
-		};
+		Vector3 objectScreenPosition = camera.WorldToScreenPosition(collider.GetPosition(),GetSize());
 
 		rectangle.setPosition({
 			objectScreenPosition.x,
@@ -96,5 +78,11 @@ namespace TinyEngine
 		rectangle.setOutlineThickness(1.0f);
 
 		Draw(rectangle);
+	}
+
+	Vector2 Window::GetSize() {
+		sf::Vector2u windowSize = sfmlWindow.getSize();
+
+		return{static_cast<float>(windowSize.x),static_cast<float>(windowSize.y) };
 	}
 }

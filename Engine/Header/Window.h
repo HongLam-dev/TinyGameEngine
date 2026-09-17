@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Vector3.h"
+#include "Vector2.h"
 #include "BoxCollider2D.h"
 #include "Camera.h"
 namespace TinyEngine
@@ -22,7 +23,7 @@ namespace TinyEngine
 		void Clear();
 		void SetPosition(const Vector3& position);
 		sf::Vector2i GetPosition() { return sfmlWindow.getPosition(); }
-		sf::Vector2u GetSize() { return sfmlWindow.getSize(); }
+		Vector2 GetSize();
 	private:
 		sf::RenderWindow sfmlWindow;
 	};

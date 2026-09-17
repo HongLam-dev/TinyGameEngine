@@ -24,7 +24,6 @@ namespace TinyEditor {
         GameObject& mainCameraObj = editingScene->CreateMainCamera();
         engine.ActivateScene(*editingScene);
 
-        GameObject editorCameraObj(engine);
         Camera& editorCamera = editorCameraObj.AddComponent<Camera>();
 
         sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
@@ -32,10 +31,14 @@ namespace TinyEditor {
         GameObject& anchor = editingScene->CreateASimpleBox({-3.0f,3.0f,0}, { 0.64f,0.64f,0 }, placeHolderTex);
         anchor.SetName("Anchor");
 
-        GameObject* selectedObject = nullptr;
+
         GameObject* renamingObject = nullptr;
 
-        ImGui::SFML::Init(*renderWindow);
+        if (!ImGui::SFML::Init(*renderWindow))
+        {
+            std::cout << "Failed to initialize ImGui window";
+            return;
+        }
 
         ImGui::GetIO().Fonts->AddFontDefault();
 
@@ -62,6 +65,7 @@ namespace TinyEditor {
 
             workingWindow = WorkingWindow::Scene;
             engine.Render(window, editorCamera);
+            DrawObjectMarker(selectedObject);
             DrawHierachyWindow(selectedObject, renamingObject);
 
             DrawInspectorWindow(selectedObject);
@@ -153,6 +157,35 @@ namespace TinyEditor {
 
         ImGui::End();
     }
+
+
+    void TinyGameEditor::DrawObjectMarker(TinyEngine::GameObject*& selectedObject) {
+        if (selectedObject)
+        {
+            Vector3 position = selectedObject->GetTransform().GetPosition();
+            Vector3 pixelPos;
+           //     DrawMarker(WorldToPixels(position));
+        }
+    }
+    void TinyGameEditor::DrawMarker(sf::Vector2f  pixelPosition) {
+        sf::VertexArray marker(sf::PrimitiveType::Lines, 4);
+
+        float size = 10.0f;
+
+        marker[0].position = pixelPosition + sf::Vector2f(-size, 0);
+        marker[1].position = pixelPosition + sf::Vector2f(size, 0);
+
+        marker[2].position = pixelPosition + sf::Vector2f(0, -size);
+        marker[3].position = pixelPosition + sf::Vector2f(0, size);
+
+        marker[0].color = sf::Color::Yellow;
+        marker[1].color = sf::Color::Yellow;
+        marker[2].color = sf::Color::Yellow;
+        marker[3].color = sf::Color::Yellow;
+
+        window.GetRenderWindow()->draw(marker);
+    }
+
     void TinyGameEditor::DrawTransform(GameObject& gameObject) {
         ImGui::Text("%s", "Transform------");
 

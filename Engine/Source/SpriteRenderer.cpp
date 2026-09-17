@@ -11,25 +11,8 @@ namespace TinyEngine {
         if (!sprite.get())
             return;
         Transform transform = GetTransform();
-        Vector3 camPosition = transform.GetPosition() - camera.GetPosition();
-        Vector3 relativePixels{
-        WorldToPixels(camPosition.x),
-        WorldToPixels(camPosition.y),
-        0.f
-        };
-        sf::Vector2u windowSize = window.GetSize();
 
-        Vector3 windowCenter{
-            windowSize.x / 2.f,
-            windowSize.y / 2.f,
-            0.f
-        };
-
-        Vector3 objectScreenPosition{
-            windowCenter.x + relativePixels.x,
-            windowCenter.y + relativePixels.y,
-            0.f
-        };
+        Vector3 objectScreenPosition = camera.WorldToScreenPosition(transform.GetPosition(),window.GetSize());
 
         sprite->setPosition({
             objectScreenPosition.x,
@@ -40,6 +23,7 @@ namespace TinyEngine {
             transform.GetScale().x,
             transform.GetScale().y
             });
+
         sprite->setOrigin({
     sprite->getLocalBounds().size.x / 2.0f,
     sprite->getLocalBounds().size.y / 2.0f
