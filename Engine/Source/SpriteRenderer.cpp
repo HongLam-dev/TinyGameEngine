@@ -12,7 +12,7 @@ namespace TinyEngine {
             return;
         Transform transform = GetTransform();
 
-        Vector3 objectScreenPosition = camera.WorldToScreenPosition(transform.GetPosition(),window.GetSize());
+        Vector2 objectScreenPosition = camera.WorldToScreenPosition(transform.GetPosition(),window.GetSize());
 
         sprite->setPosition({
             objectScreenPosition.x,

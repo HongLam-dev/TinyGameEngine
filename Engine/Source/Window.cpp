@@ -66,7 +66,7 @@ namespace TinyEngine
 			height / 2.0f
 			});
 
-		Vector3 objectScreenPosition = camera.WorldToScreenPosition(collider.GetPosition(),GetSize());
+		Vector2 objectScreenPosition = camera.WorldToScreenPosition(collider.GetPosition(),GetSize());
 
 		rectangle.setPosition({
 			objectScreenPosition.x,

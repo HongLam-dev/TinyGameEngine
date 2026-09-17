@@ -24,7 +24,8 @@ namespace TinyEditor {
         GameObject& mainCameraObj = editingScene->CreateMainCamera();
         engine.ActivateScene(*editingScene);
 
-        Camera& editorCamera = editorCameraObj.AddComponent<Camera>();
+        GameObject editorCameraObj(engine);
+        editorCamera = &editorCameraObj.AddComponent<Camera>();
 
         sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
 
@@ -64,7 +65,7 @@ namespace TinyEditor {
             renderWindow->clear(sceneColor);
 
             workingWindow = WorkingWindow::Scene;
-            engine.Render(window, editorCamera);
+            engine.Render(window, *editorCamera);
             DrawObjectMarker(selectedObject);
             DrawHierachyWindow(selectedObject, renamingObject);
 
@@ -163,25 +164,53 @@ namespace TinyEditor {
         if (selectedObject)
         {
             Vector3 position = selectedObject->GetTransform().GetPosition();
-            Vector3 pixelPos;
-           //     DrawMarker(WorldToPixels(position));
+            Vector2 screenPos =editorCamera->WorldToScreenPosition(position,window.GetSize());
+            DrawMarker({ screenPos.x,screenPos.y});
         }
     }
-    void TinyGameEditor::DrawMarker(sf::Vector2f  pixelPosition) {
-        sf::VertexArray marker(sf::PrimitiveType::Lines, 4);
+    void TinyGameEditor::DrawMarker(sf::Vector2f pixelPosition)
+    {
+        float size = 30.0f;
+        float arrowSize = 8.0f;
 
-        float size = 10.0f;
+        sf::VertexArray marker(sf::PrimitiveType::Lines, 12);
 
+        // X axis
         marker[0].position = pixelPosition + sf::Vector2f(-size, 0);
         marker[1].position = pixelPosition + sf::Vector2f(size, 0);
 
-        marker[2].position = pixelPosition + sf::Vector2f(0, -size);
-        marker[3].position = pixelPosition + sf::Vector2f(0, size);
+        // X arrow head
+        marker[2].position = pixelPosition + sf::Vector2f(size, 0);
+        marker[3].position = pixelPosition + sf::Vector2f(size - arrowSize, -arrowSize / 2);
 
-        marker[0].color = sf::Color::Yellow;
-        marker[1].color = sf::Color::Yellow;
-        marker[2].color = sf::Color::Yellow;
-        marker[3].color = sf::Color::Yellow;
+        marker[4].position = pixelPosition + sf::Vector2f(size, 0);
+        marker[5].position = pixelPosition + sf::Vector2f(size - arrowSize, arrowSize / 2);
+
+        // Y axis
+        marker[6].position = pixelPosition + sf::Vector2f(0, -size);
+        marker[7].position = pixelPosition + sf::Vector2f(0, size);
+
+        // Y arrow head
+        marker[8].position = pixelPosition + sf::Vector2f(0, -size);
+        marker[9].position = pixelPosition + sf::Vector2f(-arrowSize / 2, -size + arrowSize);
+
+        marker[10].position = pixelPosition + sf::Vector2f(0, -size);
+        marker[11].position = pixelPosition + sf::Vector2f(arrowSize / 2, -size + arrowSize);
+
+        // Colors
+        marker[0].color = sf::Color::Red;
+        marker[1].color = sf::Color::Red;
+        marker[2].color = sf::Color::Red;
+        marker[3].color = sf::Color::Red;
+        marker[4].color = sf::Color::Red;
+        marker[5].color = sf::Color::Red;
+
+        marker[6].color = sf::Color::Yellow;
+        marker[7].color = sf::Color::Yellow;
+        marker[8].color = sf::Color::Yellow;
+        marker[9].color = sf::Color::Yellow;
+        marker[10].color = sf::Color::Yellow;
+        marker[11].color = sf::Color::Yellow;
 
         window.GetRenderWindow()->draw(marker);
     }
