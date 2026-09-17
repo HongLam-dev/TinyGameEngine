@@ -10,6 +10,7 @@
 #include <iostream>
 #include <TextureManager.h>
 #include <memory>
+#include <cstring>
 
 using namespace TinyEngine;
 
@@ -31,11 +32,13 @@ namespace TinyEditor {
         GameObject& anchor = editingScene->CreateASimpleBox({-3.0f,3.0f,0}, { 0.64f,0.64f,0 }, placeHolderTex);
         anchor.SetName("Anchor");
 
-        GameObject* selectedObject = &mainCameraObj;
+        GameObject* selectedObject = nullptr;
+        GameObject* renamingObject = nullptr;
 
         ImGui::SFML::Init(*renderWindow);
 
         ImGui::GetIO().Fonts->AddFontDefault();
+
 
         sf::Clock deltaClock;
         while (renderWindow->isOpen())
@@ -51,11 +54,15 @@ namespace TinyEditor {
             sf::Time deltaTime = deltaClock.restart();
 
             ImGui::SFML::Update(*renderWindow, deltaTime);
-            inputHandler.HandleSceneInput(editorCameraObj, 5, deltaTime.asSeconds());
-            renderWindow->clear();
 
+            if (workingWindow == WorkingWindow::Scene)
+                inputHandler.HandleSceneInput(editorCameraObj, 5, deltaTime.asSeconds());
+
+            renderWindow->clear(sceneColor);
+
+            workingWindow = WorkingWindow::Scene;
             engine.Render(window, editorCamera);
-            DrawHierachyWindow(selectedObject);
+            DrawHierachyWindow(selectedObject, renamingObject);
 
             DrawInspectorWindow(selectedObject);
             ImGui::SFML::Render(*renderWindow);
@@ -67,13 +74,14 @@ namespace TinyEditor {
         ImGui::SFML::Shutdown();
     }
 
-    void TinyGameEditor::DrawHierachyWindow( GameObject*& selectedObject)
+    void TinyGameEditor::DrawHierachyWindow( GameObject*& selectedObject, GameObject*& renamingObject)
     {
         ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
 
-        ImGui::Begin("Scene (1234567890)");
+        ImGui::Begin("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV (Don't ask why)");
 
-
+        if (ImGui::IsWindowHovered())
+            workingWindow = WorkingWindow::Other;
         if (ImGui::BeginPopupContextWindow())
         {
             if (ImGui::MenuItem("Create Empty"))
@@ -91,12 +99,56 @@ namespace TinyEditor {
 
         for (auto& object : editingScene->GetGameObjects())
         {
-            if (ImGui::Selectable(
-                object->GetName().c_str(),
-                selectedObject == object.get()))
+            ImGui::PushID(object.get());
+
+            if (renamingObject == object.get())
             {
-                selectedObject = object.get();
+                ImGui::SetKeyboardFocusHere();
+                if (ImGui::InputText(
+                    "##Rename",
+                    renameBuffer,
+                    sizeof(renameBuffer),
+                    ImGuiInputTextFlags_EnterReturnsTrue))
+                {
+                    object->SetName(renameBuffer);
+                    renamingObject = nullptr;
+                }
+                if (ImGui::IsItemDeactivated())
+                {
+                    object->SetName(renameBuffer);
+                    renamingObject = nullptr;
+                }
             }
+            else
+            {
+                if (ImGui::Selectable(
+                    object->GetName().c_str(),
+                    selectedObject == object.get()))
+                {
+                    selectedObject = object.get();
+                }
+
+                if (ImGui::BeginPopupContextItem())
+                {
+                    if (ImGui::MenuItem("Rename"))
+                    {
+                        selectedObject = object.get();
+                        renamingObject = object.get();
+
+                        std::strncpy(
+                            renameBuffer,
+                            object->GetName().c_str(),
+                            sizeof(renameBuffer) - 1
+                        );
+
+                        renameBuffer[sizeof(renameBuffer) - 1] = '\0';
+                    }
+
+                    ImGui::EndPopup();
+                }
+            }
+
+            ImGui::PopID();
         }
 
         ImGui::End();
@@ -124,6 +176,9 @@ namespace TinyEditor {
 
         ImGui::Begin("Inspector");
 
+
+        if (ImGui::IsWindowHovered())
+            workingWindow = WorkingWindow::Other;
         if (selectedObject)
         {
             ImGui::Text("%s", selectedObject->GetName().c_str());

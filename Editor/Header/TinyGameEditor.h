@@ -14,9 +14,14 @@ namespace TinyEditor {
 	class TinyGameEditor
 	{
 	public:
-		TinyGameEditor():engine(window) {};
+		enum class WorkingWindow
+		{
+			Scene,
+			Other
+		};
+		TinyGameEditor() :engine(window) {};
 		void Run();
-		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject);
+		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject, TinyEngine::GameObject*& renamingObject);
 		void DrawTransform(TinyEngine::GameObject& gameObject);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
 	private:
@@ -24,5 +29,8 @@ namespace TinyEditor {
 		TinyEngine::TinyGameEngine engine;
 		TinyEngine::TextureManager textureManager;
 		std::unique_ptr< TinyEngine::Scene> editingScene;
+		WorkingWindow workingWindow = WorkingWindow::Other;
+		char renameBuffer[128]{};
+		sf::Color sceneColor{ 55, 65, 80 };
 	};
 }
