@@ -1,17 +1,55 @@
 #include "InputHandler.h"
+#include "Vector2.h"
+#include "EngineSettings.h"
+#include "Camera.h"
 #include <SFML/Window.hpp>
 
 namespace TinyEditor {
-	void InputHandler::HandleSceneInput(TinyEngine::GameObject& editorCamera, float cameraMoveSpeed, float deltaTime) {
+    void InputHandler::HandleSceneInput(
+        TinyEngine::Camera& editorCamera,
+        TinyEngine::GameObject*& selectedObject,
+        float deltaTime)
+    {
+        if (!input.IsMousePressed(sf::Mouse::Button::Left))
+            return;
 
-		if (input.IsMousePressed(sf::Mouse::Button::Left))
-		{
-			sf::Vector2i Direction = input.GetMouseMovement();
-		
-			TinyEngine::Vector3 cameraPosition = editorCamera.GetTransform().GetPosition();
-			cameraPosition.x = cameraPosition.x+cameraMoveSpeed * Direction.x*deltaTime;
-			cameraPosition.y = cameraPosition.y + cameraMoveSpeed * Direction.y * deltaTime;
-			editorCamera.GetTransform().SetPosition(cameraPosition);
-		}
-	}
+        sf::Vector2i mouseMovement = input.GetMouseMovement();
+
+        if (selectedObject)
+        {
+            TinyEngine::Vector2 objectScreenPosition =
+                editorCamera.WorldToScreenPosition (selectedObject->GetTransform().GetPosition(),window.GetSize());
+
+            TinyEngine::Vector2 mousePosition =
+                input.GetMousePosition(window.GetPosition());
+
+            float distance =
+                TinyEngine::Vector2::Distance(objectScreenPosition, mousePosition);
+            if (distance < 50)
+            {
+                MoveObject(*selectedObject, -mouseMovement, editorCamera);
+                return;
+            }
+        }
+        MoveObject(editorCamera.GetOwner(), mouseMovement, editorCamera);
+    }
+    void InputHandler::MoveObject(
+        TinyEngine::GameObject& objectToMove,
+        sf::Vector2i mouseMovement,
+        TinyEngine::Camera& camera)
+    {
+        TinyEngine::Vector2 worldMovement =
+        {
+            TinyEngine::PixelsToWorld(mouseMovement.x),
+            TinyEngine::PixelsToWorld(mouseMovement.y)
+        };
+
+        TinyEngine::Vector3 position =
+            objectToMove.GetTransform().GetPosition();
+
+        position.x += worldMovement.x;
+        position.y += worldMovement.y;
+
+        objectToMove.GetTransform().SetPosition(position);
+    }
 }

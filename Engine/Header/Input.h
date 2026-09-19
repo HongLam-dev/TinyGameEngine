@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Vector2.h"
 
 namespace TinyEngine
 {
@@ -17,7 +18,7 @@ namespace TinyEngine
 		bool IsMousePressed(sf::Mouse::Button button);
 		void ProcessEvent(const sf::Event& event);
 		sf::Vector2i GetMouseMovement() { return mounseDelta; }
-
+		Vector2 GetMousePosition( const Vector2& windowPos);
 		void EndFrame();
 		static Input& Get()
 		{

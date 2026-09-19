@@ -9,7 +9,8 @@ namespace TinyEngine {
 	{
 	public:
 		Camera(GameObject& owner):Component(owner) {}
-		const Vector2& WorldToScreenPosition(Vector3 worldPos, Vector2 windowSize) const;
+		Vector2 WorldToScreenPosition(Vector3 worldPos, Vector2 windowSize) const;
+		Vector3 ScreenToWorldPosition(Vector2 screenPos, Vector2 windowSize) const;
 		void Update(float deltaTime) override;
 		void SetPosition(const Vector3& pos) { GetTransform().SetPosition(pos); }
 		const Vector3& GetPosition() const { return GetTransform().GetPosition(); }

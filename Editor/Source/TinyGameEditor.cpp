@@ -18,7 +18,7 @@ namespace TinyEditor {
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyEditor::InputHandler inputHandler;
+        TinyEditor::InputHandler inputHandler(window);
 
         editingScene = std::make_unique<Scene>(engine);
         GameObject& mainCameraObj = editingScene->CreateMainCamera();
@@ -29,7 +29,7 @@ namespace TinyEditor {
 
         sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
 
-        GameObject& anchor = editingScene->CreateASimpleBox({-3.0f,3.0f,0}, { 0.64f,0.64f,0 }, placeHolderTex);
+        GameObject& anchor = editingScene->CreateASimpleBox({}, { 0.64f,0.64f,0 }, placeHolderTex);
         anchor.SetName("Anchor");
 
 
@@ -60,7 +60,7 @@ namespace TinyEditor {
             ImGui::SFML::Update(*renderWindow, deltaTime);
 
             if (workingWindow == WorkingWindow::Scene)
-                inputHandler.HandleSceneInput(editorCameraObj, 5, deltaTime.asSeconds());
+                inputHandler.HandleSceneInput(*editorCamera,selectedObject, deltaTime.asSeconds());
 
             renderWindow->clear(sceneColor);
 

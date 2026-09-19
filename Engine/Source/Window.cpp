@@ -85,4 +85,8 @@ namespace TinyEngine
 
 		return{static_cast<float>(windowSize.x),static_cast<float>(windowSize.y) };
 	}
+
+	Vector2  Window::GetPosition() {
+		return {static_cast<float>(sfmlWindow.getPosition().x),static_cast<float>(sfmlWindow.getPosition().y) };
+	}
 }

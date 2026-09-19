@@ -22,7 +22,7 @@ namespace TinyEngine
 		void DrawCollider(const BoxCollider2D& collider,const Camera& camera);
 		void Clear();
 		void SetPosition(const Vector3& position);
-		sf::Vector2i GetPosition() { return sfmlWindow.getPosition(); }
+		Vector2 GetPosition();
 		Vector2 GetSize();
 	private:
 		sf::RenderWindow sfmlWindow;

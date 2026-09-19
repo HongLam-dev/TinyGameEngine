@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Vector2.h"
 #include <SFML/Graphics.hpp>
 namespace TinyEngine
 {
@@ -69,5 +70,10 @@ namespace TinyEngine
 		mounseDelta.x = 0;
 		mounseDelta.y = 0;
 	}
-
+	Vector2 Input::GetMousePosition( const Vector2& windowPos) {
+		Vector2 mousePosition;
+		mousePosition.x =sf::Mouse::getPosition().x-windowPos.x;
+		mousePosition.y= sf::Mouse::getPosition().y-windowPos.y;
+		return mousePosition;
+	}
 }

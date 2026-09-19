@@ -15,6 +15,11 @@ namespace TinyEngine{
         static const Vector3 Right;
         static const Vector3 Left;
 
+        static float Distance(Vector3 a, Vector3 b) {
+            Vector3 difference = a - b;
+            return difference.Magnitude();
+        }
+
         Vector3 Normalize() const
         {
             float length = Magnitude();
