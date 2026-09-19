@@ -34,12 +34,14 @@ add_library(TinyGameEngine
     "Engine/Source/Scene.cpp"
     "Engine/Source/TextureManager.cpp"
     "Engine/Source/RenderableComponent.cpp"
+    "Engine/Source/EngineComponentRegister.cpp"
     "Engine/Header/Vector3.h"
     "Engine/Header/Vector2.h"
-     "Engine/Header/ComponentInfo.h"
-     "Engine/Header/FieldInfo.h"
-     "Engine/Header/FieldType.h" 
-     "Engine/Header/ComponentRegister.h")
+    "Engine/Header/ComponentInfo.h"
+    "Engine/Header/FieldInfo.h"
+    "Engine/Header/FieldType.h" 
+    "Engine/Header/ComponentRegister.h"
+)
 target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
     Engine/Header/UI

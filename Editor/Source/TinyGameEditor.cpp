@@ -5,6 +5,7 @@
 #include "InputHandler.h"
 #include "EngineSettings.h"
 #include "GameComponentRegister.h"
+#include "EngineComponentRegister.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -22,6 +23,7 @@ namespace TinyEditor {
 
     void TinyGameEditor::RegisterComponents() {
         TinyGame::GameComponentRegister::RegisterGameComponents(componentRegister);
+        EngineComponentRegister::RegisterEngineComponents(componentRegister);
     }
 
     void TinyGameEditor::Run() {
@@ -242,17 +244,36 @@ namespace TinyEditor {
 
     void TinyGameEditor::DrawInspectorWindow(GameObject*& selectedObject)
     {
-        ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(
+            ImVec2(300, 1280),
+            ImGuiCond_FirstUseEver
+        );
 
         ImGui::Begin("Inspector");
 
-
         if (ImGui::IsWindowHovered())
             workingWindow = WorkingWindow::Other;
+
         if (selectedObject)
         {
             ImGui::Text("%s", selectedObject->GetName().c_str());
+
             DrawTransform(*selectedObject);
+
+            // Draw existing components
+            for (const auto& component : selectedObject->GetAllComponents())
+            {
+                std::type_index type = typeid(*component);
+
+                const ComponentInfo* info =
+                    componentRegister.FindComponent(type);
+
+                if (!info)
+                    continue;
+
+                ImGui::Separator();
+                ImGui::Text("%s", info->name.c_str());
+            }
 
             if (ImGui::Button("Add Component"))
             {
@@ -263,9 +284,9 @@ namespace TinyEditor {
             {
                 for (const auto& component : componentRegister.GetComponentList())
                 {
-                    if (ImGui::MenuItem(component.name.c_str()))
+                    if (ImGui::MenuItem(component.second.name.c_str()))
                     {
-                        component.create(*selectedObject);
+                        component.second.create(*selectedObject);
                     }
                 }
 

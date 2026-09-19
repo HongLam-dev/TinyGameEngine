@@ -1,14 +1,19 @@
 #pragma once 
-#include <vector>
+#include <typeindex>
 #include "ComponentInfo.h"
 
 namespace TinyEngine {
 	class ComponentRegister
 	{
 	public:
-		void RegisterComponent(ComponentInfo info) { componentInfo.push_back(info); };
-		const std::vector<ComponentInfo>& GetComponentList() { return componentInfo; };
+		template<typename T>
+		void RegisterComponent(ComponentInfo info)
+		{
+			componentInfo[typeid(T)] = std::move(info);
+		}
+		const std::unordered_map<std::type_index, ComponentInfo>& GetComponentList() { return componentInfo; };
+		ComponentInfo* FindComponent(std::type_index typeIndex) { return &componentInfo[typeIndex]; };
 	private:
-		std::vector<ComponentInfo> componentInfo;
+		std::unordered_map<std::type_index, ComponentInfo> componentInfo;
 	};
 }

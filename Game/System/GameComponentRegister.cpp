@@ -7,11 +7,8 @@
 using namespace TinyEngine;
 
 namespace TinyGame{
-//	GameComponentRegister::GameComponentRegister(ComponentRegister& componentRegister) :componentRegister(componentRegister) {	
-//		RegisterGameComponents();
-//	};
 	void GameComponentRegister::RegisterGameComponents(TinyEngine::ComponentRegister& componentRegister) {
-		componentRegister.RegisterComponent(
+		componentRegister.RegisterComponent<PlayerController>(
 			{"Player Controller",
 			[](GameObject& gameObject){
 			gameObject.AddComponent<PlayerController>();
@@ -26,7 +23,7 @@ namespace TinyGame{
 		
 		);
 
-		componentRegister.RegisterComponent(
+		componentRegister.RegisterComponent<CameraFollow>(
 			{ "Camera Follow",
 			[](GameObject& gameObject) {
 			gameObject.AddComponent<CameraFollow>();
@@ -41,7 +38,7 @@ namespace TinyGame{
 
 		);
 
-		componentRegister.RegisterComponent(
+		componentRegister.RegisterComponent<PingPongAroundCenter>(
 			{ "Ping Pong Around Center",
 			[](GameObject& gameObject) {
 			gameObject.AddComponent<PingPongAroundCenter>();
