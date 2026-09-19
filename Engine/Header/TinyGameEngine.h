@@ -36,11 +36,11 @@ namespace TinyEngine
 		int targetFPS = 60;
 		int timeStep = 60;
 		float deltaTime = 0;
+		sf::Clock clock;
 		RenderManager renderManager;
 		CollisionManager collisionManager;
 		Scene* activeScene=nullptr;
 		std::vector<std::unique_ptr<GameObject>> persistentOjects;
-		sf::Clock clock;
 		std::vector<std::function<void()>> deferredActions;
 		std::vector<GameObject*> objectsToDestroy;
 		std::vector<GameObject*> objectsToMakePersistent;

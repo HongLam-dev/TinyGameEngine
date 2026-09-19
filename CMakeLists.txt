@@ -36,7 +36,10 @@ add_library(TinyGameEngine
     "Engine/Source/RenderableComponent.cpp"
     "Engine/Header/Vector3.h"
     "Engine/Header/Vector2.h"
-)
+     "Engine/Header/ComponentInfo.h"
+     "Engine/Header/FieldInfo.h"
+     "Engine/Header/FieldType.h" 
+     "Engine/Header/ComponentRegister.h")
 target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
     Engine/Header/UI
@@ -48,26 +51,46 @@ target_link_libraries(TinyGameEngine PUBLIC
 )
 
 # Add source to this project's executable.
-add_executable (TinyGame
-"Game/main.cpp"
-"Game/System/SceneManager.h"
-"Game/System/SceneManager.cpp"
-"Game/System/SceneBuilder.h"
-"Game/System/SceneBuilder.cpp"
-"Game/Header/PlayerController.h"
-"Game/Source/PlayerController.cpp"
-"Game/Header/PingPong.h" 
-"Game/Source/PingPong.cpp" 
-"Game/Header/CameraFollow.h"
-"Game/Source/CameraFollow.cpp")
+# Game library
+add_library(TinyGame
+    "Game/System/SceneManager.h"
+    "Game/System/SceneManager.cpp"
+    "Game/System/SceneBuilder.h"
+    "Game/System/SceneBuilder.cpp"
 
-target_include_directories(TinyGame PRIVATE
+    "Game/Header/PlayerController.h"
+    "Game/Source/PlayerController.cpp"
+
+    "Game/Header/PingPong.h"
+    "Game/Source/PingPong.cpp"
+
+    "Game/Header/CameraFollow.h"
+    "Game/Source/CameraFollow.cpp"
+
+    "Game/System/GameComponentRegister.h"
+    "Game/System/GameComponentRegister.cpp"
+)
+
+target_include_directories(TinyGame PUBLIC
     Game/System
     Game/Header
 )
 
-target_link_libraries(TinyGame PRIVATE
+target_link_libraries(TinyGame PUBLIC
     TinyGameEngine
+)
+
+
+# Game executable
+add_executable(TinyGameApp
+    "Game/main.cpp"
+)
+target_compile_features(TinyGameEngine PUBLIC cxx_std_20)
+target_compile_features(TinyGame PUBLIC cxx_std_20)
+target_compile_features(TinyGameApp PRIVATE cxx_std_20)
+
+target_link_libraries(TinyGameApp PRIVATE
+    TinyGame
 )
 
 add_executable(TinyGameEditor
@@ -76,7 +99,7 @@ add_executable(TinyGameEditor
     "Editor/Source/InputHandler.cpp"
     "Editor/Header/TinyGameEditor.h"
     "Editor/Source/TinyGameEditor.cpp"
-)
+ )
 find_package(ImGui-SFML CONFIG REQUIRED)
 
 target_include_directories(TinyGameEditor PRIVATE
@@ -84,6 +107,7 @@ target_include_directories(TinyGameEditor PRIVATE
 )
 
 target_link_libraries(TinyGameEditor PRIVATE
+    TinyGame
     TinyGameEngine
     ImGui-SFML::ImGui-SFML
 )

@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "InputHandler.h"
 #include "EngineSettings.h"
+#include "GameComponentRegister.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -15,6 +16,13 @@
 using namespace TinyEngine;
 
 namespace TinyEditor {
+    TinyGameEditor::TinyGameEditor() :engine(window) {
+        RegisterComponents();
+    }
+
+    void TinyGameEditor::RegisterComponents() {
+        TinyGame::GameComponentRegister::RegisterGameComponents(componentRegister);
+    }
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
@@ -245,6 +253,24 @@ namespace TinyEditor {
         {
             ImGui::Text("%s", selectedObject->GetName().c_str());
             DrawTransform(*selectedObject);
+
+            if (ImGui::Button("Add Component"))
+            {
+                ImGui::OpenPopup("AddComponent");
+            }
+
+            if (ImGui::BeginPopup("AddComponent"))
+            {
+                for (const auto& component : componentRegister.GetComponentList())
+                {
+                    if (ImGui::MenuItem(component.name.c_str()))
+                    {
+                        component.create(*selectedObject);
+                    }
+                }
+
+                ImGui::EndPopup();
+            }
         }
 
         ImGui::End();

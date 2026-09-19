@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "InputHandler.h"
 #include "EngineSettings.h"
+#include "ComponentRegister.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -19,14 +20,16 @@ namespace TinyEditor {
 			Scene,
 			Other
 		};
-		TinyGameEditor() :engine(window) {};
+		TinyGameEditor();
 		void Run();
 		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject, TinyEngine::GameObject*& renamingObject);
 		void DrawTransform(TinyEngine::GameObject& gameObject);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
 		void DrawMarker(sf::Vector2f  pixelPosition);
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
+		void RegisterComponents();
 	private:
+		TinyEngine::ComponentRegister componentRegister;
 		TinyEngine::Camera* editorCamera;
 		TinyEngine::Window window;
 		TinyEngine::TinyGameEngine engine;
