@@ -1,22 +1,30 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 #include "Window.h"
 #include "RenderableComponent.h"
 #include "UIRenderable.h"
+#include <string>
+#include <SFML/Graphics.hpp>
 
 namespace TinyEngine {
 	class Image:public UIRenderable
 	{
 	public:
         using UIRenderable::UIRenderable;
-        void SetTexture(const sf::Texture& texture)
+        void SetTexture(std::string texturePath)
         {
+            sf::Texture* tex = TextureManager::Instance().GetTexture(texturePath);
+            if (!tex)
+            {
+                std::cout << "No texture found: " << texturePath;
+                return;
+            }
             if (sprite == nullptr)
             {
-                sprite = std::make_unique<sf::Sprite>(texture);
+                sprite = std::make_unique<sf::Sprite>(*tex);
             }
             else
-                sprite->setTexture(texture);
+                sprite->setTexture(*tex);
         }
         void SetTextureRect(const sf::IntRect& rect)
         {

@@ -6,6 +6,10 @@ namespace TinyEngine {
 	class TextureManager
 	{
 	public:
+		static TextureManager& Instance() {
+			static TextureManager instance;
+			return instance;
+		};
 		sf::Texture* GetTexture(std::string path);
 	private:
 		std::unordered_map<std::string,sf::Texture> textures;

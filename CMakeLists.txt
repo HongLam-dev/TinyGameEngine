@@ -17,23 +17,23 @@ add_library(TinyGameEngine
     "Engine/Source/TinyGameEngine.cpp"
     "Engine/Source/Input.cpp"
     "Engine/Source/Window.cpp"
-    "Engine/Source/Component.cpp"
-    "Engine/Source/SpriteRenderer.cpp"
+    "Engine/Source/GameComponent/Component.cpp"
+    "Engine/Source/GameComponent/SpriteRenderer.cpp"
     "Engine/Source/GameObject.cpp"
-    "Engine/Source/Transform.cpp"
+    "Engine/Source/GameComponent/Transform.cpp"
     "Engine/Source/CollisionManager.cpp"
-    "Engine/Source/BoxCollider2D.cpp"
-    "Engine/Source/Rigidbody2D.cpp"
+    "Engine/Source/GameComponent/BoxCollider2D.cpp"
+    "Engine/Source/GameComponent/Rigidbody2D.cpp"
     "Engine/Source/Animation.cpp"
-    "Engine/Source/Animator.cpp"
-    "Engine/Source/Camera.cpp"
+    "Engine/Source/GameComponent/Animator.cpp"
+    "Engine/Source/GameComponent/Camera.cpp"
     "Engine/Source/UI/UITransform.cpp"
     "Engine/Source/UI/UIObject.cpp"
     "Engine/Source/UI/Image.cpp"
     "Engine/Source/RenderManager.cpp"
     "Engine/Source/Scene.cpp"
     "Engine/Source/TextureManager.cpp"
-    "Engine/Source/RenderableComponent.cpp"
+    "Engine/Source/GameComponent/RenderableComponent.cpp"
     "Engine/Source/EngineComponentRegister.cpp"
     "Engine/Header/FieldType.h"
     "Engine/Header/Vector3.h"
@@ -44,6 +44,7 @@ add_library(TinyGameEngine
 )
 target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
+    Engine/Header/GameComponent
     Engine/Header/UI
 )
 target_link_libraries(TinyGameEngine PUBLIC

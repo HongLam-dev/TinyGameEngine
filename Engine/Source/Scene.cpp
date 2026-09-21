@@ -91,15 +91,12 @@ namespace TinyEngine {
 	GameObject& Scene::CreateASimpleBox(
 		const Vector3& position,
 		const Vector3& size,
-		sf::Texture* boxTexture) {
+		std::string boxTexture ) {
 		GameObject& objectRef = CreateSceneObject();
 
-		if (boxTexture)
-		{
 			SpriteRenderer& renderer =
 				objectRef.AddComponent<SpriteRenderer>();
-			renderer.SetTexture(*boxTexture);
-		}
+			renderer.SetTexture(boxTexture);
 		BoxCollider2D& collider =
 			objectRef.AddComponent<BoxCollider2D>();
 

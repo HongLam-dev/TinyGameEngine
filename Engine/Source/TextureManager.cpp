@@ -2,6 +2,8 @@
 #include <iostream>
 namespace TinyEngine {
 	sf::Texture* TextureManager::GetTexture(std::string path) {
+		if (path.empty())
+			return nullptr;
 		if (!textures.contains(path))
 		{
 			if (!textures[path].loadFromFile(path)) {

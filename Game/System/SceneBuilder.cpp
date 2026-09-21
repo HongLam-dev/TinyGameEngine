@@ -18,18 +18,13 @@ using namespace TinyEngine;
 
 namespace TinyGame {
 	void SceneBuilder::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
-		TinyEngine::Scene& emptyScene,
-		TinyEngine::TextureManager& textureManager
+		TinyEngine::Scene& emptyScene
 	) {
 		GameObject& playerRef = emptyScene.CreateSceneObject();
 
-		sf::Texture* playerRunSheet=textureManager.GetTexture("Assets/PlayerRun.png");
-		sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
+	//	sf::Texture* playerRunSheet=Te.GetTexture(");
+		std::string placeHolderTex ="Assets/heart.png";
 
-		if (!playerRunSheet)
-			return;
-		if (!placeHolderTex)
-			return;
 		SpriteRenderer& renderer =
 			playerRef.AddComponent<SpriteRenderer>();
 
@@ -44,14 +39,14 @@ namespace TinyGame {
 		rb.SetGravityScale(0.0f);
 		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
 		//	collider.SetIsTrigger(true);
-		renderer.SetTexture(*playerRunSheet);
+		renderer.SetTexture("Assets/PlayerRun.png");
 
 		Transform& playerTranform = *playerRef.GetComponent<Transform>();
 		playerTranform.SetPosition({2,3,0});
 	//	playerTranform.SetScale({ 0.6f,0.6f,0.6f });
 
 		//player animation
-		Animation playerAni(*playerRunSheet);
+		Animation playerAni("Assets/PlayerRun.png");
 
 		playerAni.AddKey({ {{ 53,38 },{ 100, 300 }},0 });
 		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.1f });
@@ -68,7 +63,7 @@ namespace TinyGame {
 		//Create Image
 		UIObject& imageObj = emptyScene.CreateUIObject();
 		Image& image = imageObj.AddComponent<Image>();
-		image.SetTexture(*placeHolderTex);
+		image.SetTexture(placeHolderTex);
 		Transform& imageTransform = imageObj.GetTransform();
 		imageTransform.SetPosition({ 50, 500, 0 });
 		//end image
@@ -80,10 +75,7 @@ namespace TinyGame {
 
 		//end camera
 		//boxes
-		sf::Texture* crateText=textureManager.GetTexture("Assets/Crate.png");
-
-		if (!crateText)
-			return;
+		std::string crateText="Assets/Crate.png";
 
 		//CreateASimpleBox({400,200,0},{500,64,0});
 		emptyScene.CreateASimpleBox({ 4,3,0 }, { 10.0f,1.0f,0 }, crateText);
@@ -94,17 +86,13 @@ namespace TinyGame {
 	}
 
 	void SceneBuilder::BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
-		TinyEngine::Scene& emptyScene,
-		TinyEngine::TextureManager& textureManager
+		TinyEngine::Scene& emptyScene
 	) {
-		sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
-
-		if (!placeHolderTex)
-			return;
+		std::string placeHolderTex = "Assets/heart.png";
 		//Create Image
 		UIObject& imageObj = emptyScene.CreateUIObject();
 		Image& image = imageObj.AddComponent<Image>();
-		image.SetTexture(*placeHolderTex);
+		image.SetTexture(placeHolderTex);
 		Transform& imageTransform = imageObj.GetTransform();
 		imageTransform.SetPosition({ 0.5f, 5, 0 });
 		//end image
@@ -112,10 +100,7 @@ namespace TinyGame {
 		GameObject& camObj = emptyScene.CreateMainCamera();
 		//end camera
 		//boxes
-		sf::Texture* crateText = textureManager.GetTexture("Assets/Crate.png");
-
-		if (!crateText)
-			return;
+		std::string crateText = "Assets/Crate.png";
 
 		//CreateASimpleBox({400,200,0},{500,64,0});
 		emptyScene.CreateASimpleBox( {4,3,0 }, { 5.0f,0.64f,0 }, crateText);
@@ -126,8 +111,8 @@ namespace TinyGame {
 
 	}
 
-	GameObject& SceneBuilder::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, sf::Texture* boxTexture) {
-		GameObject& boxRef = scene.CreateASimpleBox( position, size, boxTexture);
+	GameObject& SceneBuilder::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, std::string boxTexture) {
+		GameObject& boxRef = scene.CreateASimpleBox( position, size);
 
 		PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
 		pingpong.Initialize({ 1,0,0 }, 3);

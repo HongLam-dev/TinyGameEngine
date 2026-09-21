@@ -5,6 +5,7 @@
 #include "UI/UIObject.h"
 #include "BoxCollider2D.h"
 #include <vector>
+#include <string>
 namespace TinyEngine {
 	class TinyGameEngine;
 	class Scene {
@@ -14,7 +15,7 @@ namespace TinyEngine {
 		GameObject& CreateASimpleBox(
 			const Vector3& position,
 			const Vector3& size,
-			sf::Texture* boxTexture=nullptr);
+			std::string boxTexture="");
 		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
 		Camera* GetMainCamera() { return mainCamera; };
 		UIObject& CreateUIObject();

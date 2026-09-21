@@ -11,7 +11,7 @@ namespace TinyGame {
 	class SceneManager
 	{
 	public:
-		SceneManager(TinyEngine::TinyGameEngine& engine, TinyEngine::TextureManager& textureManager);
+		SceneManager(TinyEngine::TinyGameEngine& engine);
 		~SceneManager();
 		static void LoadExampleScene1();
 		static void LoadExampleScene2();
@@ -21,7 +21,6 @@ namespace TinyGame {
 		std::vector<std::unique_ptr<TinyEngine::GameObject>> persistentObjects;
 		std::unique_ptr<TinyEngine::Scene> activeScene=nullptr;
 		TinyEngine::TinyGameEngine& engine;
-		TinyEngine::TextureManager& textureManager;
 		inline static SceneManager* instance = nullptr;
 
 	};

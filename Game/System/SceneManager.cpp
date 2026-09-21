@@ -2,8 +2,8 @@
 #include "TinyGameEngine.h"
 
 namespace TinyGame {
-	SceneManager::SceneManager(TinyEngine::TinyGameEngine& engine, TinyEngine::TextureManager& textureManager):
-		engine(engine),textureManager(textureManager) {
+	SceneManager::SceneManager(TinyEngine::TinyGameEngine& engine):
+		engine(engine){
 		if (!instance)
 			instance = this;
 		else
@@ -27,8 +27,7 @@ namespace TinyGame {
 		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
 
 		SceneBuilder::BuildExampleScene1(instance->engine,
-			*instance->activeScene,
-			instance->textureManager);
+			*instance->activeScene);
 		instance->engine.ActivateScene(*instance->activeScene);
 	}
 	void SceneManager::LoadExampleScene2()
@@ -46,8 +45,7 @@ namespace TinyGame {
 		}
 		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
 		SceneBuilder::BuildExampleScene2(instance->engine,
-			*instance->activeScene,
-			instance->textureManager);
+			*instance->activeScene);
 		instance->engine.ActivateScene(*instance->activeScene);
 	}
 }
