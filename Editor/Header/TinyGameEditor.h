@@ -23,7 +23,7 @@ namespace TinyEditor {
 		TinyGameEditor();
 		void Run();
 		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject, TinyEngine::GameObject*& renamingObject);
-		void DrawTransform(TinyEngine::GameObject& gameObject);
+		void DrawTransform(TinyEngine::Transform& transform);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
 		void DrawMarker(sf::Vector2f  pixelPosition);
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
