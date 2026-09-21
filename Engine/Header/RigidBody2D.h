@@ -26,7 +26,9 @@ namespace TinyEngine {
 		void SetPosition(Vector3 pos);
 		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
 		Vector3 GetVelocity(){ return velocity; }
-		float GetMass() { return mass; }
+		float GetMass() const { return mass; }
+		float GetGravityScale() const { return gravityScale; }
+
 		CollisionDetectionMode GetCollisionDetectMode() { return collisionDetectMode; }
 		Vector3 GetPreviousPosition() { return previousPostion; }
 	private:

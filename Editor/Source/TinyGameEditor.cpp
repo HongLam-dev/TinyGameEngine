@@ -257,9 +257,6 @@ namespace TinyEditor {
         if (selectedObject)
         {
             ImGui::Text("%s", selectedObject->GetName().c_str());
-
-            DrawTransform(*selectedObject);
-
             // Draw existing components
             for (const auto& component : selectedObject->GetAllComponents())
             {
@@ -271,8 +268,92 @@ namespace TinyEditor {
                 if (!info)
                     continue;
 
-                ImGui::Separator();
-                ImGui::Text("%s", info->name.c_str());
+                if (ImGui::CollapsingHeader(
+                    info->name.c_str(),
+                    ImGuiTreeNodeFlags_DefaultOpen))
+                {
+                    for (const auto& field : info->fields)
+                    {
+                        std::any value = field.getValue(*component);
+
+                        switch (field.type)
+                        {
+                        case FieldType::Float:
+                        {
+                            float valueFloat = std::any_cast<float>(value);
+
+                            if (ImGui::DragFloat(field.name.c_str(), &valueFloat))
+                            {
+                                field.setValue(*component, valueFloat);
+                            }
+
+                            break;
+                        }
+
+                        case FieldType::Vector2:
+                        {
+                            Vector2 valueVector =
+                                std::any_cast<Vector2>(value);
+
+                            if (ImGui::DragFloat2(
+                                field.name.c_str(),
+                                &valueVector.x))
+                            {
+                                field.setValue(*component, valueVector);
+                            }
+
+                            break;
+                        }
+
+                        case FieldType::Vector3:
+                        {
+                            Vector3 valueVector =
+                                std::any_cast<Vector3>(value);
+
+                            if (ImGui::DragFloat3(
+                                field.name.c_str(),
+                                &valueVector.x))
+                            {
+                                field.setValue(*component, valueVector);
+                            }
+
+                            break;
+                        }
+
+                        case FieldType::Int:
+                        {
+                            int valueInt = std::any_cast<int>(value);
+
+                            if (ImGui::DragInt(
+                                field.name.c_str(),
+                                &valueInt))
+                            {
+                                field.setValue(*component, valueInt);
+                            }
+
+                            break;
+                        }
+
+                        case FieldType::Bool:
+                        {
+                            bool valueBool = std::any_cast<bool>(value);
+
+                            if (ImGui::Checkbox(
+                                field.name.c_str(),
+                                &valueBool))
+                            {
+                                field.setValue(*component, valueBool);
+                            }
+
+                            break;
+                        }
+
+                        case FieldType::String:
+                            // Handle later
+                            break;
+                        }
+                    }
+                }
             }
 
             if (ImGui::Button("Add Component"))

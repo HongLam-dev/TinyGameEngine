@@ -13,5 +13,5 @@ namespace TinyGame {
 			GetTransform().SetPosition(target->GetPosition());
 		}
 	}
-
+	
 }

@@ -16,49 +16,107 @@ namespace TinyGame{
 				{
 					{
 						"Move Speed",
-						FieldType::Float
+						FieldType::Float,
+
+						[](const Component& component) -> std::any
+						{
+							return static_cast<const PlayerController&>(component).GetMoveSpeed();
+						},
+
+						[](Component& component, const std::any& value)
+						{
+							static_cast<PlayerController&>(component)
+								.SetMoveSpeed(std::any_cast<float>(value));
+						}
 					}
 				}
 			}
 		
 		);
 
-		componentRegister.RegisterComponent<CameraFollow>(
-			{ "Camera Follow",
-			[](GameObject& gameObject) {
-			gameObject.AddComponent<CameraFollow>();
-			},
-				{
-					{
-						"Move Speed",
-						FieldType::Float
-					}
-				}
-			}
+        componentRegister.RegisterComponent<PingPongAroundCenter>(
+            {
+                "Ping Pong Around Center",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<PingPongAroundCenter>();
+                },
+                {
+                    {
+                        "Radius",
+                        FieldType::Float,
 
-		);
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const PingPongAroundCenter&>(
+                                component
+                            ).GetRadius();
+                        },
 
-		componentRegister.RegisterComponent<PingPongAroundCenter>(
-			{ "Ping Pong Around Center",
-			[](GameObject& gameObject) {
-			gameObject.AddComponent<PingPongAroundCenter>();
-			},
-				{
-					{
-						"Radius",
-						FieldType::Float
-					},
-					{
-						"Direction",
-						FieldType::Vector3
-					},
-					{
-						"Speed",
-						FieldType::Float
-					}
-				}
-			}
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<PingPongAroundCenter&>(
+                                component
+                            ).SetRadius(
+                                std::any_cast<float>(value)
+                            );
+                        }
+                    },
+                    {
+                        "Direction",
+                        FieldType::Vector3,
 
-		);
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const PingPongAroundCenter&>(
+                                component
+                            ).GetDirection();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<PingPongAroundCenter&>(
+                                component
+                            ).SetDirection(
+                                std::any_cast<Vector3>(value)
+                            );
+                        }
+                    },
+                    {
+                        "Speed",
+                        FieldType::Float,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const PingPongAroundCenter&>(
+                                component
+                            ).GetSpeed();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<PingPongAroundCenter&>(
+                                component
+                            ).SetSpeed(
+                                std::any_cast<float>(value)
+                            );
+                        }
+                    }
+                }
+            }
+        );
+
+        componentRegister.RegisterComponent<CameraFollow>(
+            {
+                "Camera Follow",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<CameraFollow>();
+                },
+                {
+                   
+                }
+            }
+        );
 	}
 }

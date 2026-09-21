@@ -28,6 +28,7 @@ namespace TinyEditor {
 		void DrawMarker(sf::Vector2f  pixelPosition);
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 		void RegisterComponents();
+		void DrawComponent();
 	private:
 		TinyEngine::ComponentRegister componentRegister;
 		TinyEngine::Camera* editorCamera;

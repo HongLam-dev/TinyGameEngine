@@ -22,6 +22,8 @@ namespace TinyEngine {
 		void SetPosition(const Vector3& newPos);
 		Vector3 GetPosition() const;
 		Vector3 GetSize() const { return size; }
+		void SetOffset(Vector3 offset) { this->offset = offset; }
+		Vector3 GetOffset()const { return offset; }
 		Bounds GetBounds() const;
 		Bounds GetBoundsAtPosition(Vector3 position) const;
 		void SetIsTrigger(bool isTrigger) {

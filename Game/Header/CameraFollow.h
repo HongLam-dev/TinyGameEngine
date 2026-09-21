@@ -9,6 +9,7 @@ namespace TinyGame {
 		void Start() override;
 		void SetTarget(TinyEngine::Transform& target) { this->target = &target; }
 		void Update(float deltaTime) override;
+
 	private:
 		TinyEngine::Transform* target = nullptr;
 	};

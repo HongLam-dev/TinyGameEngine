@@ -1,13 +1,12 @@
 #pragma once
-
-namespace TinyEngine {
+namespace TinyEngine{
     enum class FieldType
     {
-        Int,
         Float,
-        Bool,
         Vector2,
         Vector3,
+        Int,
+        Bool,
         String
     };
 }

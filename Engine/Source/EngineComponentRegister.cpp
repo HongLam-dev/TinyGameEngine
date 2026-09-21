@@ -18,15 +18,48 @@ namespace TinyEngine{
                 {
                     {
                         "Position",
-                        FieldType::Vector3
+                        FieldType::Vector3,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const Transform&>(component).GetPosition();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<Transform&>(component)
+                                .SetPosition(std::any_cast<Vector3>(value));
+                        }
                     },
                     {
                         "Rotation",
-                        FieldType::Vector3
+                        FieldType::Vector3,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const Transform&>(component).GetRotation();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<Transform&>(component)
+                                .SetRotation(std::any_cast<Vector3>(value));
+                        }
                     },
                     {
                         "Scale",
-                        FieldType::Vector3
+                        FieldType::Vector3,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const Transform&>(component).GetScale();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<Transform&>(component)
+                                .SetScale(std::any_cast<Vector3>(value));
+                        }
                     }
                 }
             }
@@ -55,11 +88,33 @@ namespace TinyEngine{
                 {
                     {
                         "Offset",
-                        FieldType::Vector2
+                        FieldType::Vector3,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const BoxCollider2D&>(component).GetOffset();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<BoxCollider2D&>(component)
+                                .SetOffset(std::any_cast<Vector3>(value));
+                        }
                     },
                     {
                         "Size",
-                        FieldType::Vector2
+                        FieldType::Vector3,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const BoxCollider2D&>(component).GetSize();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<BoxCollider2D&>(component)
+                                .SetSize(std::any_cast<Vector3>(value));
+                        }
                     }
                 }
             }
@@ -75,15 +130,71 @@ namespace TinyEngine{
                 {
                     {
                         "Mass",
-                        FieldType::Float
+                        FieldType::Float,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const Rigidbody2D&>(component).GetMass();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<Rigidbody2D&>(component)
+                                .SetMass(std::any_cast<float>(value));
+                        }
                     },
                     {
                         "Gravity Factor",
-                        FieldType::Float
+                        FieldType::Float,
+
+                        [](const Component& component) -> std::any
+                        {
+                            return static_cast<const Rigidbody2D&>(component).GetGravityScale();
+                        },
+
+                        [](Component& component, const std::any& value)
+                        {
+                            static_cast<Rigidbody2D&>(component)
+                                .SetGravityScale(std::any_cast<float>(value));
+                        }
                     }
                 }
             }
         );
+
+        componentRegister.RegisterComponent<SpriteRenderer>(
+            {
+                "Sprite Renderer",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<SpriteRenderer>();
+                },
+                {}
+            }
+        );
+
+        componentRegister.RegisterComponent<Camera>(
+            {
+                "Camera",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<Camera>();
+                },
+                {}
+            }
+        );
+
+        componentRegister.RegisterComponent<Animator>(
+            {
+                "Animation Controller",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<Animator>();
+                },
+                {}
+            }
+        );
+
         componentRegister.RegisterComponent<Camera>(
             {
                 "Camera",

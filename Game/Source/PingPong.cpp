@@ -1,6 +1,6 @@
 #include "PingPong.h"
 #include "Input.h"
-#include "vector3.h"
+#include "Vector3.h"
 #include "GameObject.h"
 #include "TinyGameEngine.h"
 #include "BoxCollider2D.h"
@@ -36,26 +36,36 @@ namespace TinyGame {
 
     void PingPongAroundCenter::FixedUpdate(float fixedDeltaTime)
     {
-        transform->SetPosition(transform->GetPosition() + direction * moveSpeed *fixedDeltaTime);
+        transform->SetPosition(transform->GetPosition() + direction * speed *fixedDeltaTime);
     }
 
-    void PingPongAroundCenter::OnCollisionEnter(const Collision& collision) {
-        //std::cout << "Enter \n";
-    }
-    void PingPongAroundCenter::OnCollisionStay(const Collision& collision) {
-        //std::cout << "Stay \n";
-    }
-    void PingPongAroundCenter::OnCollisionExit(BoxCollider2D& other) {
-        //std::cout << "Exit \n";
+    float PingPongAroundCenter::GetRadius() const
+    {
+        return radius;
     }
 
-    void PingPongAroundCenter::OnTriggerEnter(BoxCollider2D& other) {
-        //std::cout << " trigger Enter \n";
+    void PingPongAroundCenter::SetRadius(float value)
+    {
+        radius = value;
     }
-    void PingPongAroundCenter::OnTriggerStay(BoxCollider2D& other) {
-        //std::cout << " trigger Stay \n";
+
+    Vector3 PingPongAroundCenter::GetDirection() const
+    {
+        return direction;
     }
-    void PingPongAroundCenter::OnTriggerExit(BoxCollider2D& other) {
-        //std::cout << " trigger  Exit \n";
+
+    void PingPongAroundCenter::SetDirection(const Vector3& value)
+    {
+        direction = value;
+    }
+
+    float PingPongAroundCenter::GetSpeed() const
+    {
+        return speed;
+    }
+
+    void PingPongAroundCenter::SetSpeed(float value)
+    {
+        speed = value;
     }
 }

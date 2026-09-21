@@ -17,17 +17,19 @@ namespace TinyGame {
 		void Initialize(TinyEngine::Vector3 direction, float radius, float moveSpeed = 5.0f) {
 			this->radius = radius;
 			this->direction = direction;
-			this->moveSpeed = moveSpeed;
+			this->speed = moveSpeed;
 		}
-		void OnCollisionEnter(const TinyEngine::Collision& collision) override;
-		void OnCollisionStay(const TinyEngine::Collision& collision) override;
-		void OnCollisionExit(TinyEngine::BoxCollider2D& other) override;
-		void OnTriggerEnter(TinyEngine::BoxCollider2D& other) override;
-		void OnTriggerStay(TinyEngine::BoxCollider2D& other) override;
-		void OnTriggerExit(TinyEngine::BoxCollider2D& other) override;
+		float GetRadius() const;
+		void SetRadius(float value);
+
+		TinyEngine::Vector3 GetDirection() const;
+		void SetDirection(const TinyEngine::Vector3& value);
+
+		float GetSpeed() const;
+		void SetSpeed(float value);
 	private:
 		TinyEngine::Transform* transform = nullptr;
-		float moveSpeed = 5.0f;
+		float speed = 5.0f;
 		TinyEngine::Vector3 direction = TinyEngine::Vector3::Zero;
 		TinyEngine::Vector3 center = TinyEngine::Vector3::Zero;
 		float radius = 5.0f;

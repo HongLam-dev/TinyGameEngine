@@ -19,6 +19,9 @@ namespace TinyGame {
 		void OnTriggerEnter(TinyEngine::BoxCollider2D& other) override;
 		void OnTriggerStay(TinyEngine::BoxCollider2D& other) override;
 		void OnTriggerExit(TinyEngine::BoxCollider2D& other) override;
+
+		float GetMoveSpeed() const { return moveSpeed; }
+		void SetMoveSpeed(float moveSpeed) { this->moveSpeed = moveSpeed; }
 	private:
 		TinyEngine::Transform* transform = nullptr;
 		TinyEngine::Rigidbody2D* rb = nullptr;
