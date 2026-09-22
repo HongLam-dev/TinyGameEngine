@@ -37,9 +37,7 @@ namespace TinyEditor {
         GameObject editorCameraObj(engine);
         editorCamera = &editorCameraObj.AddComponent<Camera>();
 
-        sf::Texture* placeHolderTex = textureManager.GetTexture("Assets/heart.png");
-
-        GameObject& anchor = editingScene->CreateASimpleBox({}, { 0.64f,0.64f,0 }, placeHolderTex);
+        GameObject& anchor = editingScene->CreateASimpleBox({}, { 0.64f,0.64f,0 }, "Assets/heart.png");
         anchor.SetName("Anchor");
 
 

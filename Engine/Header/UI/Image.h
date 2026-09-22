@@ -25,6 +25,7 @@ namespace TinyEngine {
             }
             else
                 sprite->setTexture(*tex);
+            this->texturePath = texturePath;
         }
         void SetTextureRect(const sf::IntRect& rect)
         {
@@ -34,6 +35,7 @@ namespace TinyEngine {
         }
         void Render(Window& window) override;
 	private:
+        std::string texturePath;
 		std::unique_ptr<sf::Sprite> sprite = nullptr;
 	};
 }

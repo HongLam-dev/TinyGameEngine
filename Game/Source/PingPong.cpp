@@ -54,7 +54,7 @@ namespace TinyGame {
         return direction;
     }
 
-    void PingPongAroundCenter::SetDirection(const Vector3& value)
+    void PingPongAroundCenter::SetDirection(Vector3 value)
     {
         direction = value;
     }

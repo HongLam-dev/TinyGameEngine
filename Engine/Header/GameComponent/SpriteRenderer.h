@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "RenderableComponent.h"
+#include "Rect.h"
 #include <string>
 
 namespace TinyEngine {
@@ -33,6 +34,8 @@ namespace TinyEngine {
             }
             else
                 sprite->setTexture(*tex);
+            
+            this->texturePath = texturePath;
         }
         void SetTextureRect(const sf::IntRect& rect)
         {
@@ -41,6 +44,8 @@ namespace TinyEngine {
             sprite->setTextureRect(rect);
         }
     private:
+        std::string texturePath;
+        Rect textureRect;
         std::unique_ptr< sf::Sprite> sprite;
     };
 

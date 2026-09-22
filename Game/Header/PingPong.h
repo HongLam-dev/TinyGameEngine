@@ -23,7 +23,7 @@ namespace TinyGame {
 		void SetRadius(float value);
 
 		TinyEngine::Vector3 GetDirection() const;
-		void SetDirection(const TinyEngine::Vector3& value);
+		void SetDirection(TinyEngine::Vector3 value);
 
 		float GetSpeed() const;
 		void SetSpeed(float value);

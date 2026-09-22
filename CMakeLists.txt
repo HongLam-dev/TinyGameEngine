@@ -41,7 +41,7 @@ add_library(TinyGameEngine
     "Engine/Header/ComponentInfo.h"
     "Engine/Header/FieldInfo.h" 
     "Engine/Header/ComponentRegister.h"
-)
+ "Engine/Header/MakeField.h")
 target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
     Engine/Header/GameComponent

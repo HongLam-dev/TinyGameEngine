@@ -4,35 +4,29 @@
 #include "PlayerController.h"
 #include "CameraFollow.h"
 #include "PingPong.h"
+#include "MakeField.h"
+#include "Vector3.h"
 using namespace TinyEngine;
 
 namespace TinyGame{
 	void GameComponentRegister::RegisterGameComponents(TinyEngine::ComponentRegister& componentRegister) {
-		componentRegister.RegisterComponent<PlayerController>(
-			{"Player Controller",
-			[](GameObject& gameObject){
-			gameObject.AddComponent<PlayerController>();
-			},
-				{
-					{
-						"Move Speed",
-						FieldType::Float,
-
-						[](const Component& component) -> std::any
-						{
-							return static_cast<const PlayerController&>(component).GetMoveSpeed();
-						},
-
-						[](Component& component, const std::any& value)
-						{
-							static_cast<PlayerController&>(component)
-								.SetMoveSpeed(std::any_cast<float>(value));
-						}
-					}
-				}
-			}
-		
-		);
+        componentRegister.RegisterComponent<PlayerController>(
+            {
+                "Player Controller",
+                [](GameObject& gameObject)
+                {
+                    gameObject.AddComponent<PlayerController>();
+                },
+                {
+                    MakeField<PlayerController, float>(
+                        "Move Speed",
+                        FieldType::Float,
+                        &PlayerController::GetMoveSpeed,
+                        &PlayerController::SetMoveSpeed
+                    )
+                }
+            }
+        );
 
         componentRegister.RegisterComponent<PingPongAroundCenter>(
             {
@@ -42,66 +36,26 @@ namespace TinyGame{
                     gameObject.AddComponent<PingPongAroundCenter>();
                 },
                 {
-                    {
+                    MakeField<PingPongAroundCenter, float>(
                         "Radius",
                         FieldType::Float,
+                        &PingPongAroundCenter::GetRadius,
+                        &PingPongAroundCenter::SetRadius
+                    ),
 
-                        [](const Component& component) -> std::any
-                        {
-                            return static_cast<const PingPongAroundCenter&>(
-                                component
-                            ).GetRadius();
-                        },
-
-                        [](Component& component, const std::any& value)
-                        {
-                            static_cast<PingPongAroundCenter&>(
-                                component
-                            ).SetRadius(
-                                std::any_cast<float>(value)
-                            );
-                        }
-                    },
-                    {
+                    MakeField<PingPongAroundCenter, Vector3>(
                         "Direction",
                         FieldType::Vector3,
+                        &PingPongAroundCenter::GetDirection,
+                        &PingPongAroundCenter::SetDirection
+                    ),
 
-                        [](const Component& component) -> std::any
-                        {
-                            return static_cast<const PingPongAroundCenter&>(
-                                component
-                            ).GetDirection();
-                        },
-
-                        [](Component& component, const std::any& value)
-                        {
-                            static_cast<PingPongAroundCenter&>(
-                                component
-                            ).SetDirection(
-                                std::any_cast<Vector3>(value)
-                            );
-                        }
-                    },
-                    {
+                    MakeField<PingPongAroundCenter, float>(
                         "Speed",
                         FieldType::Float,
-
-                        [](const Component& component) -> std::any
-                        {
-                            return static_cast<const PingPongAroundCenter&>(
-                                component
-                            ).GetSpeed();
-                        },
-
-                        [](Component& component, const std::any& value)
-                        {
-                            static_cast<PingPongAroundCenter&>(
-                                component
-                            ).SetSpeed(
-                                std::any_cast<float>(value)
-                            );
-                        }
-                    }
+                        &PingPongAroundCenter::GetSpeed,
+                        &PingPongAroundCenter::SetSpeed
+                    )
                 }
             }
         );
@@ -114,9 +68,9 @@ namespace TinyGame{
                     gameObject.AddComponent<CameraFollow>();
                 },
                 {
-                   
                 }
             }
         );
+
 	}
 }

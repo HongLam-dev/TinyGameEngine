@@ -18,7 +18,7 @@ namespace TinyEngine {
 		void NotifyTriggerStay(BoxCollider2D& other);
 		void NotifyTriggerExit(BoxCollider2D& other);
 		Rigidbody2D* GetRigidbody() { return rb; }
-		void SetSize(const Vector3& size)  { this->size=size; }
+		void SetSize(Vector3 size)  { this->size=size; }
 		void SetPosition(const Vector3& newPos);
 		Vector3 GetPosition() const;
 		Vector3 GetSize() const { return size; }
