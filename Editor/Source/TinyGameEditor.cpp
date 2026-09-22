@@ -68,7 +68,7 @@ namespace TinyEditor {
             ImGui::SFML::Update(*renderWindow, deltaTime);
 
             if (workingWindow == WorkingWindow::Scene)
-                inputHandler.HandleSceneInput(*editorCamera,selectedObject, deltaTime.asSeconds());
+                inputHandler.HandleSceneInput(*editorCamera, selectedObject, deltaTime.asSeconds());
 
             renderWindow->clear(sceneColor);
 
@@ -87,11 +87,11 @@ namespace TinyEditor {
         ImGui::SFML::Shutdown();
     }
 
-    void TinyGameEditor::DrawHierachyWindow( GameObject*& selectedObject, GameObject*& renamingObject)
+    void TinyGameEditor::DrawHierachyWindow(GameObject*& selectedObject, GameObject*& renamingObject)
     {
         ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
 
-        ImGui::Begin("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV (Don't ask why)");
+        ImGui::Begin("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV';:/\"\\ (Don't ask why)");
 
         if (ImGui::IsWindowHovered())
             workingWindow = WorkingWindow::Other;
@@ -104,7 +104,7 @@ namespace TinyEditor {
 
             if (ImGui::MenuItem("Create Rectangle"))
             {
-                editingScene->CreateASimpleBox({},{ 0.64f,0.64f,0});
+                editingScene->CreateASimpleBox({}, { 0.64f,0.64f,0 });
             }
 
             ImGui::EndPopup();
@@ -172,8 +172,8 @@ namespace TinyEditor {
         if (selectedObject)
         {
             Vector3 position = selectedObject->GetTransform().GetPosition();
-            Vector2 screenPos =editorCamera->WorldToScreenPosition(position,window.GetSize());
-            DrawMarker({ screenPos.x,screenPos.y});
+            Vector2 screenPos = editorCamera->WorldToScreenPosition(position, window.GetSize());
+            DrawMarker({ screenPos.x,screenPos.y });
         }
     }
     void TinyGameEditor::DrawMarker(sf::Vector2f pixelPosition)
@@ -239,147 +239,300 @@ namespace TinyEditor {
         transform.SetScale(scale);
     }
 
-    void TinyGameEditor::DrawInspectorWindow(GameObject*& selectedObject)
-    {
-        ImGui::SetNextWindowSize(
-            ImVec2(300, 1280),
-            ImGuiCond_FirstUseEver
-        );
+       void TinyGameEditor::DrawInspectorWindow(GameObject*& selectedObject)
+   {
+       ImGui::SetNextWindowSize(
+           ImVec2(300, 1280),
+           ImGuiCond_FirstUseEver
+       );
 
-        ImGui::Begin("Inspector");
+       ImGui::Begin("Inspector");
 
-        if (ImGui::IsWindowHovered())
-            workingWindow = WorkingWindow::Other;
+       if (ImGui::IsWindowHovered())
+           workingWindow = WorkingWindow::Other;
 
-        if (selectedObject)
-        {
-            ImGui::Text("%s", selectedObject->GetName().c_str());
-            // Draw existing components
-            for (const auto& component : selectedObject->GetAllComponents())
-            {
-                if (typeid(*component)== typeid(Transform))
-                {
-                    Transform* transform = static_cast<Transform*>(component);
-                    DrawTransform(*transform);
-                }
-                else {
-                    std::type_index type = typeid(*component);
+       if (selectedObject)
+       {
+           DrawSelectedObject(*selectedObject);
+           DrawAddComponentMenu(*selectedObject);
+       }
 
-                    const ComponentInfo* info =
-                        componentRegister.FindComponent(type);
+       ImGui::End();
+   }
 
-                    if (!info)
-                        continue;
 
-                    if (ImGui::CollapsingHeader(
-                        info->name.c_str(),
-                        ImGuiTreeNodeFlags_DefaultOpen))
-                    {
-                        for (const auto& field : info->fields)
-                        {
-                            std::any value = field.getValue(*component);
+   void TinyGameEditor::DrawSelectedObject(GameObject& gameObject)
+   {
+       ImGui::Text("%s", gameObject.GetName().c_str());
 
-                            switch (field.type)
-                            {
-                            case FieldType::Float:
-                            {
-                                float valueFloat = std::any_cast<float>(value);
+       for (const auto& component : gameObject.GetAllComponents())
+       {
+           DrawComponent(*component);
+       }
+   }
 
-                                if (ImGui::DragFloat(field.name.c_str(), &valueFloat))
-                                {
-                                    field.setValue(*component, valueFloat);
-                                }
 
-                                break;
-                            }
+   void TinyGameEditor::DrawComponent(Component& component)
+   {
+       if (typeid(component) == typeid(Transform))
+       {
+           Transform& transform =
+               static_cast<Transform&>(component);
 
-                            case FieldType::Vector2:
-                            {
-                                Vector2 valueVector =
-                                    std::any_cast<Vector2>(value);
+           DrawTransform(transform);
+           return;
+       }
 
-                                if (ImGui::DragFloat2(
-                                    field.name.c_str(),
-                                    &valueVector.x))
-                                {
-                                    field.setValue(*component, valueVector);
-                                }
+       std::type_index type = typeid(component);
 
-                                break;
-                            }
+       const ComponentInfo* info =
+           componentRegister.FindComponent(type);
 
-                            case FieldType::Vector3:
-                            {
-                                Vector3 valueVector =
-                                    std::any_cast<Vector3>(value);
+       if (!info)
+           return;
 
-                                if (ImGui::DragFloat3(
-                                    field.name.c_str(),
-                                    &valueVector.x))
-                                {
-                                    field.setValue(*component, valueVector);
-                                }
+       if (!ImGui::CollapsingHeader(
+           info->name.c_str(),
+           ImGuiTreeNodeFlags_DefaultOpen))
+       {
+           return;
+       }
 
-                                break;
-                            }
+       for (const auto& field : info->fields)
+       {
+           DrawField(component, field);
+       }
+   }
 
-                            case FieldType::Int:
-                            {
-                                int valueInt = std::any_cast<int>(value);
 
-                                if (ImGui::DragInt(
-                                    field.name.c_str(),
-                                    &valueInt))
-                                {
-                                    field.setValue(*component, valueInt);
-                                }
+   void TinyGameEditor::DrawField(
+       Component& component,
+       const FieldInfo& field)
+   {
+       std::any value = field.getValue(component);
 
-                                break;
-                            }
+       switch (field.type)
+       {
+       case FieldType::Float:
+           DrawFloatField(component, field, value);
+           break;
 
-                            case FieldType::Bool:
-                            {
-                                bool valueBool = std::any_cast<bool>(value);
+       case FieldType::Vector2:
+           DrawVector2Field(component, field, value);
+           break;
 
-                                if (ImGui::Checkbox(
-                                    field.name.c_str(),
-                                    &valueBool))
-                                {
-                                    field.setValue(*component, valueBool);
-                                }
+       case FieldType::Vector3:
+           DrawVector3Field(component, field, value);
+           break;
 
-                                break;
-                            }
+       case FieldType::Int:
+           DrawIntField(component, field, value);
+           break;
 
-                            case FieldType::String:
-                                // Handle later
-                                break;
-                            }
-                        }
-                    }
-                }
-               
-            }
+       case FieldType::Bool:
+           DrawBoolField(component, field, value);
+           break;
 
-            if (ImGui::Button("Add Component"))
-            {
-                ImGui::OpenPopup("AddComponent");
-            }
+       case FieldType::String:
+           DrawStringField(component, field, value);
+           break;
 
-            if (ImGui::BeginPopup("AddComponent"))
-            {
-                for (const auto& component : componentRegister.GetComponentList())
-                {
-                    if (ImGui::MenuItem(component.second.name.c_str()))
-                    {
-                        component.second.create(*selectedObject);
-                    }
-                }
+       case FieldType::IntRect:
+           DrawIntRectField(component, field, value);
+           break;
+       }
+   }
 
-                ImGui::EndPopup();
-            }
-        }
 
-        ImGui::End();
-    }
+   void TinyGameEditor::DrawFloatField(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       float valueFloat =
+           std::any_cast<float>(value);
+
+       if (ImGui::DragFloat(
+           field.name.c_str(),
+           &valueFloat))
+       {
+           field.setValue(component, valueFloat);
+       }
+   }
+
+
+   void TinyGameEditor::DrawVector2Field(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       Vector2 valueVector =
+           std::any_cast<Vector2>(value);
+
+       if (ImGui::DragFloat2(
+           field.name.c_str(),
+           &valueVector.x))
+       {
+           field.setValue(component, valueVector);
+       }
+   }
+
+
+   void TinyGameEditor::DrawVector3Field(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       Vector3 valueVector =
+           std::any_cast<Vector3>(value);
+
+       if (ImGui::DragFloat3(
+           field.name.c_str(),
+           &valueVector.x))
+       {
+           field.setValue(component, valueVector);
+       }
+   }
+
+
+   void TinyGameEditor::DrawIntField(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       int valueInt =
+           std::any_cast<int>(value);
+
+       if (ImGui::DragInt(
+           field.name.c_str(),
+           &valueInt))
+       {
+           field.setValue(component, valueInt);
+       }
+   }
+
+
+   void TinyGameEditor::DrawBoolField(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       bool valueBool =
+           std::any_cast<bool>(value);
+
+       if (ImGui::Checkbox(
+           field.name.c_str(),
+           &valueBool))
+       {
+           field.setValue(component, valueBool);
+       }
+   }
+
+
+   void TinyGameEditor::DrawStringField(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       std::string valueString =
+           std::any_cast<std::string>(value);
+
+       if (editingField != &field ||
+           editingComponent != &component)
+       {
+           std::strncpy(
+               fieldStringBuffer,
+               valueString.c_str(),
+               sizeof(fieldStringBuffer) - 1
+           );
+
+           fieldStringBuffer[
+               sizeof(fieldStringBuffer) - 1
+           ] = '\0';
+
+           editingField = &field;
+           editingComponent = &component;
+       }
+
+       if (ImGui::InputText(
+           field.name.c_str(),
+           fieldStringBuffer,
+           sizeof(fieldStringBuffer),
+           ImGuiInputTextFlags_EnterReturnsTrue))
+       {
+           field.setValue(
+               component,
+               std::string(fieldStringBuffer)
+           );
+
+           editingField = nullptr;
+           editingComponent = nullptr;
+       }
+
+       if (ImGui::IsItemDeactivated())
+       {
+           field.setValue(
+               component,
+               std::string(fieldStringBuffer)
+           );
+
+           editingField = nullptr;
+           editingComponent = nullptr;
+       }
+   }
+
+
+   void TinyGameEditor::DrawIntRectField(
+       Component& component,
+       const FieldInfo& field,
+       const std::any& value)
+   {
+       sf::IntRect rect =
+           std::any_cast<sf::IntRect>(value);
+
+       int values[4] =
+       {
+           rect.position.x,
+           rect.position.y,
+           rect.size.x,
+           rect.size.y
+       };
+
+       if (ImGui::DragInt4(
+           field.name.c_str(),
+           values))
+       {
+           rect.position.x = values[0];
+           rect.position.y = values[1];
+           rect.size.x = values[2];
+           rect.size.y = values[3];
+
+           field.setValue(component, rect);
+       }
+   }
+
+
+   void TinyGameEditor::DrawAddComponentMenu(
+       GameObject& gameObject)
+   {
+       if (ImGui::Button("Add Component"))
+       {
+           ImGui::OpenPopup("AddComponent");
+       }
+
+       if (!ImGui::BeginPopup("AddComponent"))
+           return;
+
+       for (const auto& [type, info] :
+           componentRegister.GetComponentList())
+       {
+           if (ImGui::MenuItem(info.name.c_str()))
+           {
+               info.create(gameObject);
+           }
+       }
+
+       ImGui::EndPopup();
+   }
+
 }

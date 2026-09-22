@@ -7,6 +7,7 @@ namespace TinyEngine{
         Vector3,
         Int,
         Bool,
-        String
+        String,
+        IntRect
     };
 }

@@ -11,42 +11,77 @@
 
 namespace TinyEngine {
 
-    class SpriteRenderer : public RenderableComponent
-    {
-    public:
-        Bounds GetBounds();
-	    void Render(Window& window, const Camera& camera);
-        void OnDestroy() override;
-        SpriteRenderer(GameObject& owner):RenderableComponent(owner) {
-            GetOwner().RegisterRenderer(*this);
-        }
-        void SetTexture(std::string texturePath)
-        {
-            sf::Texture* tex = TextureManager::Instance().GetTexture(texturePath);
-            if (!tex)
+      class SpriteRenderer : public RenderableComponent
+  {
+  public:
+      Bounds GetBounds();
+
+      void Render(Window& window, const Camera& camera);
+      void OnDestroy() override;
+
+      SpriteRenderer(GameObject& owner)
+          : RenderableComponent(owner)
+      {
+          GetOwner().RegisterRenderer(*this);
+      }
+
+      void SetTexture(std::string texturePath)
+      {
+          sf::Texture* tex =
+              TextureManager::Instance().GetTexture(texturePath);
+
+          if (!tex)
+          {
+              std::cout << "No texture found: " << texturePath;
+              return;
+          }
+
+          if (sprite == nullptr)
+          {
+              sprite = std::make_unique<sf::Sprite>(*tex);
+          }
+          else
+          {
+              sprite->setTexture(*tex);
+          }
+
+          sprite->setTextureRect(
+              sf::IntRect(
+                  { 0, 0 },
             {
-                std::cout << "No texture found: " << texturePath;
-                return;
+                static_cast<int>(tex->getSize().x),
+                static_cast<int>(tex->getSize().y)
             }
-            if (sprite == nullptr)
-            {
-                sprite = std::make_unique<sf::Sprite>(*tex);
-            }
-            else
-                sprite->setTexture(*tex);
-            
-            this->texturePath = texturePath;
-        }
-        void SetTextureRect(const sf::IntRect& rect)
-        {
-            if (sprite == nullptr)
-                return;
-            sprite->setTextureRect(rect);
-        }
-    private:
-        std::string texturePath;
-        Rect textureRect;
-        std::unique_ptr< sf::Sprite> sprite;
-    };
+              )
+          );
+
+          this->texturePath = texturePath;
+      }
+
+      std::string GetTexturePath() const
+      {
+          return texturePath;
+      }
+
+      void SetTextureRect(sf::IntRect rect)
+      {
+          if (sprite == nullptr)
+              return;
+
+          sprite->setTextureRect(rect);
+      }
+
+      sf::IntRect GetTextureRect() const
+      {
+          if (!sprite)
+              return {};
+
+          return sprite->getTextureRect();
+      }
+
+  private:
+      std::string texturePath;
+      std::unique_ptr<sf::Sprite> sprite;
+  };
 
 }

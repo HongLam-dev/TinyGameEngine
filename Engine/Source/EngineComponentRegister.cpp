@@ -41,18 +41,30 @@ namespace TinyEngine{
                }
            );
 
-       componentRegister.RegisterComponent<SpriteRenderer>(
-           {
-               "Sprite Renderer",
-               [](GameObject& gameObject)
+           componentRegister.RegisterComponent<SpriteRenderer>(
                {
-                   gameObject.AddComponent<SpriteRenderer>();
-               },
-               {
-               
+                   "Sprite Renderer",
+                   [](GameObject& gameObject)
+                   {
+                       gameObject.AddComponent<SpriteRenderer>();
+                   },
+                   {
+                       MakeField<SpriteRenderer, std::string>(
+                           "Texture",
+                           FieldType::String,
+                           &SpriteRenderer::GetTexturePath,
+                           &SpriteRenderer::SetTexture
+                       ),
+
+                       MakeField<SpriteRenderer, sf::IntRect>(
+                           "Texture Rect",
+                           FieldType::IntRect,
+                           &SpriteRenderer::GetTextureRect,
+                           &SpriteRenderer::SetTextureRect
+                       )
+                   }
                }
-           }
-       );
+           );
 
        componentRegister.RegisterComponent<BoxCollider2D>(
            {
