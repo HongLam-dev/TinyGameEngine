@@ -13,13 +13,15 @@
 #include "Image.h"
 #include "UIObject.h"
 #include "TextureManager.h"
+#include "GameComponentRegister.h"
 #include <string>
 
+#include "FieldType.h"
 namespace TinyGame {
-	class SceneBuilder
+	class SceneSerializer
 	{
 	public:
-		SceneBuilder() = delete;
+		SceneSerializer() = delete;
 		static TinyEngine::GameObject& CreateAPingPongBox(TinyEngine::Scene& scene,
 			TinyEngine::TinyGameEngine& engine,
 			const TinyEngine::Vector3& position,
@@ -31,6 +33,10 @@ namespace TinyGame {
 		static void BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
 			TinyEngine::Scene& emptyScene
 		);
+
+		static std::string FieldTypeToString(TinyEngine::FieldType type);
+
+		static void SaveScene(TinyEngine::Scene& scene,TinyEngine::ComponentRegister& componentRegister);
 	private:
 	};
 }

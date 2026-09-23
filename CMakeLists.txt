@@ -58,8 +58,8 @@ target_link_libraries(TinyGameEngine PUBLIC
 add_library(TinyGame
     "Game/System/SceneManager.h"
     "Game/System/SceneManager.cpp"
-    "Game/System/SceneBuilder.h"
-    "Game/System/SceneBuilder.cpp"
+    "Game/System/SceneSerializer.h"
+    "Game/System/SceneSerializer.cpp"
 
     "Game/Header/PlayerController.h"
     "Game/Source/PlayerController.cpp"

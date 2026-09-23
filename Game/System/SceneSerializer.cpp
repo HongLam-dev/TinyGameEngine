@@ -1,4 +1,4 @@
-#include "SceneBuilder.h"
+#include "SceneSerializer.h"
 #include "TinyGameEngine.h"
 #include "Window.h"
 #include <iostream>
@@ -14,10 +14,13 @@
 #include "PingPong.h"
 #include "CameraFollow.h"
 #include "PlayerController.h"
+#include <fstream>
+#include <typeindex>
+
 using namespace TinyEngine;
 
 namespace TinyGame {
-	void SceneBuilder::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
+	void SceneSerializer::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
 		TinyEngine::Scene& emptyScene
 	) {
 		GameObject& playerRef = emptyScene.CreateSceneObject();
@@ -85,7 +88,7 @@ namespace TinyGame {
 
 	}
 
-	void SceneBuilder::BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
+	void SceneSerializer::BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
 		TinyEngine::Scene& emptyScene
 	) {
 		std::string placeHolderTex = "Assets/heart.png";
@@ -111,7 +114,7 @@ namespace TinyGame {
 
 	}
 
-	GameObject& SceneBuilder::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, std::string boxTexture) {
+	GameObject& SceneSerializer::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, std::string boxTexture) {
 		GameObject& boxRef = scene.CreateASimpleBox( position, size);
 
 		PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
@@ -126,4 +129,104 @@ namespace TinyGame {
 		return boxRef;
 	}
 
+
+	void SceneSerializer::SaveScene(TinyEngine::Scene& scene, TinyEngine::ComponentRegister& componentRegister) {
+		std::filesystem::path path =
+			std::filesystem::path("Scene") / (scene.GetName()+".tge");
+		std::ofstream file(path);
+
+		for (auto& object : scene.GetGameObjects())
+		{
+			file << "-Object- \"" << object->GetName()<<"\"{\n";
+			for (auto& component : object->GetAllComponents())
+			{
+				const ComponentInfo* info = componentRegister.FindComponent(typeid(*component));
+				if (info)
+				{
+					file << "	-Component- \"" << info->name << "\"{\n";
+					for (const FieldInfo& field : info->fields)
+					{
+						file << "		-Field- \"" << field.name << "\"{\n";
+						file << "		(" << FieldTypeToString(field.type) << ")(";
+						switch (field.type)
+						{
+						case FieldType::Int:
+						{
+							file << std::any_cast<int>(field.getValue(*component)) ;
+							break;
+						}
+						case FieldType::Float:
+						{
+							file  << std::any_cast<float>(field.getValue(*component)) ;
+							break;
+						}
+						case FieldType::String:
+						{
+							file  << std::any_cast<std::string>(field.getValue(*component)) ;
+							break;
+						}
+						case FieldType::Vector2:
+						{
+							Vector2 value = std::any_cast<Vector2>(field.getValue(*component));
+							file << value.x << ")(" << value.y << ")\n";
+							break;
+						}
+						case FieldType::Vector3:
+						{
+							Vector3 value = std::any_cast<Vector3>(field.getValue(*component));
+							file  << value.x << ")(" << value.y << ")(" << value.z ;
+							break;
+						}
+						case FieldType::Bool:
+						{
+							bool value = std::any_cast<bool>(field.getValue(*component));
+							file << value;
+							break;
+						}
+						case FieldType::IntRect:
+						{
+							sf::IntRect value = std::any_cast<sf::IntRect>(field.getValue(*component));
+							file << value.size.x << ")(" << value.size.y << ")(" << value.position.x << ")(" << value.position.y;
+							break;
+						}
+						default:
+							break;
+						}
+						file << ")\n" << "		}\n";
+					}
+				}
+				file << "	}\n";
+			}
+			file << "}\n";
+		}
+	}
+	std::string SceneSerializer::FieldTypeToString(
+		TinyEngine::FieldType type)
+	{
+		switch (type)
+		{
+		case TinyEngine::FieldType::Float:
+			return "Float";
+
+		case TinyEngine::FieldType::Vector2:
+			return "Vector2";
+
+		case TinyEngine::FieldType::Vector3:
+			return "Vector3";
+
+		case TinyEngine::FieldType::Int:
+			return "Int";
+
+		case TinyEngine::FieldType::Bool:
+			return "Bool";
+
+		case TinyEngine::FieldType::String:
+			return "String";
+
+		case TinyEngine::FieldType::IntRect:
+			return "IntRect";
+		}
+
+		return "Unknown";
+	}
 }

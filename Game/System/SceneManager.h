@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "TinyGameEngine.h"
-#include "SceneBuilder.h"
+#include "SceneSerializer.h"
 #include "TextureManager.h"
 #include "RenderableComponent.h"
 

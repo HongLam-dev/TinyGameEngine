@@ -6,6 +6,7 @@
 #include "EngineSettings.h"
 #include "GameComponentRegister.h"
 #include "EngineComponentRegister.h"
+#include "SceneSerializer.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -28,7 +29,7 @@ namespace TinyEditor {
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyEditor::InputHandler inputHandler(window);
+        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();});
 
         editingScene = std::make_unique<Scene>(engine);
         GameObject& mainCameraObj = editingScene->CreateMainCamera();
@@ -66,10 +67,6 @@ namespace TinyEditor {
             sf::Time deltaTime = deltaClock.restart();
 
             ImGui::SFML::Update(*renderWindow, deltaTime);
-
-            if (workingWindow == WorkingWindow::Scene)
-                inputHandler.HandleSceneInput(*editorCamera, selectedObject, deltaTime.asSeconds());
-
             renderWindow->clear(sceneColor);
 
             workingWindow = WorkingWindow::Scene;
@@ -81,6 +78,10 @@ namespace TinyEditor {
             ImGui::SFML::Render(*renderWindow);
 
             renderWindow->display();
+
+            if (workingWindow == WorkingWindow::Scene)
+                inputHandler.HandleSceneInput(*editorCamera, selectedObject, deltaTime.asSeconds());
+            inputHandler.HandleGlobalInput();
             Input::Get().EndFrame();
         }
 
@@ -138,7 +139,14 @@ namespace TinyEditor {
                     object->GetName().c_str(),
                     selectedObject == object.get()))
                 {
-                    selectedObject = object.get();
+                    selectedObject = object.get();                 
+                }
+                if (ImGui::IsItemHovered() &&
+                    ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+                {
+                    editorCamera->SetPosition(
+                        object->GetTransform().GetPosition()
+                    );
                 }
 
                 if (ImGui::BeginPopupContextItem())
@@ -178,65 +186,22 @@ namespace TinyEditor {
     }
     void TinyGameEditor::DrawMarker(sf::Vector2f pixelPosition)
     {
-        float size = 30.0f;
-        float arrowSize = 8.0f;
+        sf::Sprite marker(
+            *TextureManager::Instance().GetTexture("Assets/Hand.png")
+        );
 
-        sf::VertexArray marker(sf::PrimitiveType::Lines, 12);
+        sf::Vector2u size = marker.getTexture().getSize();
 
-        // X axis
-        marker[0].position = pixelPosition + sf::Vector2f(-size, 0);
-        marker[1].position = pixelPosition + sf::Vector2f(size, 0);
+        marker.setOrigin(
+            sf::Vector2f(
+                size.x / 2.0f,
+                size.y / 2.0f
+            )
+        );
 
-        // X arrow head
-        marker[2].position = pixelPosition + sf::Vector2f(size, 0);
-        marker[3].position = pixelPosition + sf::Vector2f(size - arrowSize, -arrowSize / 2);
-
-        marker[4].position = pixelPosition + sf::Vector2f(size, 0);
-        marker[5].position = pixelPosition + sf::Vector2f(size - arrowSize, arrowSize / 2);
-
-        // Y axis
-        marker[6].position = pixelPosition + sf::Vector2f(0, -size);
-        marker[7].position = pixelPosition + sf::Vector2f(0, size);
-
-        // Y arrow head
-        marker[8].position = pixelPosition + sf::Vector2f(0, -size);
-        marker[9].position = pixelPosition + sf::Vector2f(-arrowSize / 2, -size + arrowSize);
-
-        marker[10].position = pixelPosition + sf::Vector2f(0, -size);
-        marker[11].position = pixelPosition + sf::Vector2f(arrowSize / 2, -size + arrowSize);
-
-        // Colors
-        marker[0].color = sf::Color::Red;
-        marker[1].color = sf::Color::Red;
-        marker[2].color = sf::Color::Red;
-        marker[3].color = sf::Color::Red;
-        marker[4].color = sf::Color::Red;
-        marker[5].color = sf::Color::Red;
-
-        marker[6].color = sf::Color::Yellow;
-        marker[7].color = sf::Color::Yellow;
-        marker[8].color = sf::Color::Yellow;
-        marker[9].color = sf::Color::Yellow;
-        marker[10].color = sf::Color::Yellow;
-        marker[11].color = sf::Color::Yellow;
+        marker.setPosition(pixelPosition);
 
         window.GetRenderWindow()->draw(marker);
-    }
-
-    void TinyGameEditor::DrawTransform(TinyEngine::Transform& transform) {
-        ImGui::Text("%s", "Transform------");
-
-        Vector3 position = transform.GetPosition();
-        Vector3 rotation = transform.GetRotation();
-        Vector3 scale = transform.GetScale();
-
-        ImGui::DragFloat3("Position", &position.x);
-        ImGui::DragFloat3("Rotation", &rotation.x);
-        ImGui::DragFloat3("Scale", &scale.x);
-
-        transform.SetPosition(position);
-        transform.SetRotation(rotation);
-        transform.SetScale(scale);
     }
 
        void TinyGameEditor::DrawInspectorWindow(GameObject*& selectedObject)
@@ -274,15 +239,6 @@ namespace TinyEditor {
 
    void TinyGameEditor::DrawComponent(Component& component)
    {
-       if (typeid(component) == typeid(Transform))
-       {
-           Transform& transform =
-               static_cast<Transform&>(component);
-
-           DrawTransform(transform);
-           return;
-       }
-
        std::type_index type = typeid(component);
 
        const ComponentInfo* info =
@@ -310,41 +266,45 @@ namespace TinyEditor {
        const FieldInfo& field)
    {
        std::any value = field.getValue(component);
-
+       bool isFieldInteracted=false;
        switch (field.type)
        {
        case FieldType::Float:
-           DrawFloatField(component, field, value);
+           isFieldInteracted = DrawFloatField(component, field, value);
            break;
 
        case FieldType::Vector2:
-           DrawVector2Field(component, field, value);
+           isFieldInteracted = DrawVector2Field(component, field, value);
            break;
 
        case FieldType::Vector3:
-           DrawVector3Field(component, field, value);
+           isFieldInteracted = DrawVector3Field(component, field, value);
            break;
 
        case FieldType::Int:
-           DrawIntField(component, field, value);
+           isFieldInteracted = DrawIntField(component, field, value);
            break;
 
        case FieldType::Bool:
-           DrawBoolField(component, field, value);
+           isFieldInteracted = DrawBoolField(component, field, value);
            break;
 
        case FieldType::String:
-           DrawStringField(component, field, value);
+           isFieldInteracted = DrawStringField(component, field, value);
            break;
 
        case FieldType::IntRect:
-           DrawIntRectField(component, field, value);
+           isFieldInteracted = DrawIntRectField(component, field, value);
            break;
+       }
+       if (isFieldInteracted)
+       {
+           workingWindow = WorkingWindow::Other;
        }
    }
 
 
-   void TinyGameEditor::DrawFloatField(
+   bool TinyGameEditor::DrawFloatField(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -357,11 +317,13 @@ namespace TinyEditor {
            &valueFloat))
        {
            field.setValue(component, valueFloat);
+           return true;
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawVector2Field(
+   bool TinyGameEditor::DrawVector2Field(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -374,11 +336,13 @@ namespace TinyEditor {
            &valueVector.x))
        {
            field.setValue(component, valueVector);
+           return true;
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawVector3Field(
+   bool TinyGameEditor::DrawVector3Field(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -391,11 +355,13 @@ namespace TinyEditor {
            &valueVector.x))
        {
            field.setValue(component, valueVector);
+           return true;
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawIntField(
+   bool TinyGameEditor::DrawIntField(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -408,11 +374,13 @@ namespace TinyEditor {
            &valueInt))
        {
            field.setValue(component, valueInt);
+           return true;
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawBoolField(
+   bool TinyGameEditor::DrawBoolField(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -425,11 +393,13 @@ namespace TinyEditor {
            &valueBool))
        {
            field.setValue(component, valueBool);
+           return true;
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawStringField(
+   bool TinyGameEditor::DrawStringField(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -478,11 +448,13 @@ namespace TinyEditor {
 
            editingField = nullptr;
            editingComponent = nullptr;
+
        }
+       return false;
    }
 
 
-   void TinyGameEditor::DrawIntRectField(
+   bool TinyGameEditor::DrawIntRectField(
        Component& component,
        const FieldInfo& field,
        const std::any& value)
@@ -508,7 +480,9 @@ namespace TinyEditor {
            rect.size.y = values[3];
 
            field.setValue(component, rect);
+           return true;
        }
+       return false;
    }
 
 
@@ -535,4 +509,8 @@ namespace TinyEditor {
        ImGui::EndPopup();
    }
 
+   void TinyGameEditor::SaveScene() {
+       TinyGame::SceneSerializer::SaveScene(*editingScene,componentRegister);
+       std::cout << "Scene Saved\n";
+   }
 }

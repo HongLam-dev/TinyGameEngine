@@ -28,7 +28,11 @@ namespace TinyEngine {
 		void FixedUpdate(float fixedDeltaTime);
 		void Unload();
 		const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const;
+
+		std::string GetName() { return sceneName; }
+		void SetName(std::string newName) { sceneName = newName; }
 	private:
+		std::string sceneName="Example Scene";
 		TinyGameEngine& engine;
 		Camera* mainCamera = nullptr;
 		std::vector<std::unique_ptr<GameObject>> sceneObjects;

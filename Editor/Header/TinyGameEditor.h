@@ -26,11 +26,11 @@ namespace TinyEditor {
 		TinyGameEditor();
 		void Run();
 		void DrawHierachyWindow(TinyEngine::GameObject*& selectedObject, TinyEngine::GameObject*& renamingObject);
-		void DrawTransform(TinyEngine::Transform& transform);
 		void DrawInspectorWindow(TinyEngine::GameObject*& selectedObject);
 		void DrawMarker(sf::Vector2f  pixelPosition);
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 		void RegisterComponents();
+        void SaveScene();
 
         void DrawSelectedObject(TinyEngine::GameObject& gameObject);
 
@@ -41,43 +41,43 @@ namespace TinyEditor {
             const TinyEngine::FieldInfo& field
         );
 
-        void DrawFloatField(
+        bool DrawFloatField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawVector2Field(
+        bool DrawVector2Field(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawVector3Field(
+        bool DrawVector3Field(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawIntField(
+        bool DrawIntField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawBoolField(
+        bool DrawBoolField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawStringField(
+        bool DrawStringField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        void DrawIntRectField(
+        bool DrawIntRectField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value

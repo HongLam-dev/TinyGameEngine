@@ -33,6 +33,15 @@ namespace TinyEditor {
         }
         MoveObject(editorCamera.GetOwner(), mouseMovement, editorCamera);
     }
+    void InputHandler::HandleGlobalInput() {
+        if (input.isKeyPressed(sf::Keyboard::Key::LControl))
+        {
+            if (input.OnKeyDown(sf::Keyboard::Key::S))
+            {
+                saveSceneCallback();
+            }
+        }
+    }
     void InputHandler::MoveObject(
         TinyEngine::GameObject& objectToMove,
         sf::Vector2i mouseMovement,
