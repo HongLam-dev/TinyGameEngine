@@ -17,6 +17,11 @@ namespace TinyEngine {
 				return nullptr;
 			return &componentInfo[typeIndex]; 
 		};
+		static ComponentRegister& Instance()
+		{
+			static ComponentRegister componentRegister;
+			return componentRegister;
+		}
 	private:
 		std::unordered_map<std::type_index, ComponentInfo> componentInfo;
 	};

@@ -29,7 +29,7 @@ namespace TinyEditor {
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();});
+        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();}, [this]() { LoadScene(); });
 
         editingScene = std::make_unique<Scene>(engine);
         GameObject& mainCameraObj = editingScene->CreateMainCamera();
@@ -510,7 +510,16 @@ namespace TinyEditor {
    }
 
    void TinyGameEditor::SaveScene() {
-       TGModule::SceneSerializer::SaveScene(*editingScene,componentRegister);
+       if (!editingScene)
+           return;
+       TGModule::SceneSerializer::SaveScene(*editingScene);
+       TGModule::SceneSerializer::LoadScene(editingScene->GetName(),engine,*editingScene);
+
        std::cout << "Scene Saved\n";
+   }
+
+   void TinyGameEditor::LoadScene() {
+       editingScene = std::make_unique<Scene>(engine);
+       engine.ActivateScene(*editingScene);
    }
 }

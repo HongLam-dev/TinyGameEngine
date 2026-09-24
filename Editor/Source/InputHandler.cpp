@@ -40,6 +40,10 @@ namespace TinyEditor {
             {
                 saveSceneCallback();
             }
+            else if(input.OnKeyDown(sf::Keyboard::Key::V))
+            {
+                loadSceneCallback();
+            }
         }
     }
     void InputHandler::MoveObject(

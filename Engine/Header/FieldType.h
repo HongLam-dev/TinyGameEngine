@@ -8,6 +8,7 @@ namespace TinyEngine{
         Int,
         Bool,
         String,
-        IntRect
+        IntRect,
+        Unknown
     };
 }

@@ -35,8 +35,12 @@ namespace TGModule {
 		);
 
 		static std::string FieldTypeToString(TinyEngine::FieldType type);
+		static TinyEngine::FieldType StringToFieldType(std::string type);
 
-		static void SaveScene(TinyEngine::Scene& scene,TinyEngine::ComponentRegister& componentRegister);
+		static void SaveScene(TinyEngine::Scene& scene);
+		static void LoadScene(std::string sceneName,
+			TinyEngine::TinyGameEngine& engine,
+			TinyEngine::Scene& emptyScene);
 	private:
 	};
 }

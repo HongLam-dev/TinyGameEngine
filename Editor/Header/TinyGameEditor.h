@@ -12,6 +12,7 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <iostream>
+#include <functional>
 
 
 namespace TinyEditor {
@@ -30,7 +31,9 @@ namespace TinyEditor {
 		void DrawMarker(sf::Vector2f  pixelPosition);
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 		void RegisterComponents();
+
         void SaveScene();
+        void LoadScene();
 
         void DrawSelectedObject(TinyEngine::GameObject& gameObject);
 
@@ -85,7 +88,7 @@ namespace TinyEditor {
 
         void DrawAddComponentMenu(TinyEngine::GameObject& gameObject);
 	private:
-		TinyEngine::ComponentRegister componentRegister;
+        TinyEngine::ComponentRegister& componentRegister = TinyEngine::ComponentRegister::Instance();
 		TinyEngine::Camera* editorCamera;
 		TinyEngine::Window window;
 		TinyEngine::TinyGameEngine engine;

@@ -130,10 +130,12 @@ namespace TGModule {
 	}
 
 
-	void SceneSerializer::SaveScene(TinyEngine::Scene& scene, TinyEngine::ComponentRegister& componentRegister) {
+	void SceneSerializer::SaveScene(TinyEngine::Scene& scene) {
 		std::filesystem::path path =
 			std::filesystem::path("Scene") / (scene.GetName()+".tge");
 		std::ofstream file(path);
+
+		ComponentRegister& componentRegister = ComponentRegister::Instance();
 
 		for (auto& object : scene.GetGameObjects())
 		{
@@ -229,4 +231,79 @@ namespace TGModule {
 
 		return "Unknown";
 	}
+
+	TinyEngine::FieldType SceneSerializer::StringToFieldType(std::string type) {
+		if (type == "Float")
+			return TinyEngine::FieldType::Float;
+
+		if (type == "Vector2")
+			return TinyEngine::FieldType::Vector2;
+
+		if (type == "Vector3")
+			return TinyEngine::FieldType::Vector3;
+
+		if (type == "Int")
+			return TinyEngine::FieldType::Int;
+
+		if (type == "Bool")
+			return TinyEngine::FieldType::Bool;
+
+		if (type == "String")
+			return TinyEngine::FieldType::String;
+
+		if (type == "IntRect")
+			return TinyEngine::FieldType::IntRect;
+
+
+		return  TinyEngine::FieldType::Unknown;
+	}
+
+	void SceneSerializer::LoadScene(std::string sceneName, 
+		TinyEngine::TinyGameEngine& engine, 
+		TinyEngine::Scene& emptyScene) {
+		std::ifstream file("Scene/"+sceneName+".tge");
+
+		ComponentRegister& componentRegister = ComponentRegister::Instance();
+		if (!file)
+		{
+			std::cout << "Failed to open scene\n";
+			return;
+		}
+
+		std::string line;
+		int processingLine=0;
+		int processedLine = -1;
+
+		while (std::getline(file, line))
+		{
+			if (processedLine > processedLine)
+			{
+				processingLine++;
+				continue;
+			}
+			for (int i = 0; i < line.length(); i++)
+			{
+				if (line[i] == '-')
+				{
+					while (line[i] != '"')
+					{
+						i++;
+					}
+					i++;
+					std::string objectName="";
+					while (line[i] != '"')
+					{
+						objectName += line[i];
+						i++;
+					}
+					GameObject& object = emptyScene.CreateSceneObject();
+					object.SetName(objectName);
+				}
+				processedLine++;
+			}
+			processingLine++;
+
+		}
+	}
+
 }
