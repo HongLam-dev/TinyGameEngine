@@ -7,7 +7,7 @@
 #include "TextureManager.h"
 #include "RenderableComponent.h"
 
-namespace TinyGame {
+namespace TGModule {
 	class SceneManager
 	{
 	public:

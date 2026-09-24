@@ -17,7 +17,7 @@
 #include <string>
 
 #include "FieldType.h"
-namespace TinyGame {
+namespace TGModule {
 	class SceneSerializer
 	{
 	public:

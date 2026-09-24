@@ -16,8 +16,8 @@ int main()
 	TinyEngine::Window window;
 
 	TinyEngine::TinyGameEngine engine(window);
-	TinyGame::SceneManager sceneManager(engine);
-	TinyGame::SceneManager::LoadExampleScene1();
+	TGModule::SceneManager sceneManager(engine);
+	TGModule::SceneManager::LoadExampleScene1();
 	engine.Run();
 	return 0;
 }

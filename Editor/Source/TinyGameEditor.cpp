@@ -23,7 +23,7 @@ namespace TinyEditor {
     }
 
     void TinyGameEditor::RegisterComponents() {
-        TinyGame::GameComponentRegister::RegisterGameComponents(componentRegister);
+        TGModule::GameComponentRegister::RegisterGameComponents(componentRegister);
         EngineComponentRegister::RegisterEngineComponents(componentRegister);
     }
 
@@ -510,7 +510,7 @@ namespace TinyEditor {
    }
 
    void TinyGameEditor::SaveScene() {
-       TinyGame::SceneSerializer::SaveScene(*editingScene,componentRegister);
+       TGModule::SceneSerializer::SaveScene(*editingScene,componentRegister);
        std::cout << "Scene Saved\n";
    }
 }

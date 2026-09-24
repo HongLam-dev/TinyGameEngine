@@ -8,64 +8,64 @@
 #include "Vector3.h"
 using namespace TinyEngine;
 
-namespace TinyGame{
+namespace TGModule{
 	void GameComponentRegister::RegisterGameComponents(TinyEngine::ComponentRegister& componentRegister) {
-        componentRegister.RegisterComponent<PlayerController>(
+        componentRegister.RegisterComponent<TinyGame::PlayerController>(
             {
                 "Player Controller",
                 [](GameObject& gameObject)
                 {
-                    gameObject.AddComponent<PlayerController>();
+                    gameObject.AddComponent<TinyGame::PlayerController>();
                 },
                 {
-                    MakeField<PlayerController, float>(
+                    MakeField<TinyGame::PlayerController, float>(
                         "Move Speed",
                         FieldType::Float,
-                        &PlayerController::GetMoveSpeed,
-                        &PlayerController::SetMoveSpeed
+                        &TinyGame::PlayerController::GetMoveSpeed,
+                        &TinyGame::PlayerController::SetMoveSpeed
                     )
                 }
             }
         );
 
-        componentRegister.RegisterComponent<PingPongAroundCenter>(
+        componentRegister.RegisterComponent<TinyGame::PingPongAroundCenter>(
             {
                 "Ping Pong Around Center",
                 [](GameObject& gameObject)
                 {
-                    gameObject.AddComponent<PingPongAroundCenter>();
+                    gameObject.AddComponent<TinyGame::PingPongAroundCenter>();
                 },
                 {
-                    MakeField<PingPongAroundCenter, float>(
+                    MakeField<TinyGame::PingPongAroundCenter, float>(
                         "Radius",
                         FieldType::Float,
-                        &PingPongAroundCenter::GetRadius,
-                        &PingPongAroundCenter::SetRadius
+                        &TinyGame::PingPongAroundCenter::GetRadius,
+                        &TinyGame::PingPongAroundCenter::SetRadius
                     ),
 
-                    MakeField<PingPongAroundCenter, Vector3>(
+                    MakeField<TinyGame::PingPongAroundCenter, Vector3>(
                         "Direction",
                         FieldType::Vector3,
-                        &PingPongAroundCenter::GetDirection,
-                        &PingPongAroundCenter::SetDirection
+                        &TinyGame::PingPongAroundCenter::GetDirection,
+                        &TinyGame::PingPongAroundCenter::SetDirection
                     ),
 
-                    MakeField<PingPongAroundCenter, float>(
+                    MakeField<TinyGame::PingPongAroundCenter, float>(
                         "Speed",
                         FieldType::Float,
-                        &PingPongAroundCenter::GetSpeed,
-                        &PingPongAroundCenter::SetSpeed
+                        &TinyGame::PingPongAroundCenter::GetSpeed,
+                        &TinyGame::PingPongAroundCenter::SetSpeed
                     )
                 }
             }
         );
 
-        componentRegister.RegisterComponent<CameraFollow>(
+        componentRegister.RegisterComponent<TinyGame::CameraFollow>(
             {
                 "Camera Follow",
                 [](GameObject& gameObject)
                 {
-                    gameObject.AddComponent<CameraFollow>();
+                    gameObject.AddComponent<TinyGame::CameraFollow>();
                 },
                 {
                 }

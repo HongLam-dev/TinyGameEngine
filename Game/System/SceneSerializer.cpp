@@ -19,7 +19,7 @@
 
 using namespace TinyEngine;
 
-namespace TinyGame {
+namespace TGModule {
 	void SceneSerializer::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
 		TinyEngine::Scene& emptyScene
 	) {
@@ -35,7 +35,7 @@ namespace TinyGame {
 			playerRef.AddComponent<BoxCollider2D>();
 
 		collider.SetSize({0.64f,0.64f,0});
-		playerRef.AddComponent<PlayerController>();
+		playerRef.AddComponent<TinyGame::PlayerController>();
 
 		Rigidbody2D& rb =
 			playerRef.AddComponent<Rigidbody2D>();
@@ -73,7 +73,7 @@ namespace TinyGame {
 
 		//Camera
 		GameObject& camObj = emptyScene.CreateMainCamera();
-		CameraFollow& camFollow = camObj.AddComponent<TinyGame::CameraFollow>();
+		TinyGame::CameraFollow& camFollow = camObj.AddComponent<TinyGame::CameraFollow>();
 		camFollow.SetTarget(playerTranform);
 
 		//end camera
@@ -117,7 +117,7 @@ namespace TinyGame {
 	GameObject& SceneSerializer::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, std::string boxTexture) {
 		GameObject& boxRef = scene.CreateASimpleBox( position, size);
 
-		PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
+		TinyGame::PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
 		pingpong.Initialize({ 1,0,0 }, 3);
 
 		boxRef.GetComponent<Transform>()

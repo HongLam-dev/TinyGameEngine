@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentRegister.h"
 
-namespace TinyGame {
+namespace TGModule {
 	class  GameComponentRegister
 	{
 	public:

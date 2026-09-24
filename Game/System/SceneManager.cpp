@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "TinyGameEngine.h"
 
-namespace TinyGame {
+namespace TGModule {
 	SceneManager::SceneManager(TinyEngine::TinyGameEngine& engine):
 		engine(engine){
 		if (!instance)
