@@ -8,7 +8,7 @@
 namespace TinyEditor {
 	class InputHandler {
 	public:
-		InputHandler(TinyEngine::Window& window, std::function<void()> saveSceneCallback, std::function<void()> loadSceneCallback)
+		InputHandler(TinyEngine::Window& window, std::function<void()> saveSceneCallback, std::function<void(std::string sceneName)> loadSceneCallback)
 			: window(window),saveSceneCallback(saveSceneCallback),loadSceneCallback(loadSceneCallback) {};
 		void HandleSceneInput(TinyEngine::Camera& editorCamera, TinyEngine::GameObject*& selectedObject , float deltaTime);
 		void MoveObject(
@@ -21,7 +21,7 @@ namespace TinyEditor {
 		TinyEngine::Vector2 cameraMoveSpeed{5,5};
 		TinyEngine::Input& input = TinyEngine::Input::Get();
 		std::function<void()> saveSceneCallback;
-		std::function<void()> loadSceneCallback;
+		std::function<void(std::string sceneName)> loadSceneCallback;
 	};
 
 }

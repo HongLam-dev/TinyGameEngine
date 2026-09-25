@@ -42,7 +42,7 @@ namespace TinyEditor {
             }
             else if(input.OnKeyDown(sf::Keyboard::Key::V))
             {
-                loadSceneCallback();
+                loadSceneCallback("Example Scene");
             }
         }
     }

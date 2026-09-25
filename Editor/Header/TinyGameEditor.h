@@ -33,7 +33,7 @@ namespace TinyEditor {
 		void RegisterComponents();
 
         void SaveScene();
-        void LoadScene();
+        void LoadScene(std::string sceneName);
 
         void DrawSelectedObject(TinyEngine::GameObject& gameObject);
 

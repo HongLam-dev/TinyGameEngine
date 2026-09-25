@@ -29,11 +29,8 @@ namespace TinyEditor {
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();}, [this]() { LoadScene(); });
-
-        editingScene = std::make_unique<Scene>(engine);
-        GameObject& mainCameraObj = editingScene->CreateMainCamera();
-        engine.ActivateScene(*editingScene);
+        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();}, [this](std::string sceneName) { LoadScene(sceneName); });
+        LoadScene("Example Scene");
 
         GameObject editorCameraObj(engine);
         editorCamera = &editorCameraObj.AddComponent<Camera>();
@@ -160,6 +157,13 @@ namespace TinyEditor {
 
                         renameBuffer[sizeof(renameBuffer) - 1] = '\0';
                     }
+
+                    if (ImGui::MenuItem("Delete"))
+                    {
+                        selectedObject = nullptr;
+                        editingScene->DestroySceneObject(*object.get());
+                    }
+
 
                     ImGui::EndPopup();
                 }
@@ -513,9 +517,9 @@ namespace TinyEditor {
        std::cout << "Scene Saved\n";
    }
 
-   void TinyGameEditor::LoadScene() {
+   void TinyGameEditor::LoadScene(std::string sceneName) {
        editingScene = std::make_unique<Scene>(engine);
-       TGModule::SceneSerializer::LoadScene("Example Scene",*editingScene);
+       TGModule::SceneSerializer::LoadScene(sceneName,*editingScene);
        selectedObject = nullptr;
        engine.ActivateScene(*editingScene);
    }
