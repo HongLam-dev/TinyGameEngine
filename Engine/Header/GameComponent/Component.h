@@ -1,4 +1,7 @@
 #pragma once
+#include <cstdint>
+#include <iostream>
+#include "IDGenerator.h"
 namespace TinyEngine {
 	class BoxCollider2D;
 	class Transform;
@@ -29,7 +32,30 @@ namespace TinyEngine {
 		virtual void OnTriggerStay(BoxCollider2D& other){}
 		virtual void OnTriggerExit(BoxCollider2D& other){}
 		virtual ~Component() = default;
+
+		uint64_t GetID() const
+		{
+			return id;
+		}
+		void ChangeID(uint64_t newID)
+		{
+			if (!IDGenerator::AddID(newID))
+			{
+				std::cout << "ID already exist\n";
+				return;
+			}
+
+			IDGenerator::RemoveID(id);
+			id = newID;
+		}
 	private:
+		friend class GameObject;
+		void SetID(uint64_t newID)
+		{
+			id = newID;
+		}
+
+		uint64_t id = 0;
 		GameObject& owner;
 	};
 }

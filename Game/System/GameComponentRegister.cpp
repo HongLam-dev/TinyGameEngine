@@ -9,7 +9,9 @@
 using namespace TinyEngine;
 
 namespace TGModule{
-	void GameComponentRegister::RegisterGameComponents(TinyEngine::ComponentRegister& componentRegister) {
+	void GameComponentRegister::RegisterGameComponents() {
+        ComponentRegister& componentRegister = ComponentRegister::Instance();
+
         componentRegister.RegisterComponent<TinyGame::PlayerController>(
             {
                 "Player Controller",

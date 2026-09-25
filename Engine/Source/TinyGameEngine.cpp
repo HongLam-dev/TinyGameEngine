@@ -18,6 +18,7 @@ namespace TinyEngine
 
 	void TinyGameEngine::Run()
 	{
+		HandleReferredActions();
 		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{

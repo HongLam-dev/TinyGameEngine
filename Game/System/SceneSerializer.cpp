@@ -20,115 +20,6 @@
 using namespace TinyEngine;
 
 namespace TGModule {
-	void SceneSerializer::BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
-		TinyEngine::Scene& emptyScene
-	) {
-		GameObject& playerRef = emptyScene.CreateSceneObject();
-
-	//	sf::Texture* playerRunSheet=Te.GetTexture(");
-		std::string placeHolderTex ="Assets/heart.png";
-
-		SpriteRenderer& renderer =
-			playerRef.AddComponent<SpriteRenderer>();
-
-		BoxCollider2D& collider =
-			playerRef.AddComponent<BoxCollider2D>();
-
-		collider.SetSize({0.64f,0.64f,0});
-		playerRef.AddComponent<TinyGame::PlayerController>();
-
-		Rigidbody2D& rb =
-			playerRef.AddComponent<Rigidbody2D>();
-		rb.SetGravityScale(0.0f);
-		rb.SetCollisionDetectMode(CollisionDetectionMode::Continuous);
-		//	collider.SetIsTrigger(true);
-		renderer.SetTexture("Assets/PlayerRun.png");
-
-		Transform& playerTranform = *playerRef.GetComponent<Transform>();
-		playerTranform.SetPosition({2,3,0});
-	//	playerTranform.SetScale({ 0.6f,0.6f,0.6f });
-
-		//player animation
-		Animation playerAni("Assets/PlayerRun.png");
-
-		playerAni.AddKey({ {{ 53,38 },{ 100, 300 }},0 });
-		playerAni.AddKey({ {{ 167,38 },{ 100, 300 }},0.1f });
-		playerAni.AddKey({ {{ 311,38 },{ 120, 300 }},0.2f });
-		playerAni.AddKey({ {{ 434,38 },{ 100, 300}},0.3f });
-		playerAni.AddKey({ {{ 560,38 },{ 100, 300 }},0.4f });
-		playerAni.AddKey({ {{ 675,38 },{ 140, 300 }},0.5f });
-
-		Animator& animator = playerRef.AddComponent<Animator>();
-		animator.AddAnimation("Run", std::move(playerAni));
-		animator.SetAnimation("Run");
-		//end
-
-		//Create Image
-		UIObject& imageObj = emptyScene.CreateUIObject();
-		Image& image = imageObj.AddComponent<Image>();
-		image.SetTexture(placeHolderTex);
-		Transform& imageTransform = imageObj.GetTransform();
-		imageTransform.SetPosition({ 50, 500, 0 });
-		//end image
-
-		//Camera
-		GameObject& camObj = emptyScene.CreateMainCamera();
-		TinyGame::CameraFollow& camFollow = camObj.AddComponent<TinyGame::CameraFollow>();
-		camFollow.SetTarget(playerTranform);
-
-		//end camera
-		//boxes
-		std::string crateText="Assets/Crate.png";
-
-		//CreateASimpleBox({400,200,0},{500,64,0});
-		emptyScene.CreateASimpleBox({ 4,3,0 }, { 10.0f,1.0f,0 }, crateText);
-		emptyScene.CreateASimpleBox( { 4,1,0 }, { 0.64f,0.64f,0 }, crateText);
-		CreateAPingPongBox(emptyScene, engine, { 4,0,0 }, { 0.64f,0.64f,0 }, crateText);
-		//end
-
-	}
-
-	void SceneSerializer::BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
-		TinyEngine::Scene& emptyScene
-	) {
-		std::string placeHolderTex = "Assets/heart.png";
-		//Create Image
-		UIObject& imageObj = emptyScene.CreateUIObject();
-		Image& image = imageObj.AddComponent<Image>();
-		image.SetTexture(placeHolderTex);
-		Transform& imageTransform = imageObj.GetTransform();
-		imageTransform.SetPosition({ 0.5f, 5, 0 });
-		//end image
-		//Camera
-		GameObject& camObj = emptyScene.CreateMainCamera();
-		//end camera
-		//boxes
-		std::string crateText = "Assets/Crate.png";
-
-		//CreateASimpleBox({400,200,0},{500,64,0});
-		emptyScene.CreateASimpleBox( {4,3,0 }, { 5.0f,0.64f,0 }, crateText);
-		emptyScene.CreateASimpleBox( { 4,1,0 }, { 0.64f,0.64f,0 }, crateText);
-	//	CreateAPingPongBox(emptyScene, engine, { 400,200,0 }, { 64,64,0 }, crateText);
-	//	CreateAPingPongBox(emptyScene, engine, { 400,600,0 }, { 64,64,0 }, crateText);
-		//end
-
-	}
-
-	GameObject& SceneSerializer::CreateAPingPongBox(Scene& scene, TinyGameEngine& engine, const Vector3& position, const Vector3& size, std::string boxTexture) {
-		GameObject& boxRef = scene.CreateASimpleBox( position, size);
-
-		TinyGame::PingPongAroundCenter& pingpong = boxRef.AddComponent<TinyGame::PingPongAroundCenter>();
-		pingpong.Initialize({ 1,0,0 }, 3);
-
-		boxRef.GetComponent<Transform>()
-			->SetPosition({
-				position.x,
-				position.y,
-				0
-				});
-		return boxRef;
-	}
-
 
 	void SceneSerializer::SaveScene(TinyEngine::Scene& scene)
 	{
@@ -163,6 +54,8 @@ namespace TGModule {
 
 				file << "\t<Component name=\""
 					<< info->name
+					<<"\" id=\""
+					<<component->GetID()
 					<< "\">\n";
 
 				for (const FieldInfo& field : info->fields)
@@ -255,6 +148,22 @@ namespace TGModule {
 
 						break;
 					}
+
+					case FieldType::Component:
+					{
+						Component* component =
+							std::any_cast<Component*>(
+								field.getValue(*component));
+						if (component)
+						{
+							file << component->GetID();
+						}
+						else {
+							file << "None";
+						}
+
+						break;
+					}
 					}
 
 					file << "\n";
@@ -301,6 +210,18 @@ namespace TGModule {
 
 			LoadObject(file, object);
 		}
+
+		for (auto& unresolvedReference : unresolvedReferences)
+		{
+			uint64_t referencedID = unresolvedReference.first;
+
+			for (auto& reference : unresolvedReference.second)
+			{
+				reference.second(*reference.first,loadedComponents[referencedID]);
+			}
+		}
+		unresolvedReferences.clear();
+		loadedComponents.clear();
 	}
 
 	void SceneSerializer::LoadObject(
@@ -319,6 +240,8 @@ namespace TGModule {
 
 			std::string componentName =
 				GetAttribute(line, "name");
+
+			std::uint64_t id = std::stoull(GetAttribute(line, "id"));
 
 			ComponentInfo* info =
 				ComponentRegister::Instance()
@@ -341,7 +264,10 @@ namespace TGModule {
 			else {
 				component = &info->create(object);
 			}
+			component->ChangeID(id);
 			LoadComponent(file, *component);
+
+			loadedComponents[id] = component;
 		}
 	}
 
@@ -502,6 +428,17 @@ namespace TGModule {
 
 			break;
 		}
+		case FieldType::Component:
+		{
+			uint64_t referencedID;
+			stream >> referencedID;
+			unresolvedReferences[referencedID].push_back({
+	&component,
+	field.setValue
+				});
+
+			break;
+		}
 		}
 	}
 
@@ -533,32 +470,6 @@ namespace TGModule {
 		}
 
 		return "Unknown";
-	}
-
-	TinyEngine::FieldType SceneSerializer::StringToFieldType(std::string type) {
-		if (type == "Float")
-			return TinyEngine::FieldType::Float;
-
-		if (type == "Vector2")
-			return TinyEngine::FieldType::Vector2;
-
-		if (type == "Vector3")
-			return TinyEngine::FieldType::Vector3;
-
-		if (type == "Int")
-			return TinyEngine::FieldType::Int;
-
-		if (type == "Bool")
-			return TinyEngine::FieldType::Bool;
-
-		if (type == "String")
-			return TinyEngine::FieldType::String;
-
-		if (type == "IntRect")
-			return TinyEngine::FieldType::IntRect;
-
-
-		return  TinyEngine::FieldType::Unknown;
 	}
 
 	std::string SceneSerializer::GetAttribute(

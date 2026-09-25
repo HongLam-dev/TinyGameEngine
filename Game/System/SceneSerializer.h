@@ -15,49 +15,51 @@
 #include "TextureManager.h"
 #include "GameComponentRegister.h"
 #include <string>
-
 #include "FieldType.h"
 namespace TGModule {
 	class SceneSerializer
 	{
 	public:
-		SceneSerializer() = delete;
-		static TinyEngine::GameObject& CreateAPingPongBox(TinyEngine::Scene& scene,
-			TinyEngine::TinyGameEngine& engine,
-			const TinyEngine::Vector3& position,
-			const TinyEngine::Vector3& size,std::string texture="");
-
-		static void BuildExampleScene1(TinyEngine::TinyGameEngine& engine,
-			TinyEngine::Scene& emptyScene
-		);
-		static void BuildExampleScene2(TinyEngine::TinyGameEngine& engine,
-			TinyEngine::Scene& emptyScene
-		);
-
-		static std::string FieldTypeToString(TinyEngine::FieldType type);
-		static TinyEngine::FieldType StringToFieldType(std::string type);
-
-		static void SaveScene(TinyEngine::Scene& scene);
-		static void LoadScene(std::string sceneName,
+		std::string FieldTypeToString(TinyEngine::FieldType type);
+		void SaveScene(TinyEngine::Scene& scene);
+		void LoadScene(std::string sceneName,
 			TinyEngine::Scene& emptyScene);
+
+		static SceneSerializer& Instance() {
+			static SceneSerializer serializer;
+			return serializer;
+		}
 	private:
-	private:
-		static std::string GetAttribute(
+		SceneSerializer() {};
+		std::string GetAttribute(
 			const std::string& line,
 			const std::string& attribute);
 
-		static void LoadObject(
+		void LoadObject(
 			std::ifstream& file,
 			TinyEngine::GameObject& object);
 
-		static void LoadComponent(
+		void LoadComponent(
 			std::ifstream& file,
 			TinyEngine::Component& component);
 
-		static void LoadField(
+		void LoadField(
 			TinyEngine::Component& component,
 			const TinyEngine::FieldInfo& field,
 			const std::string& line);
+		std::unordered_map<
+			std::uint64_t,
+			std::vector<
+			std::pair<
+			TinyEngine::Component*,
+			std::function<void(
+				TinyEngine::Component&,
+				const std::any&
+				)>
+			>
+			>
+		> unresolvedReferences;
 
+		std::unordered_map< std::uint64_t, TinyEngine::Component*> loadedComponents;
 	};
 }

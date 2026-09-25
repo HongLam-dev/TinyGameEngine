@@ -5,7 +5,7 @@ namespace TinyEngine {
 	class  EngineComponentRegister
 	{
 	public:
-		static void RegisterEngineComponents(TinyEngine::ComponentRegister& componentRegister);
+		static void RegisterEngineComponents();
 	private:
 	};
 }

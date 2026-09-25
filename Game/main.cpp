@@ -5,9 +5,9 @@
 #include "Image.h"
 #include "Animator.h"
 #include "Camera.h"
-#include "EngineSettings.h"
-#include "Vector3.h"
-#include "TextureManager.h"
+#include "ComponentRegister.h"
+#include "GameComponentRegister.h"
+#include "EngineComponentRegister.h"
 #include "SceneManager.h"
 
 int main()
@@ -15,9 +15,12 @@ int main()
 
 	TinyEngine::Window window;
 
+	TinyEngine::EngineComponentRegister::RegisterEngineComponents();
+	TGModule::GameComponentRegister::RegisterGameComponents();
+
 	TinyEngine::TinyGameEngine engine(window);
 	TGModule::SceneManager sceneManager(engine);
-	TGModule::SceneManager::LoadExampleScene1();
+	TGModule::SceneManager::LoadScene("Example Scene");
 	engine.Run();
 	return 0;
 }

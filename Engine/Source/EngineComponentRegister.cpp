@@ -6,9 +6,9 @@
 #include "MakeField.h"
 
 namespace TinyEngine{
-    void EngineComponentRegister::RegisterEngineComponents(
-        TinyEngine::ComponentRegister& componentRegister)
+    void EngineComponentRegister::RegisterEngineComponents()
     {
+        ComponentRegister& componentRegister = ComponentRegister::Instance();
            componentRegister.RegisterComponent<Transform>(
                {
                    "Transform",

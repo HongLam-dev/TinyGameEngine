@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "Vector3.h"
 #include "RenderableComponent.h"
+#include "IDGenerator.h"
 namespace TinyEngine {
 
 	class Camera;
@@ -27,8 +28,10 @@ namespace TinyEngine {
 		void Destroy(Component& component);
 		void Destroy();
 		void OnDestroy();
+
 		const std::string& GetName() const { return name; }
 		void SetName(const std::string& name) { this->name = name; }
+
 		template <typename T>
 			requires std::derived_from<T, Component>
 		T& AddComponent()
@@ -36,6 +39,7 @@ namespace TinyEngine {
 			auto component = std::make_unique<T>(*this);
 
 			T& ref = *component;
+			ref.SetID(IDGenerator::GenerateID());
 
 			components.push_back(std::move(component));
 			return ref;

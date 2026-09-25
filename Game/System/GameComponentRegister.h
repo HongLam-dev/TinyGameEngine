@@ -5,7 +5,7 @@ namespace TGModule {
 	class  GameComponentRegister
 	{
 	public:
-		static void RegisterGameComponents(TinyEngine::ComponentRegister& componentRegister);
+		static void RegisterGameComponents();
 	private:
 	};
 }

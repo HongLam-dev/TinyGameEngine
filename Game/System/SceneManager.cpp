@@ -10,32 +10,22 @@ namespace TGModule {
 			throw std::runtime_error("SceneManager already exists");
 
 	}
+	void SceneManager::LoadScene(std::string sceneToLoad) {
+		if (!instance)
+			throw std::runtime_error("No SceneManager instance exists");
+		instance->sceneToLoad = sceneToLoad;
+		instance->engine.EnqueueAction(instance->LoadNewScene);
+	}
+
 	SceneManager::~SceneManager()
 	{
 		instance = nullptr;
-	}
-
-	void SceneManager::LoadExampleScene1()
-	{
-		if (!instance)
-			throw std::runtime_error("No SceneManager instance exists");
-		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
-
-		SceneSerializer::BuildExampleScene1(instance->engine,
-			*instance->activeScene);
-		instance->engine.ActivateScene(*instance->activeScene);
-	}
-	void SceneManager::LoadExampleScene2()
-	{
-		if (!instance)
-			throw std::runtime_error("No SceneManager instance exists");
-		instance->engine.EnqueueAction(LoadNewScene);
 	}
 	void SceneManager::LoadNewScene() {
 		if (!instance)
 			throw std::runtime_error("No SceneManager instance exists");
 		instance->activeScene = std::make_unique<TinyEngine::Scene>(instance->engine);
-		SceneSerializer::BuildExampleScene2(instance->engine,
+		SceneSerializer::Instance().LoadScene(instance->sceneToLoad,
 			*instance->activeScene);
 		instance->engine.ActivateScene(*instance->activeScene);
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include "TinyGameEngine.h"
+#include "SceneSerializer.h"
 #include "Window.h"
 #include "Scene.h"
 #include "InputHandler.h"

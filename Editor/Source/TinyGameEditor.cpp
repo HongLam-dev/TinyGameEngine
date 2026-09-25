@@ -23,8 +23,8 @@ namespace TinyEditor {
     }
 
     void TinyGameEditor::RegisterComponents() {
-        TGModule::GameComponentRegister::RegisterGameComponents(componentRegister);
-        EngineComponentRegister::RegisterEngineComponents(componentRegister);
+        TGModule::GameComponentRegister::RegisterGameComponents();
+        EngineComponentRegister::RegisterEngineComponents();
     }
 
     void TinyGameEditor::Run() {
@@ -512,14 +512,14 @@ namespace TinyEditor {
    void TinyGameEditor::SaveScene() {
        if (!editingScene)
            return;
-       TGModule::SceneSerializer::SaveScene(*editingScene);
+       TGModule::SceneSerializer::Instance().SaveScene(*editingScene);
 
        std::cout << "Scene Saved\n";
    }
 
    void TinyGameEditor::LoadScene(std::string sceneName) {
        editingScene = std::make_unique<Scene>(engine);
-       TGModule::SceneSerializer::LoadScene(sceneName,*editingScene);
+       TGModule::SceneSerializer::Instance().LoadScene(sceneName,*editingScene);
        selectedObject = nullptr;
        engine.ActivateScene(*editingScene);
    }

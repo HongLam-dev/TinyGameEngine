@@ -20,9 +20,12 @@ namespace TinyEngine {
 			std::string boxTexture="");
 		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
 		Camera* GetMainCamera() { return mainCamera; };
+		GameObject* FindObjectByID(uint64_t id);
+
 		UIObject& CreateUIObject();
 		GameObject& CreateMainCamera();
 		GameObject& CreateCamera();
+
 		std::unique_ptr<GameObject> RemoveSceneObject(GameObject& gameObject);
 		void DestroySceneObject(GameObject& object);
 		void Start();
