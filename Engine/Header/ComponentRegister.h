@@ -17,6 +17,15 @@ namespace TinyEngine {
 				return nullptr;
 			return &componentInfo[typeIndex]; 
 		};
+
+		ComponentInfo* FindComponent(std::string componentName) {
+			for (auto& component : componentInfo)
+			{
+				if (component.second.name == componentName)
+					return &component.second;
+			}
+			return nullptr;
+		};
 		static ComponentRegister& Instance()
 		{
 			static ComponentRegister componentRegister;

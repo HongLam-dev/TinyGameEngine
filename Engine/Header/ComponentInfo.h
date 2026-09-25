@@ -9,7 +9,7 @@ namespace TinyEngine {
     {
         std::string name;
 
-        std::function<void(TinyEngine::GameObject&)> create;
+        std::function<Component&(TinyEngine::GameObject&)> create;
 
         std::vector<FieldInfo> fields;
     };

@@ -38,10 +38,6 @@ namespace TinyEditor {
         GameObject editorCameraObj(engine);
         editorCamera = &editorCameraObj.AddComponent<Camera>();
 
-        GameObject& anchor = editingScene->CreateASimpleBox({}, { 0.64f,0.64f,0 }, "Assets/heart.png");
-        anchor.SetName("Anchor");
-
-
         GameObject* renamingObject = nullptr;
 
         if (!ImGui::SFML::Init(*renderWindow))
@@ -513,13 +509,14 @@ namespace TinyEditor {
        if (!editingScene)
            return;
        TGModule::SceneSerializer::SaveScene(*editingScene);
-       TGModule::SceneSerializer::LoadScene(editingScene->GetName(),engine,*editingScene);
 
        std::cout << "Scene Saved\n";
    }
 
    void TinyGameEditor::LoadScene() {
        editingScene = std::make_unique<Scene>(engine);
+       TGModule::SceneSerializer::LoadScene("Example Scene",*editingScene);
+       selectedObject = nullptr;
        engine.ActivateScene(*editingScene);
    }
 }

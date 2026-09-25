@@ -11,6 +11,8 @@ namespace TinyEngine {
 	class Scene {
 	public:
 		Scene(TinyGameEngine& engine):engine(engine){}
+		~Scene() { Unload(); }
+
 		GameObject& CreateSceneObject();
 		GameObject& CreateASimpleBox(
 			const Vector3& position,
@@ -31,6 +33,7 @@ namespace TinyEngine {
 
 		std::string GetName() { return sceneName; }
 		void SetName(std::string newName) { sceneName = newName; }
+
 	private:
 		std::string sceneName="Example Scene";
 		TinyGameEngine& engine;

@@ -13,9 +13,9 @@ namespace TGModule{
         componentRegister.RegisterComponent<TinyGame::PlayerController>(
             {
                 "Player Controller",
-                [](GameObject& gameObject)
+                [](GameObject& gameObject)->Component&
                 {
-                    gameObject.AddComponent<TinyGame::PlayerController>();
+                    return gameObject.AddComponent<TinyGame::PlayerController>();
                 },
                 {
                     MakeField<TinyGame::PlayerController, float>(
@@ -31,9 +31,9 @@ namespace TGModule{
         componentRegister.RegisterComponent<TinyGame::PingPongAroundCenter>(
             {
                 "Ping Pong Around Center",
-                [](GameObject& gameObject)
+                [](GameObject& gameObject)->Component&
                 {
-                    gameObject.AddComponent<TinyGame::PingPongAroundCenter>();
+                    return gameObject.AddComponent<TinyGame::PingPongAroundCenter>();
                 },
                 {
                     MakeField<TinyGame::PingPongAroundCenter, float>(
@@ -63,9 +63,9 @@ namespace TGModule{
         componentRegister.RegisterComponent<TinyGame::CameraFollow>(
             {
                 "Camera Follow",
-                [](GameObject& gameObject)
+                [](GameObject& gameObject)->Component&
                 {
-                    gameObject.AddComponent<TinyGame::CameraFollow>();
+                    return gameObject.AddComponent<TinyGame::CameraFollow>();
                 },
                 {
                 }

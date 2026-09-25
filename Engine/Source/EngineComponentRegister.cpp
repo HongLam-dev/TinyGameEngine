@@ -12,9 +12,9 @@ namespace TinyEngine{
            componentRegister.RegisterComponent<Transform>(
                {
                    "Transform",
-                   [](GameObject& gameObject)
+                   [](GameObject& gameObject)->Component&
                    {
-                       gameObject.AddComponent<Transform>();
+                       return gameObject.AddComponent<Transform>();
                    },
                    {
                        MakeField<Transform, Vector3>(
@@ -44,9 +44,9 @@ namespace TinyEngine{
            componentRegister.RegisterComponent<SpriteRenderer>(
                {
                    "Sprite Renderer",
-                   [](GameObject& gameObject)
+                   [](GameObject& gameObject)->Component&
                    {
-                       gameObject.AddComponent<SpriteRenderer>();
+                       return gameObject.AddComponent<SpriteRenderer>();
                    },
                    {
                        MakeField<SpriteRenderer, std::string>(
@@ -69,9 +69,9 @@ namespace TinyEngine{
        componentRegister.RegisterComponent<BoxCollider2D>(
            {
                "Box Collider 2D",
-               [](GameObject& gameObject)
+               [](GameObject& gameObject)->Component&
                {
-                   gameObject.AddComponent<BoxCollider2D>();
+                   return gameObject.AddComponent<BoxCollider2D>();
                },
                {
                    MakeField<BoxCollider2D, Vector3>(
@@ -94,9 +94,9 @@ namespace TinyEngine{
        componentRegister.RegisterComponent<Rigidbody2D>(
            {
                "Rigidbody 2D",
-               [](GameObject& gameObject)
+               [](GameObject& gameObject)->Component&
                {
-                   gameObject.AddComponent<Rigidbody2D>();
+                   return gameObject.AddComponent<Rigidbody2D>();
                },
                {
                    MakeField<Rigidbody2D, float>(
@@ -119,9 +119,9 @@ namespace TinyEngine{
        componentRegister.RegisterComponent<Camera>(
            {
                "Camera",
-               [](GameObject& gameObject)
+               [](GameObject& gameObject)->Component&
                {
-                   gameObject.AddComponent<Camera>();
+                   return gameObject.AddComponent<Camera>();
                },
                {}
            }
@@ -130,9 +130,9 @@ namespace TinyEngine{
        componentRegister.RegisterComponent<Animator>(
            {
                "Animation Controller",
-               [](GameObject& gameObject)
+               [](GameObject& gameObject)->Component&
                {
-                   gameObject.AddComponent<Animator>();
+                   return gameObject.AddComponent<Animator>();
                },
                {}
            }

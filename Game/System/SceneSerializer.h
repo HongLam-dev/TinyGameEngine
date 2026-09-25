@@ -39,8 +39,25 @@ namespace TGModule {
 
 		static void SaveScene(TinyEngine::Scene& scene);
 		static void LoadScene(std::string sceneName,
-			TinyEngine::TinyGameEngine& engine,
 			TinyEngine::Scene& emptyScene);
 	private:
+	private:
+		static std::string GetAttribute(
+			const std::string& line,
+			const std::string& attribute);
+
+		static void LoadObject(
+			std::ifstream& file,
+			TinyEngine::GameObject& object);
+
+		static void LoadComponent(
+			std::ifstream& file,
+			TinyEngine::Component& component);
+
+		static void LoadField(
+			TinyEngine::Component& component,
+			const TinyEngine::FieldInfo& field,
+			const std::string& line);
+
 	};
 }
