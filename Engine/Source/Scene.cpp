@@ -65,6 +65,14 @@ namespace TinyEngine {
 
 	void Scene::Start()
 	{
+		if (!mainCamera)
+		{
+			mainCamera=FindComponentByType<Camera>();
+		}
+		if (!mainCamera) {
+			std::cout << "No camera in scene\n";
+		}
+
 		for (auto& gameObject : sceneObjects)
 		{
 			gameObject->Start();

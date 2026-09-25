@@ -20,7 +20,6 @@ namespace TinyEngine {
 			std::string boxTexture="");
 		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
 		Camera* GetMainCamera() { return mainCamera; };
-		GameObject* FindObjectByID(uint64_t id);
 
 		UIObject& CreateUIObject();
 		GameObject& CreateMainCamera();
@@ -37,6 +36,21 @@ namespace TinyEngine {
 		std::string GetName() { return sceneName; }
 		void SetName(std::string newName) { sceneName = newName; }
 
+		template <typename T>
+			requires std::derived_from<T, Component>
+		T* FindComponentByType() {
+			for (auto& object : sceneObjects)
+			{
+				for (auto& component : object->GetAllComponents())
+				{
+					if (auto* result = dynamic_cast<T*>(component))
+					{
+						return result;
+					}
+				}
+			}
+			return nullptr;
+		}
 	private:
 		std::string sceneName="Example Scene";
 		TinyGameEngine& engine;
