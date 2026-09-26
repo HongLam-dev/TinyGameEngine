@@ -19,9 +19,7 @@ namespace TGModule {
 		std::unique_ptr<TinyEngine::Scene> activeScene=nullptr;
 		TinyEngine::TinyGameEngine& engine;
 		inline static SceneManager* instance = nullptr;
-		static void LoadNewScene();
-
-		std::string sceneToLoad="";
+		static void LoadNewScene(const std::string& sceneToLoad);
 	};
 
 }
