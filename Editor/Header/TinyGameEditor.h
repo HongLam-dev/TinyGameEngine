@@ -33,8 +33,9 @@ namespace TinyEditor {
 		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 		void RegisterComponents();
 
+        void CreateNewScene();
         void SaveScene();
-        void LoadScene(std::string sceneName);
+        bool LoadScene(std::string sceneName);
 
         void DrawSelectedObject(TinyEngine::GameObject& gameObject);
 

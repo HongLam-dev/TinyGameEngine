@@ -22,7 +22,7 @@ namespace TGModule {
 	public:
 		std::string FieldTypeToString(TinyEngine::FieldType type);
 		void SaveScene(TinyEngine::Scene& scene);
-		void LoadScene(std::string sceneName,
+		bool LoadScene(std::string sceneName,
 			TinyEngine::Scene& emptyScene);
 
 		static SceneSerializer& Instance() {

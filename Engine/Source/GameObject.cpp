@@ -62,6 +62,12 @@ namespace TinyEngine
 		engine.UnregisterCollider(collider);
 	}
 	void GameObject::Destroy(Component& component) {
+		if (&component == transform)
+		{
+			std::cout << "Please don't destroy transform\n";
+			return;
+		}
+
 		auto it = std::find_if(
 			components.begin(),
 			components.end(),

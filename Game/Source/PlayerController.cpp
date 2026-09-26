@@ -12,7 +12,7 @@ namespace TinyGame {
 	void PlayerController::Start() {
 		transform = GetOwner().GetComponent<Transform>();
 		rb = GetOwner().GetComponent<Rigidbody2D>();
-		DontDestroyOnload(*this);
+		//DontDestroyOnload(*this);
 	}
 
 	void PlayerController::Update(float deltaTime)

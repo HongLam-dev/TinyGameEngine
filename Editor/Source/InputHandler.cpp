@@ -40,7 +40,7 @@ namespace TinyEditor {
             {
                 saveSceneCallback();
             }
-            else if(input.OnKeyDown(sf::Keyboard::Key::V))
+            else if(input.OnKeyDown(sf::Keyboard::Key::L))
             {
                 loadSceneCallback("Example Scene");
             }

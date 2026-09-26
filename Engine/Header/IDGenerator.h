@@ -18,7 +18,7 @@ namespace TinyEngine {
 			do
 			{
 				id = distribution(generator);
-			} while (!Instance().usedIDs.insert(id).second);
+			} while (Instance().usedIDs.contains(id));
 			return id;
 		}
 		static void RemoveID(uint64_t id)

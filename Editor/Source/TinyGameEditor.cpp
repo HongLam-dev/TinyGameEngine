@@ -30,7 +30,10 @@ namespace TinyEditor {
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
         TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();}, [this](std::string sceneName) { LoadScene(sceneName); });
-        LoadScene("Example Scene");
+        if (!LoadScene("Example Scene"))
+        {
+            CreateNewScene();
+        }
 
         GameObject editorCameraObj(engine);
         editorCamera = &editorCameraObj.AddComponent<Camera>();
@@ -186,22 +189,31 @@ namespace TinyEditor {
     }
     void TinyGameEditor::DrawMarker(sf::Vector2f pixelPosition)
     {
-        sf::Sprite marker(
-            *TextureManager::Instance().GetTexture("Assets/Hand.png")
-        );
+        sf::Texture* tex= TextureManager::Instance().GetTexture("Assets/Hand.png");
+        if (tex)
+        {
+            sf::Sprite marker(
+                *tex
+            );
 
-        sf::Vector2u size = marker.getTexture().getSize();
+            sf::Vector2u size = marker.getTexture().getSize();
 
-        marker.setOrigin(
-            sf::Vector2f(
-                size.x / 2.0f,
-                size.y / 2.0f
-            )
-        );
+            marker.setOrigin(
+                sf::Vector2f(
+                    size.x / 2.0f,
+                    size.y / 2.0f
+                )
+            );
 
-        marker.setPosition(pixelPosition);
+            marker.setPosition(pixelPosition);
 
-        window.GetRenderWindow()->draw(marker);
+            window.GetRenderWindow()->draw(marker);
+        }
+        else
+        {
+            std::cout << "No texture for marker found\n";
+        }
+
     }
 
        void TinyGameEditor::DrawInspectorWindow(GameObject*& selectedObject)
@@ -229,7 +241,6 @@ namespace TinyEditor {
    void TinyGameEditor::DrawSelectedObject(GameObject& gameObject)
    {
        ImGui::Text("%s", gameObject.GetName().c_str());
-
        for (const auto& component : gameObject.GetAllComponents())
        {
            DrawComponent(*component);
@@ -247,19 +258,28 @@ namespace TinyEditor {
        if (!info)
            return;
 
-       if (!ImGui::CollapsingHeader(
+       ImGui::PushID(&component);
+
+       bool open = ImGui::CollapsingHeader(
            info->name.c_str(),
-           ImGuiTreeNodeFlags_DefaultOpen))
+           ImGuiTreeNodeFlags_DefaultOpen
+       );
+
+
+       if (open)
        {
-           return;
+           for (const auto& field : info->fields)
+           {
+               DrawField(component, field);
+           }
+           if (ImGui::SmallButton("X"))
+           {
+               selectedObject->Destroy(component);
+           }
        }
 
-       for (const auto& field : info->fields)
-       {
-           DrawField(component, field);
-       }
+       ImGui::PopID();
    }
-
 
    void TinyGameEditor::DrawField(
        Component& component,
@@ -517,10 +537,25 @@ namespace TinyEditor {
        std::cout << "Scene Saved\n";
    }
 
-   void TinyGameEditor::LoadScene(std::string sceneName) {
-       editingScene = std::make_unique<Scene>(engine);
-       TGModule::SceneSerializer::Instance().LoadScene(sceneName,*editingScene);
-       selectedObject = nullptr;
-       engine.ActivateScene(*editingScene);
+   bool TinyGameEditor::LoadScene(std::string sceneName) {
+       auto emptyScene = std::make_unique<Scene>(engine);
+
+       if (TGModule::SceneSerializer::Instance().LoadScene(sceneName, *emptyScene))
+       {
+           editingScene = std::move(emptyScene);
+           selectedObject = nullptr;
+           engine.ActivateScene(*editingScene);
+           return true;
+       }
+       else {
+           return false;
+       }
+
+   }
+
+   void TinyGameEditor::CreateNewScene()
+   {
+       editingScene= std::make_unique<Scene>(engine);
+       editingScene->CreateMainCamera();
    }
 }

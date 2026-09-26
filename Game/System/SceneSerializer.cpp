@@ -24,7 +24,7 @@ namespace TGModule {
 	void SceneSerializer::SaveScene(TinyEngine::Scene& scene)
 	{
 		std::filesystem::path path =
-			std::filesystem::path("Scene") /
+			std::filesystem::path("Scenes") /
 			(scene.GetName() + ".tge");
 
 		std::ofstream file(path);
@@ -177,12 +177,12 @@ namespace TGModule {
 		}
 	}
 
-	void SceneSerializer::LoadScene(
+	bool SceneSerializer::LoadScene(
 		std::string sceneName,
 		TinyEngine::Scene& emptyScene)
 	{
 		std::filesystem::path path =
-			std::filesystem::path("Scene") /
+			std::filesystem::path("Scenes") /
 			(sceneName + ".tge");
 
 		std::ifstream file(path);
@@ -190,7 +190,7 @@ namespace TGModule {
 		if (!file)
 		{
 			std::cout << "Failed to open scene\n";
-			return;
+			return false;
 		}
 
 		std::string line;
@@ -220,8 +220,9 @@ namespace TGModule {
 				reference.second(*reference.first,loadedComponents[referencedID]);
 			}
 		}
-		unresolvedReferences.clear();
 		loadedComponents.clear();
+		unresolvedReferences.clear();
+		return true;
 	}
 
 	void SceneSerializer::LoadObject(
@@ -264,7 +265,7 @@ namespace TGModule {
 			else {
 				component = &info->create(object);
 			}
-			component->ChangeID(id);
+			component->SetID(id);
 			LoadComponent(file, *component);
 
 			loadedComponents[id] = component;

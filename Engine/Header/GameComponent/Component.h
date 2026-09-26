@@ -37,7 +37,7 @@ namespace TinyEngine {
 		{
 			return id;
 		}
-		void ChangeID(uint64_t newID)
+		void SetID(uint64_t newID)
 		{
 			if (!IDGenerator::AddID(newID))
 			{
@@ -50,10 +50,6 @@ namespace TinyEngine {
 		}
 	private:
 		friend class GameObject;
-		void SetID(uint64_t newID)
-		{
-			id = newID;
-		}
 
 		uint64_t id = 0;
 		GameObject& owner;
