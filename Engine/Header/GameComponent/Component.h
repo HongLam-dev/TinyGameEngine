@@ -20,7 +20,9 @@ namespace TinyEngine {
 		void Destroy(GameObject& gameObject);
 		void DontDestroyOnload(GameObject& gameObject);
 		void DontDestroyOnload(Component& component);
-		virtual void OnDestroy() {};
+		virtual void OnDestroy() {
+			IDGenerator::RemoveID(id);
+		};
 		virtual void Awake() {};
 		virtual void Start() {};
 		virtual void Update(float deltaTime) {};

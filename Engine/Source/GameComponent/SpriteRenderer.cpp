@@ -55,8 +55,4 @@ namespace TinyEngine {
 
         return bounds;
     }
-
-    void SpriteRenderer::OnDestroy() {
-        GetOwner().UnregisterRenderer(*this);
-    }
 }

@@ -4,6 +4,7 @@
 #include "Rigidbody2D.h"
 #include "Animator.h"
 #include "MakeField.h"
+#include "Image.h"
 
 namespace TinyEngine{
     void EngineComponentRegister::RegisterEngineComponents()
@@ -138,5 +139,30 @@ namespace TinyEngine{
            }
        );
 
+
+       componentRegister.RegisterComponent<Image>(
+           {
+               "Image",
+               [](GameObject& gameObject)->Component&
+               {
+                   return gameObject.AddComponent<Image>();
+               },
+               {
+                   MakeField<Image, std::string>(
+                       "Texture",
+                       FieldType::String,
+                       &Image::GetTexturePath,
+                       &Image::SetTexture
+                   ),
+
+                   MakeField<Image, sf::IntRect>(
+                       "Texture Rect",
+                       FieldType::IntRect,
+                       &Image::GetTextureRect,
+                       &Image::SetTextureRect
+                   )
+               }
+           }
+       );
     }
 }

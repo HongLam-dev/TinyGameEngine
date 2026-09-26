@@ -75,6 +75,7 @@ namespace TinyEngine {
 		}
 	}
 	void BoxCollider2D::OnDestroy() {
+		Component::OnDestroy();
 		GetOwner().UnregisterCollider(*this);
 	}
 }

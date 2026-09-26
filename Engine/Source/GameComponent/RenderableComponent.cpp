@@ -6,6 +6,7 @@ namespace TinyEngine {
 		GetOwner().RegisterRenderer(*this);
 	}
 	void RenderableComponent::OnDestroy() {
+		Component::OnDestroy();
 		GetOwner().UnregisterRenderer(*this);
 	}
 }

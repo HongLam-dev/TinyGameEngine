@@ -254,7 +254,7 @@ namespace TinyEngine {
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
 				if (!a.GetRigidbody() && !b.GetRigidbody())
-					return;
+					continue;
 
 				DiscreteCollisionDetect(a, b);
 			}

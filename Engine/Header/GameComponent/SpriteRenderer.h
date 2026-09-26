@@ -17,7 +17,6 @@ namespace TinyEngine {
       Bounds GetBounds();
 
       void Render(Window& window, const Camera& camera);
-      void OnDestroy() override;
 
       SpriteRenderer(GameObject& owner)
           : RenderableComponent(owner)
@@ -32,7 +31,6 @@ namespace TinyEngine {
 
           if (!tex)
           {
-              std::cout << "No texture found: " << texturePath;
               return;
           }
 

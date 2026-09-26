@@ -13,6 +13,11 @@ namespace TGModule {
 	void SceneManager::LoadScene(std::string sceneToLoad) {
 		if (!instance)
 			throw std::runtime_error("No SceneManager instance exists");
+		if (instance->sceneToLoad != "")
+		{
+			std::cout<<"Another scene loading is in :"<<instance->sceneToLoad<<'\n';
+			return;
+		}
 		instance->sceneToLoad = sceneToLoad;
 		instance->engine.EnqueueAction(instance->LoadNewScene);
 	}
@@ -28,5 +33,6 @@ namespace TGModule {
 		SceneSerializer::Instance().LoadScene(instance->sceneToLoad,
 			*instance->activeScene);
 		instance->engine.ActivateScene(*instance->activeScene);
+		instance->sceneToLoad="";
 	}
 }

@@ -148,7 +148,10 @@ namespace TinyEngine
 		for (auto& object : objectsToMakePersistent)
 		{
 			if(object)
+			{
 				persistentOjects.push_back(std::move(activeScene->RemoveSceneObject(*object)));
+				std::cout << "Don't destroy\n";
+			}
 		}
 
 		objectsToMakePersistent.clear();

@@ -200,8 +200,8 @@ namespace TinyEditor {
 
             marker.setOrigin(
                 sf::Vector2f(
-                    size.x / 2.0f,
-                    size.y / 2.0f
+                    (size.x / 2.0f),
+                    (size.y / 2.0f)
                 )
             );
 
