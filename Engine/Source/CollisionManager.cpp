@@ -170,8 +170,8 @@ namespace TinyEngine {
 
 						float velocityAlongNormalA = collisions[0].normal.Dot(aVelocity);
 						float velocityAlongNormalB = collisions[1].normal.Dot(bVelocity);
-					//	std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
-					//	std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
+						std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
+						std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
 						if (velocityAlongNormalA < 0)
 						{
 							Vector3 normalVelocity = collisions[0].normal * velocityAlongNormalA;
@@ -230,7 +230,7 @@ namespace TinyEngine {
 				}
 			}
 
-			for (size_t i = 0; i < collisionResults.size(); i++)
+			/*for (size_t i = 0; i < collisionResults.size(); i++)
 			{
 				ContinuousCollision& result = collisionResults[i];
 				if (result.exitTime<0 || result.exitTime>fixedDeltaTime)
@@ -243,7 +243,7 @@ namespace TinyEngine {
 				{
 					ExitCallback(a, b);
 				}
-			}
+			}*/
 
 		}
 	

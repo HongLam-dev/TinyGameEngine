@@ -6,6 +6,7 @@ namespace TinyEngine {
 	{
 	public:
 		static void RegisterEngineComponents();
+		static void RegisterEngineEnums();
 	private:
 	};
 }

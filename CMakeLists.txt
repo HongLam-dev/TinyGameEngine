@@ -35,17 +35,21 @@ add_library(TinyGameEngine
     "Engine/Source/TextureManager.cpp"
     "Engine/Source/GameComponent/RenderableComponent.cpp"
     "Engine/Source/EngineComponentRegister.cpp"
-    "Engine/Header/FieldType.h"
-    "Engine/Header/Vector3.h"
-    "Engine/Header/Vector2.h"
-    "Engine/Header/ComponentInfo.h"
-    "Engine/Header/FieldInfo.h" 
+    "Engine/Header/Struct/FieldType.h"
+    "Engine/Header/Struct/Vector3.h"
+    "Engine/Header/Struct/Vector2.h"
+    "Engine/Header/Struct/ComponentInfo.h"
+    "Engine/Header/Struct/FieldInfo.h" 
     "Engine/Header/ComponentRegister.h"
- "Engine/Header/MakeField.h" "Engine/Header/IDGenerator.h")
+    "Engine/Header/MakeField.h"
+    "Engine/Header/IDGenerator.h" 
+    "Engine/Header/Struct/EnumString.h"
+    "Engine/Header/Struct/EnumStringMap.h")
 target_include_directories(TinyGameEngine PUBLIC
     Engine/Header
     Engine/Header/GameComponent
     Engine/Header/UI
+    Engine/Header/Struct
 )
 target_link_libraries(TinyGameEngine PUBLIC
     SFML::Graphics

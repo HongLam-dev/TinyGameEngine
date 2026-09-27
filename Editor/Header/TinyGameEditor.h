@@ -88,6 +88,10 @@ namespace TinyEditor {
             const std::any& value
         );
 
+        bool DrawEnumField(TinyEngine::Component& component,
+            const TinyEngine::FieldInfo& field,
+            const std::any& value);
+
         void DrawAddComponentMenu(TinyEngine::GameObject& gameObject);
 	private:
         TinyEngine::ComponentRegister& componentRegister = TinyEngine::ComponentRegister::Instance();

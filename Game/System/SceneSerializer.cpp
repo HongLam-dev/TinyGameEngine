@@ -63,8 +63,15 @@ namespace TGModule {
 					file << "\t\t<Field name=\""
 						<< field.name
 						<< "\" type=\""
-						<< FieldTypeToString(field.type)
-						<< "\">\n";
+						<< FieldTypeToString(field.type);
+
+					if (field.type == FieldType::Enum)
+					{
+						file << "\" enum=\""
+							<< componentRegister.FindEnumClass(field.enumType)->name;
+					}	
+
+					file<< "\">\n";
 
 					file << "\t\t\t";
 
@@ -162,6 +169,12 @@ namespace TGModule {
 							file << "None";
 						}
 
+						break;
+					}
+					case FieldType::Enum:{
+						int enumValue = std::any_cast<int>(
+							field.getValue(*component));
+						file << enumValue;
 						break;
 					}
 					}
@@ -440,6 +453,12 @@ namespace TGModule {
 
 			break;
 		}
+		case FieldType::Enum: {
+			int enumValue;
+			stream >> enumValue;
+			field.setValue(component,enumValue);
+			break;
+		}
 		}
 	}
 
@@ -468,6 +487,10 @@ namespace TGModule {
 
 		case TinyEngine::FieldType::IntRect:
 			return "IntRect";
+		case TinyEngine::FieldType::Component:
+			return "Component";
+		case TinyEngine::FieldType::Enum:
+			return "Enum";
 		}
 
 		return "Unknown";

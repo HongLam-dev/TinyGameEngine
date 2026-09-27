@@ -1,6 +1,7 @@
 #pragma once 
 #include <typeindex>
 #include "ComponentInfo.h"
+#include "EnumStringMap.h"
 
 namespace TinyEngine {
 	class ComponentRegister
@@ -11,7 +12,32 @@ namespace TinyEngine {
 		{
 			componentInfo[typeid(T)] = std::move(info);
 		}
+
+		template<typename T>
+		void RegisterEnumClass(EnumStringMap enumMap)
+		{
+			enumMaps[typeid(T)] = std::move(enumMap);
+		}
+
 		const std::unordered_map<std::type_index, ComponentInfo>& GetComponentList() { return componentInfo; };
+		const std::unordered_map<std::type_index, EnumStringMap>& GetEnumList() { return enumMaps; };
+
+		EnumStringMap* FindEnumClass(std::type_index typeIndex) {
+			if (!enumMaps.contains(typeIndex))
+				return nullptr;
+			return &enumMaps[typeIndex];
+		};
+
+		EnumStringMap* FindEnumClass(std::string enumClassName) {
+			for (auto& enumClass : enumMaps)
+			{
+				if (enumClass.second.name == enumClassName)
+					return &enumClass.second;
+			}
+			return nullptr;
+		};
+
+
 		ComponentInfo* FindComponent(std::type_index typeIndex) { 
 			if (!componentInfo.contains(typeIndex))
 				return nullptr;
@@ -26,6 +52,7 @@ namespace TinyEngine {
 			}
 			return nullptr;
 		};
+
 		static ComponentRegister& Instance()
 		{
 			static ComponentRegister componentRegister;
@@ -33,5 +60,6 @@ namespace TinyEngine {
 		}
 	private:
 		std::unordered_map<std::type_index, ComponentInfo> componentInfo;
+		std::unordered_map<std::type_index, EnumStringMap> enumMaps;
 	};
 }

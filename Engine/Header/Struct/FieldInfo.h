@@ -9,6 +9,7 @@ namespace TinyEngine {
     {
         std::string name;
         FieldType type;
+        std::type_index enumType = typeid(void);
         std::function<std::any(const Component&)> getValue;
         std::function<void(Component&, const std::any&)> setValue;
     };

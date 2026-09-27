@@ -10,6 +10,7 @@ namespace TinyEngine{
         String,
         IntRect,
         Component,
+        Enum,
         Unknown
     };
 }

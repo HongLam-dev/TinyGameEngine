@@ -89,7 +89,6 @@ namespace TinyEngine
 	}
 
 	void  GameObject::OnDestroy() {
-		std::cout << name << " was destroyed\n";
 		for (auto& component : components)
 		{
 			component->OnDestroy();

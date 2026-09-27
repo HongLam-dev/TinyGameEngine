@@ -25,6 +25,7 @@ namespace TinyEditor {
     void TinyGameEditor::RegisterComponents() {
         TGModule::GameComponentRegister::RegisterGameComponents();
         EngineComponentRegister::RegisterEngineComponents();
+        EngineComponentRegister::RegisterEngineEnums();
     }
 
     void TinyGameEditor::Run() {
@@ -316,6 +317,9 @@ namespace TinyEditor {
        case FieldType::IntRect:
            isFieldInteracted = DrawIntRectField(component, field, value);
            break;
+       case FieldType::Enum:
+           isFieldInteracted = DrawEnumField(component, field, value);
+           break;
        }
        if (isFieldInteracted)
        {
@@ -504,7 +508,58 @@ namespace TinyEditor {
        }
        return false;
    }
+   bool TinyGameEditor::DrawEnumField(
+       TinyEngine::Component& component,
+       const TinyEngine::FieldInfo& field,
+       const std::any& mode)
+   {
+       EnumStringMap* enumClass =
+           componentRegister.FindEnumClass(field.enumType);
 
+       if (!enumClass)
+           return false;
+
+       int current = std::any_cast<int>(mode);
+
+       const char* currentName = "Unknown";
+
+       for (const auto& enumValue : enumClass->enums)
+       {
+           if (enumValue.value == current)
+           {
+               currentName = enumValue.name.c_str();
+               break;
+           }
+       }
+
+       if (ImGui::BeginCombo(
+           field.name.c_str(),
+           currentName))
+       {
+           for (const auto& enumValue : enumClass->enums)
+           {
+               bool selected =
+                   enumValue.value == current;
+
+               if (ImGui::Selectable(
+                   enumValue.name.c_str(),
+                   selected))
+               {
+                   field.setValue(
+                       component,
+                       enumValue.value
+                   );
+               }
+
+               if (selected)
+                   ImGui::SetItemDefaultFocus();
+           }
+
+           ImGui::EndCombo();
+       }
+
+       return true;
+   }
 
    void TinyGameEditor::DrawAddComponentMenu(
        GameObject& gameObject)

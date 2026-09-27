@@ -24,12 +24,15 @@ namespace TinyEngine {
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }
 		void SetPosition(Vector3 pos);
-		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
+
 		Vector3 GetVelocity(){ return velocity; }
+
 		float GetMass() const { return mass; }
 		float GetGravityScale() const { return gravityScale; }
 
-		CollisionDetectionMode GetCollisionDetectMode() { return collisionDetectMode; }
+		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
+		CollisionDetectionMode GetCollisionDetectMode() const { return collisionDetectMode; }
+
 		Vector3 GetPreviousPosition() { return previousPostion; }
 	private:
 		Transform* transform=nullptr;

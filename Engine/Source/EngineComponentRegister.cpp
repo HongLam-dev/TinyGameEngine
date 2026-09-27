@@ -5,6 +5,7 @@
 #include "Animator.h"
 #include "MakeField.h"
 #include "Image.h"
+#include "EnumStringMap.h"
 
 namespace TinyEngine{
     void EngineComponentRegister::RegisterEngineComponents()
@@ -112,6 +113,11 @@ namespace TinyEngine{
                        FieldType::Float,
                        &Rigidbody2D::GetGravityScale,
                        &Rigidbody2D::SetGravityScale
+                   ),
+                    MakeEnumField<Rigidbody2D, CollisionDetectionMode>(
+                       "Collision Detect Mode",
+                       &Rigidbody2D::GetCollisionDetectMode,
+                       &Rigidbody2D::SetCollisionDetectMode
                    )
                }
            }
@@ -164,5 +170,25 @@ namespace TinyEngine{
                }
            }
        );
+    }
+
+    void EngineComponentRegister::RegisterEngineEnums() {
+        ComponentRegister& componentRegister = ComponentRegister::Instance();
+
+        componentRegister.RegisterEnumClass<CollisionDetectionMode>(
+            {
+                "Collision Detection Mode",
+                {
+                    {
+                        "Discrete",
+                        static_cast<int>(CollisionDetectionMode::Discrete)
+                    },
+                    {
+                        "Continuous",
+                        static_cast<int>(CollisionDetectionMode::Continuous)
+                    }
+                }
+            }
+            );
     }
 }
