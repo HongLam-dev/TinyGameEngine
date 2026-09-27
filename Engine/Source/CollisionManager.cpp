@@ -4,6 +4,7 @@
 #include "Bounds.h"
 #include "RigidBody2D.h"
 #include "Collision.h"
+#include "GameObject.h"
 #include <array>
 #include <cmath>
 #include <iostream>
@@ -40,8 +41,8 @@ namespace TinyEngine {
 		{
 			bool overlapped = false;
 
-			Vector3 aPreviousPos = a.GetRigidbody() ? a.GetRigidbody()->GetPreviousPosition() : a.GetPosition();
-			Vector3 bPreviousPos = b.GetRigidbody() ? b.GetRigidbody()->GetPreviousPosition() : b.GetPosition();
+			Vector3 aPreviousPos = a.GetPreviousPosition();
+			Vector3 bPreviousPos = b.GetPreviousPosition();
 
 			Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
 			Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
@@ -50,7 +51,6 @@ namespace TinyEngine {
 			float tExitX = tExit;
 			float tEnterY= tEnter;
 			float tExitY= tExit;
-
 
 			if (relativeVelocity.x != 0)
 			{
@@ -95,8 +95,6 @@ namespace TinyEngine {
 		bool hasCollision = false;
 		if (tExit > 0 && tEnter < fixedDeltaTime && tEnter >= 0 && tEnter < tExit)
 			hasCollision = true;
-
-
 
 		return ContinuousCollision(tEnter,tExit,hasCollision,a,b);
 	}
@@ -153,11 +151,14 @@ namespace TinyEngine {
 
 					if (!result.a->GetIsTrigger() && !result.b->GetIsTrigger())
 					{
-						Vector3 aVelocity = a.GetRigidbody() ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
-						Vector3 bVelocity = b.GetRigidbody() ? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
+						Rigidbody2D* rba = a.GetRigidbody();
+						Rigidbody2D* rbb = b.GetRigidbody();
 
-						Vector3 aPreviousPos = a.GetRigidbody() ? a.GetRigidbody()->GetPreviousPosition() : a.GetPosition();
-						Vector3 bPreviousPos = b.GetRigidbody() ? b.GetRigidbody()->GetPreviousPosition() : b.GetPosition();
+						Vector3 aVelocity = rba ? rba->GetVelocity() : Vector3::Zero;
+						Vector3 bVelocity = rbb ? rbb->GetVelocity() : Vector3::Zero;
+
+						Vector3 aPreviousPos = a.GetPreviousPosition();
+						Vector3 bPreviousPos = b.GetPreviousPosition();
 
 						Vector3 aCollidePos = aPreviousPos + aVelocity * t;
 						Vector3 bCollidePos = bPreviousPos + bVelocity * t;
@@ -170,8 +171,9 @@ namespace TinyEngine {
 
 						float velocityAlongNormalA = collisions[0].normal.Dot(aVelocity);
 						float velocityAlongNormalB = collisions[1].normal.Dot(bVelocity);
-						std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
-						std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
+						//std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
+					//	std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
+					//	std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
 						if (velocityAlongNormalA < 0)
 						{
 							Vector3 normalVelocity = collisions[0].normal * velocityAlongNormalA;
@@ -183,15 +185,15 @@ namespace TinyEngine {
 							bVelocity -= normalVelocity;
 						}
 
-						if (a.GetRigidbody())
+						if (rba)
 						{
-							a.SetPosition(a.GetPosition() + (aVelocity * (fixedDeltaTime - t)));
-							a.GetRigidbody()->SetVelocity(aVelocity);
+							rba->SetPosition(a.GetOwner().GetTransform().GetPosition() + (aVelocity * (fixedDeltaTime - t)));
+							rba->SetVelocity(aVelocity);
 						}
-						if (b.GetRigidbody())
+						if (rbb)
 						{
-							b.SetPosition(b.GetPosition() + (bVelocity * (fixedDeltaTime - t)));
-							b.GetRigidbody()->SetVelocity(bVelocity);
+							rbb->SetPosition(b.GetOwner().GetTransform().GetPosition() + (bVelocity * (fixedDeltaTime - t)));
+							rbb->SetVelocity(bVelocity);
 						}
 						collisionResults.erase(collisionResults.begin() + i);
 						std::vector<ContinuousCollision> recalculateResults;
@@ -230,7 +232,7 @@ namespace TinyEngine {
 				}
 			}
 
-			/*for (size_t i = 0; i < collisionResults.size(); i++)
+			for (size_t i = 0; i < collisionResults.size(); i++)
 			{
 				ContinuousCollision& result = collisionResults[i];
 				if (result.exitTime<0 || result.exitTime>fixedDeltaTime)
@@ -243,7 +245,7 @@ namespace TinyEngine {
 				{
 					ExitCallback(a, b);
 				}
-			}*/
+			}
 
 		}
 	

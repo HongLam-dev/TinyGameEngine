@@ -36,8 +36,7 @@ namespace TinyEngine {
 
 	void Rigidbody2D::ApplyVelocity(float fixedDeltaTime) {
 		Vector3 newPosition = transform->GetPosition() + velocity *fixedDeltaTime;
-		previousPostion = transform->GetPosition();
-		transform->SetPosition(newPosition);
+		SetPosition(newPosition);
 	}
 
 	void Rigidbody2D::AddImpulse(Vector3 force) {

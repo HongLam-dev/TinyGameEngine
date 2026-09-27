@@ -18,7 +18,7 @@ namespace TinyEngine {
 		void ApplyGravity();
 		void AddImpulse(Vector3 force);
 		void AddForce(Vector3 force);
-		void ApplyVelocity(float fixedDeltaTime);
+
 		void FixedUpdate(float fixedDeltaTime) override;
 		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		void SetGravityScale(float factor) { gravityScale = factor; }
@@ -35,6 +35,8 @@ namespace TinyEngine {
 
 		Vector3 GetPreviousPosition() { return previousPostion; }
 	private:
+		void ApplyVelocity(float fixedDeltaTime);
+
 		Transform* transform=nullptr;
 		Vector3 velocity{0,0,0};
 		Vector3 gravity{ 0.0f, 9.81f, 0.0f };
