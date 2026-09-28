@@ -14,13 +14,13 @@ namespace TinyEngine {
             Vector3 scale = { 1.0f, 1.0f, 1.0f },
             Vector3 rotation = {}
         ) : position(position), scale(scale), rotation(rotation), Component(owner) {};
-        void SetPosition(Vector3 newPosition);
+        virtual void SetPosition(Vector3 newPosition);
+        virtual Vector3 GetPosition() const { return position; }
         void SetScale(Vector3 newScale);
         void SetRotation(Vector3 newRotation);
-        Vector3 GetPosition() const {return position; }
         Vector3 GetScale() const { return scale; }
         Vector3 GetRotation() const { return rotation; }
-    private:
+    protected:
         Vector3 position{};
         Vector3 scale{ 1.0f, 1.0f, 1.0f };
         Vector3 rotation{};

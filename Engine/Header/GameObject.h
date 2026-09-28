@@ -105,7 +105,6 @@ namespace TinyEngine {
 		}
 	protected:
 		Transform* transform = nullptr;
-	private:
 		std::string name="";
 		bool destroyOnLoad = true;
 		bool destroyed = false;
