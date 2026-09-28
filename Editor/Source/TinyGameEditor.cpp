@@ -68,9 +68,8 @@ namespace TinyEditor {
             renderWindow->clear(sceneColor);
 
             workingWindow = WorkingWindow::Scene;
-            engine.Render(window, *editorCamera);
-            DrawObjectMarker(selectedObject);
 
+            scenePreview.Draw(window,engine,editingScene.get(), *editorCamera,selectedObject);
             hierarchy.Draw(*editingScene,selectedObject,*editorCamera);
             inspector.Draw(selectedObject);
 
@@ -85,43 +84,6 @@ namespace TinyEditor {
         }
 
         ImGui::SFML::Shutdown();
-    }
-
-    void TinyGameEditor::DrawObjectMarker(TinyEngine::GameObject*& selectedObject) {
-        if (selectedObject)
-        {
-            Vector3 position = selectedObject->GetTransform().GetPosition();
-            Vector2 screenPos = editorCamera->WorldToScreenPosition(position, window.GetSize());
-            DrawMarker({ screenPos.x,screenPos.y });
-        }
-    }
-    void TinyGameEditor::DrawMarker(sf::Vector2f pixelPosition)
-    {
-        sf::Texture* tex= TextureManager::Instance().GetTexture("Assets/Hand.png");
-        if (tex)
-        {
-            sf::Sprite marker(
-                *tex
-            );
-
-            sf::Vector2u size = marker.getTexture().getSize();
-
-            marker.setOrigin(
-                sf::Vector2f(
-                    (size.x / 2.0f),
-                    (size.y / 2.0f)
-                )
-            );
-
-            marker.setPosition(pixelPosition);
-
-            window.GetRenderWindow()->draw(marker);
-        }
-        else
-        {
-            std::cout << "No texture for marker found\n";
-        }
-
     }
 
    void TinyGameEditor::SaveScene() {

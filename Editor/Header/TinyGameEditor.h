@@ -6,17 +6,16 @@
 #include "InputHandler.h"
 #include "EngineSettings.h"
 #include "ComponentRegister.h"
-#include "FieldInfo.h"
 #include "TextureManager.h"
 #include "Component.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "ScenePreview.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <iostream>
 #include <functional>
-
 
 namespace TinyEditor {
 	class TinyGameEditor
@@ -29,8 +28,6 @@ namespace TinyEditor {
 		};
 		TinyGameEditor();
 		void Run();
-		void DrawMarker(sf::Vector2f  pixelPosition);
-		void DrawObjectMarker(TinyEngine::GameObject*& selectedObject);
 		void RegisterComponents();
 
         void CreateNewScene();
@@ -39,12 +36,14 @@ namespace TinyEditor {
 
 	private:
         TinyEngine::ComponentRegister& componentRegister = TinyEngine::ComponentRegister::Instance();
+		TinyEngine::Window window;
+		TinyEngine::TinyGameEngine engine;
+
         Hierarchy hierarchy;
+		ScenePreview scenePreview;
         Inspector inspector;
 
 		TinyEngine::Camera* editorCamera;
-		TinyEngine::Window window;
-		TinyEngine::TinyGameEngine engine;
 		std::unique_ptr< TinyEngine::Scene> editingScene;
 		WorkingWindow workingWindow = WorkingWindow::Other;
 
