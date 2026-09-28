@@ -24,12 +24,12 @@ namespace TinyEngine {
 		Vector3 GetSize() const { return size; }
 
 		void SetPosition(const Vector3& newPos);
-		Vector3 GetPosition() const;
+		Vector3 GetWorldCenter() const;
 
 		void SetOffset(Vector3 offset) { this->offset = offset; }
 		Vector3 GetOffset()const { return offset; }
 
-		Vector3 GetPreviousPosition();
+		Vector3 GetPreviousWorldCenter();
 
 		Bounds GetBounds() const;
 		Bounds GetBoundsAtPosition(Vector3 position) const;

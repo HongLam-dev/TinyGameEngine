@@ -58,6 +58,9 @@ namespace TinyEngine {
 	{
 		auto go = std::make_unique<UIObject>(engine);
 		UIObject& uiObject = *go;
+
+		go->SetName("NewUIObject");
+
 		sceneObjects.push_back(std::move(go));
 
 		return uiObject;

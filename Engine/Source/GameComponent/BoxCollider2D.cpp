@@ -15,15 +15,15 @@ namespace TinyEngine {
 		rb = GetOwner().GetComponent<Rigidbody2D>();
 	}
 
-	Vector3 BoxCollider2D::GetPreviousPosition()
+	Vector3 BoxCollider2D::GetPreviousWorldCenter()
 	{
 		if (rb)
-			return rb->GetPreviousPosition() + offset;
+			return rb->GetPreviousWorldCenter() + offset;
 		else
-			return GetPosition();
+			return GetWorldCenter();
 	}
 
-	Vector3 BoxCollider2D::GetPosition() const {
+	Vector3 BoxCollider2D::GetWorldCenter() const {
 		return GetTransform().GetPosition() + offset;
 	}
 	Bounds BoxCollider2D::GetBounds() const {

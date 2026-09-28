@@ -41,8 +41,8 @@ namespace TinyEngine {
 		{
 			bool overlapped = false;
 
-			Vector3 aPreviousPos = a.GetPreviousPosition();
-			Vector3 bPreviousPos = b.GetPreviousPosition();
+			Vector3 aPreviousPos = a.GetPreviousWorldCenter();
+			Vector3 bPreviousPos = b.GetPreviousWorldCenter();
 
 			Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
 			Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
@@ -157,8 +157,8 @@ namespace TinyEngine {
 						Vector3 aVelocity = rba ? rba->GetVelocity() : Vector3::Zero;
 						Vector3 bVelocity = rbb ? rbb->GetVelocity() : Vector3::Zero;
 
-						Vector3 aPreviousPos = a.GetPreviousPosition();
-						Vector3 bPreviousPos = b.GetPreviousPosition();
+						Vector3 aPreviousPos = a.GetPreviousWorldCenter();
+						Vector3 bPreviousPos = b.GetPreviousWorldCenter();
 
 						Vector3 aCollidePos = aPreviousPos + aVelocity * t;
 						Vector3 bCollidePos = bPreviousPos + bVelocity * t;
@@ -266,7 +266,7 @@ namespace TinyEngine {
 
 	const std::array<Collision, 2>& CollisionManager::CalculateCollisionAndResolveOverlap(BoxCollider2D& a, BoxCollider2D& b) {
 
-		Vector3 direction =a.GetPosition() - b.GetPosition();
+		Vector3 direction =a.GetWorldCenter() - b.GetWorldCenter();
 		Vector3 contactPoint=Vector3::Zero;
 		Vector3 separation=Vector3::Zero;
 		Bounds ba = a.GetBounds();
@@ -440,11 +440,11 @@ namespace TinyEngine {
 		}
 
 		a.SetPosition(
-			a.GetPosition() + correctionVector * aRatio
+			a.GetWorldCenter() + correctionVector * aRatio
 		);
 
 		b.SetPosition(
-			b.GetPosition() - correctionVector * bRatio
+			b.GetWorldCenter() - correctionVector * bRatio
 		);
 	}
 

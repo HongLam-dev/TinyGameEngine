@@ -33,7 +33,7 @@ namespace TinyEngine {
 		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
 		CollisionDetectionMode GetCollisionDetectMode() const { return collisionDetectMode; }
 
-		Vector3 GetPreviousPosition() { return previousPostion; }
+		Vector3 GetPreviousWorldCenter() { return previousPostion; }
 	private:
 		void ApplyVelocity(float fixedDeltaTime);
 

@@ -5,6 +5,7 @@
 #include "Animator.h"
 #include "MakeField.h"
 #include "Image.h"
+#include "UITransform.h"
 #include "EnumStringMap.h"
 
 namespace TinyEngine{
@@ -170,6 +171,40 @@ namespace TinyEngine{
                }
            }
        );
+
+
+       componentRegister.RegisterComponent<UITransform>(
+           {
+               "UI Transform",
+               [](GameObject& gameObject)->Component&
+               {
+                   return gameObject.AddComponent<UITransform>();
+               },
+               {
+                   MakeField<UITransform, Vector3>(
+                       "Position",
+                       FieldType::Vector3,
+                       &UITransform::GetPosition,
+                       &UITransform::SetPosition
+                   ),
+
+                   MakeField<Transform, Vector3>(
+                       "Rotation",
+                       FieldType::Vector3,
+                       &UITransform::GetRotation,
+                       &UITransform::SetRotation
+                   ),
+
+                   MakeField<UITransform, Vector3>(
+                       "Scale",
+                       FieldType::Vector3,
+                       &UITransform::GetScale,
+                       &UITransform::SetScale
+                   )
+               }
+           }
+       );
+
     }
 
     void EngineComponentRegister::RegisterEngineEnums() {
