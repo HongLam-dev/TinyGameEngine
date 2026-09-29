@@ -4,9 +4,9 @@ namespace TinyEngine{
 
     struct Vector3
     {
-        float x;
-        float y;
-        float z;
+        float x=0;
+        float y=0;
+        float z=0;
 
         static const Vector3 Zero;
         static const Vector3 One;

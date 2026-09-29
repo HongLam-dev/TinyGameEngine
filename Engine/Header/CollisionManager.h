@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Collision.h"
 #include "BoxCollider2D.h"
 #include "RigidBody2D.h"
 #include "Vector3.h"
@@ -41,12 +42,21 @@ namespace TinyEngine{
         {
             float enterTime;
             float exitTime;
-            bool hasCollision;;
             BoxCollider2D* a;
             BoxCollider2D* b;
-            ContinuousCollision(float enter,float exit ,bool hasCollision,BoxCollider2D& a, BoxCollider2D& b)
-                :enterTime(enter), exitTime(exit),hasCollision(hasCollision), a(&a), b(&b)
-            {}
+            bool hasCollision;
+            Collision collisionA;
+            Collision collisionB;
+            ContinuousCollision(float enter,
+                float exit ,
+                bool hasCollision,
+                Collision collisionA, 
+                Collision collisionB)
+                :enterTime(enter), exitTime(exit),hasCollision(hasCollision),collisionA(collisionA), collisionB(collisionB)
+            {
+                a = collisionB.other;
+                b = collisionA.other;
+            }
         };
 
         const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b);

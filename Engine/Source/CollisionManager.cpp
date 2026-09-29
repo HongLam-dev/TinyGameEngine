@@ -25,8 +25,12 @@ namespace TinyEngine {
 		}
 	}
 
+
 	CollisionManager::ContinuousCollision CollisionManager::ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime)
 	{
+		Vector3 normal;
+		Vector3 contactPoint;
+
 		Vector3 aVelocity = a.GetRigidbody() ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
 		Vector3 bVelocity = b.GetRigidbody() ? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
 
@@ -34,42 +38,27 @@ namespace TinyEngine {
 		float tExit = fixedDeltaTime + 1;
 
 		Vector3 relativeVelocity = aVelocity - bVelocity;
-		bool overlapX = CheckOverlapX(a.GetBounds(), b.GetBounds());
-		bool overlapY = CheckOverlapY(a.GetBounds(), b.GetBounds());
 
-		if (relativeVelocity != Vector3::Zero || overlapX|| overlapY)
+		Vector3 aPreviousPos = a.GetPreviousWorldCenter();
+		Vector3 bPreviousPos = b.GetPreviousWorldCenter();
+		Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
+		Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
+
+		bool overlapX = CheckOverlapX(aPreviousBounds, bPreviousBounds);
+		bool overlapY = CheckOverlapY(aPreviousBounds, bPreviousBounds);
+
+		if (relativeVelocity.x !=0&& relativeVelocity.y!=0)
 		{
-			bool overlapped = false;
-
-			Vector3 aPreviousPos = a.GetPreviousWorldCenter();
-			Vector3 bPreviousPos = b.GetPreviousWorldCenter();
-
-			Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
-			Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
-
 			float tEnterX = tEnter;
 			float tExitX = tExit;
-			float tEnterY= tEnter;
-			float tExitY= tExit;
+			float tEnterY = tEnter;
+			float tExitY = tExit;
 
-			if (relativeVelocity.x != 0)
-			{
-				tEnterX = (bPreviousBounds.min.x - aPreviousBounds.max.x) / relativeVelocity.x;
-				tExitX = (bPreviousBounds.max.x - aPreviousBounds.min.x) / relativeVelocity.x;
-			}
-			else {
-					tEnterX = overlapX? 0 : fixedDeltaTime+1;
-			}
-
-			if (relativeVelocity.y != 0)
-			{
-				tEnterY = (bPreviousBounds.min.y - aPreviousBounds.max.y) / relativeVelocity.y;
-				tExitY= (bPreviousBounds.max.y - aPreviousBounds.min.y) / relativeVelocity.y;
-			}
-			else {
-				tEnterY = overlapY ? 0 : fixedDeltaTime + 1;
-			}
-
+			tEnterX = (bPreviousBounds.min.x - aPreviousBounds.max.x) / relativeVelocity.x;
+			tExitX = (bPreviousBounds.max.x - aPreviousBounds.min.x) / relativeVelocity.x;
+			tEnterY = (bPreviousBounds.min.y - aPreviousBounds.max.y) / relativeVelocity.y;
+			tExitY = (bPreviousBounds.max.y - aPreviousBounds.min.y) / relativeVelocity.y;
+			
 			if (relativeVelocity.x < 0)
 			{
 				float temp = tExitX;
@@ -83,20 +72,67 @@ namespace TinyEngine {
 				tExitY = tEnterY;
 				tEnterY = temp;
 			}
-			if (tEnterX >= 0 && tEnterY >= 0)
+
+			if (tEnterX > tEnterY)
 			{
-				tEnter = tEnterX > tEnterY ? tEnterX : tEnterY;
+				tEnter = tEnterX;
+				normal.x = relativeVelocity.x > 0? -1:1;
 			}
 			else {
-				tEnter= fixedDeltaTime + 1;
+				tEnter = tEnterY;
+				normal.y = relativeVelocity.y > 0 ? -1 : 1;
 			}
-			tExit = tExitX < tExitY ? tExitX : tExitY;
-		}
-		bool hasCollision = false;
-		if (tExit > 0 && tEnter < fixedDeltaTime && tEnter >= 0 && tEnter < tExit)
-			hasCollision = true;
 
-		return ContinuousCollision(tEnter,tExit,hasCollision,a,b);
+			tExit = std::min(tExitX, tExitY);
+		}
+		else {
+			if (relativeVelocity.x == 0 && relativeVelocity.y!=0)
+			{
+				if (overlapX)
+				{
+					tEnter= (bPreviousBounds.min.y - aPreviousBounds.max.y) / relativeVelocity.y;
+					tExit = (bPreviousBounds.max.y - aPreviousBounds.min.y) / relativeVelocity.y;
+
+					if (relativeVelocity.y < 0)
+					{
+						float temp = tExit;
+						tExit = tEnter;
+						tEnter = temp;
+						normal.y = 1;
+					}
+					else {
+						normal.y = -1;
+					}
+				}
+			}
+			else if (relativeVelocity.y == 0 && relativeVelocity.x != 0)
+			{
+				if (overlapY)
+				{
+					tEnter = (bPreviousBounds.min.x - aPreviousBounds.max.x) / relativeVelocity.x;
+					tExit = (bPreviousBounds.max.x - aPreviousBounds.min.x) / relativeVelocity.x;
+					if (relativeVelocity.x < 0)
+					{
+						float temp = tExit;
+						tExit = tEnter;
+						tEnter = temp;
+						normal.x = 1;
+					}
+					else {
+						normal.x = -1;
+					}
+				}
+			}
+		}
+
+		bool hasCollision = false;
+		if (tEnter <= tExit && tExit > 0 && tEnter < fixedDeltaTime)
+		{
+			hasCollision = true;
+		}
+		Collision collisionA(b, normal, contactPoint, relativeVelocity);
+		Collision collisionB(a, normal * -1, contactPoint, relativeVelocity * -1);
+		return { tEnter, tExit, hasCollision, collisionA, collisionB };
 	}
 
 	void CollisionManager::CheckCollision(float fixedDeltaTime)
@@ -121,13 +157,14 @@ namespace TinyEngine {
 			float t = 0;
 			int trytime = 0;
 			bool allResolved = false;
-			while (t <= fixedDeltaTime&&!collisionResults.empty()&&!allResolved)
+			while (!collisionResults.empty()&&!allResolved)
 			{
 				if (trytime > 100)
 				{
 					std::cout << "try time exceeded \n";
 					break;
 				}
+
 				trytime++;
 
 				std::sort(collisionResults.begin(), collisionResults.end(),
@@ -138,10 +175,15 @@ namespace TinyEngine {
 				for (size_t i=0 ; i<collisionResults.size();i++ )
 				{
 					ContinuousCollision& result = collisionResults[i];
-					if (!result.hasCollision)
+					if (!result.hasCollision||result.enterTime<t)
 					{
 						if(result.enterTime > fixedDeltaTime)
 							t = result.enterTime;
+						if (i == collisionResults.size() - 1)
+						{
+							allResolved = true;
+							break;
+						}
 						continue;
 					}
 			//		std::cout << result.enterTime << '\n';
@@ -166,22 +208,21 @@ namespace TinyEngine {
 						a.SetPosition(aCollidePos);
 						b.SetPosition(bCollidePos);
 
-						std::array<Collision, 2> collisions = CalculateCollisionAndResolveOverlap(a, b);
-						CollisionCallback(a, b, collisions[0], collisions[1]);
+						CollisionCallback(a, b, result.collisionA, result.collisionB);
 
-						float velocityAlongNormalA = collisions[0].normal.Dot(aVelocity);
-						float velocityAlongNormalB = collisions[1].normal.Dot(bVelocity);
+						float velocityAlongNormalA = result.collisionA.normal.Dot(aVelocity);
+						float velocityAlongNormalB = result.collisionB.normal.Dot(bVelocity);
 						//std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
 					//	std::cout << "normal x:" << collisions[0].normal.x << " y: " << collisions[0].normal.y << '\n';
 					//	std::cout << "velocity x:" << aVelocity.x << " y: " << aVelocity.y << '\n';
 						if (velocityAlongNormalA < 0)
 						{
-							Vector3 normalVelocity = collisions[0].normal * velocityAlongNormalA;
+							Vector3 normalVelocity = result.collisionA.normal * velocityAlongNormalA;
 							aVelocity -= normalVelocity;
 						}
 						if (velocityAlongNormalB < 0)
 						{
-							Vector3 normalVelocity = collisions[1].normal * velocityAlongNormalB;
+							Vector3 normalVelocity = result.collisionB.normal * velocityAlongNormalB;
 							bVelocity -= normalVelocity;
 						}
 
@@ -227,7 +268,7 @@ namespace TinyEngine {
 					else {
 						TriggerCallback(a,b);
 					}
-					if (i == collisionResults.size() - 1)
+					if (i == collisionResults.size() - 1||t>fixedDeltaTime)
 						allResolved = true;
 				}
 			}
@@ -267,8 +308,8 @@ namespace TinyEngine {
 	const std::array<Collision, 2>& CollisionManager::CalculateCollisionAndResolveOverlap(BoxCollider2D& a, BoxCollider2D& b) {
 
 		Vector3 direction =a.GetWorldCenter() - b.GetWorldCenter();
-		Vector3 contactPoint=Vector3::Zero;
-		Vector3 separation=Vector3::Zero;
+		Vector3 contactPoint;
+		Vector3 separation;
 		Bounds ba = a.GetBounds();
 		Bounds bb = b.GetBounds();
 		if (direction.x > 0)
@@ -292,40 +333,15 @@ namespace TinyEngine {
 			separation.y = bb.min.y - ba.max.y;
 			contactPoint.y = ba.min.y + ((separation.y) / 2);
 		}
-		constexpr float epsilon = 0.00001f;
-		if (std::abs(separation.x) < epsilon)
-			separation.x = 0.0f;
 
-		if (std::abs(separation.y) < epsilon)
-			separation.y = 0.0f;
-
-		Vector3 normal = Vector3::Zero;
-		if (separation.x != 0 && separation.y != 0)
-		{
-			Vector3 correctionVector = separation;
-			if (std::abs(separation.x) < std::abs(separation.y))
-				correctionVector.y = 0;
-			else
-				correctionVector.x = 0;
-			float magnitude = correctionVector.Magnitude();
-			ResolveCollision(a, b, correctionVector);
-			normal = correctionVector.Normalize();
-		}
-		else {
-			if (separation.y == 0)
-			{
-				if (direction.y > 0)
-					normal = { 0,1, 0 };
-				else
-					normal = { 0,-1, 0 };
-			}
-			else if(separation.x == 0){
-				if (direction.x > 0)
-					normal = { 1,0, 0 };
-				else
-					normal = { -1,0, 0 };
-			}
-		}
+		Vector3 correctionVector = separation;
+		if (std::abs(separation.x) < std::abs(separation.y))
+			correctionVector.y = 0;
+		else
+			correctionVector.x = 0;
+		float magnitude = correctionVector.Magnitude();
+		ResolveCollision(a, b, correctionVector);
+		Vector3 normal = correctionVector.Normalize();
 
 		Vector3 aVelocity = a.GetRigidbody() ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
 		Vector3 bVelocity = b.GetRigidbody() ? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
@@ -334,7 +350,6 @@ namespace TinyEngine {
 
 		Collision aCollision( b, normal , contactPoint,relativeVeloctiy );
 		Collision bCollision(a, normal * (-1), contactPoint,relativeVeloctiy* (-1) );
-
 
 		return { aCollision,bCollision };
 
