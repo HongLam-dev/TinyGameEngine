@@ -36,6 +36,7 @@ namespace TinyEngine {
 		Vector3 colliderPosition = position + offset;
 		float width = size.x * scale.x;
 		float height = size.y * scale.y;
+		bounds.center = colliderPosition;
 		bounds.max = Vector3(colliderPosition.x + width / 2, colliderPosition.y + height / 2, 0);
 		bounds.min = Vector3(colliderPosition.x - width / 2, colliderPosition.y - height / 2, 0);
 		return bounds;

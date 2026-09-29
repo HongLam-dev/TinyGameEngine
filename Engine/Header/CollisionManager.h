@@ -62,6 +62,7 @@ namespace TinyEngine{
         const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b);
         bool CheckOverlapX(const Bounds& a, const Bounds& b);
         bool CheckOverlapY(const Bounds& a, const Bounds& b);
+        Vector3 CalculateContactPoint(const Bounds& a, const Bounds& b);
         ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);
 		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
         void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);

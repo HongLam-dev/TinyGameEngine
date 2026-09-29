@@ -208,6 +208,10 @@ namespace TinyEngine {
 						a.SetPosition(aCollidePos);
 						b.SetPosition(bCollidePos);
 
+						Vector3 contactPoint = CalculateContactPoint(a.GetBoundsAtPosition(aCollidePos),b.GetBoundsAtPosition(bCollidePos));
+						result.collisionA.contactPoint = contactPoint;
+						result.collisionB.contactPoint = contactPoint;
+
 						CollisionCallback(a, b, result.collisionA, result.collisionB);
 
 						float velocityAlongNormalA = result.collisionA.normal.Dot(aVelocity);
@@ -308,30 +312,26 @@ namespace TinyEngine {
 	const std::array<Collision, 2>& CollisionManager::CalculateCollisionAndResolveOverlap(BoxCollider2D& a, BoxCollider2D& b) {
 
 		Vector3 direction =a.GetWorldCenter() - b.GetWorldCenter();
-		Vector3 contactPoint;
 		Vector3 separation;
 		Bounds ba = a.GetBounds();
 		Bounds bb = b.GetBounds();
+		Vector3 contactPoint = CalculateContactPoint(ba,bb);
 		if (direction.x > 0)
 		{
 			separation.x = bb.max.x - ba.min.x;
-			contactPoint.x = ba.min.x + ((separation.x) / 2);
 		}
 		else
 		{
 			separation.x = bb.min.x - ba.max.x;
-			contactPoint.x = ba.min.x + ((separation.x) / 2);
 		}
 
 		if (direction.y > 0)
 		{
 			separation.y = bb.max.y - ba.min.y;
-			contactPoint.y = ba.min.y + ((separation.y) / 2);
 		}
 		else
 		{
 			separation.y = bb.min.y - ba.max.y;
-			contactPoint.y = ba.min.y + ((separation.y) / 2);
 		}
 
 		Vector3 correctionVector = separation;
@@ -379,6 +379,7 @@ namespace TinyEngine {
 		}
 
 	}
+
 
 	void CollisionManager::CollisionCallback(BoxCollider2D& a, BoxCollider2D& b, const Collision& aCollision, const Collision& bCollision) {
 		if (previousPairs.contains({ &a, &b }))
@@ -475,5 +476,33 @@ namespace TinyEngine {
 			a.min.y <= b.max.y &&
 			a.max.y >= b.min.y;
 		return overlapY;
+	}
+
+	Vector3 CollisionManager::CalculateContactPoint(const Bounds& a, const Bounds& b) {
+		Vector3 direction = a.center - b.center;
+		Vector3 contactPoint;
+		Vector3 separation;
+		if (direction.x > 0)
+		{
+			separation.x = b.max.x - a.min.x;
+			contactPoint.x = a.min.x + ((separation.x) / 2);
+		}
+		else
+		{
+			separation.x = b.min.x - a.max.x;
+			contactPoint.x = a.min.x + ((separation.x) / 2);
+		}
+
+		if (direction.y > 0)
+		{
+			separation.y = b.max.y - a.min.y;
+			contactPoint.y = a.min.y + ((separation.y) / 2);
+		}
+		else
+		{
+			separation.y = b.min.y - a.max.y;
+			contactPoint.y = a.min.y + ((separation.y) / 2);
+		}
+		return contactPoint;
 	}
 }
