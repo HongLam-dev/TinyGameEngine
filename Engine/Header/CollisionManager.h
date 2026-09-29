@@ -42,6 +42,7 @@ namespace TinyEngine{
         {
             float enterTime;
             float exitTime;
+            float t;
             BoxCollider2D* a;
             BoxCollider2D* b;
             bool hasCollision;
@@ -49,10 +50,11 @@ namespace TinyEngine{
             Collision collisionB;
             ContinuousCollision(float enter,
                 float exit ,
+                float t,
                 bool hasCollision,
                 Collision collisionA, 
                 Collision collisionB)
-                :enterTime(enter), exitTime(exit),hasCollision(hasCollision),collisionA(collisionA), collisionB(collisionB)
+                :enterTime(enter), exitTime(exit),t(t), hasCollision(hasCollision), collisionA(collisionA), collisionB(collisionB)
             {
                 a = collisionB.other;
                 b = collisionA.other;
@@ -60,10 +62,11 @@ namespace TinyEngine{
         };
 
         const std::array<Collision,2>& CalculateCollisionAndResolveOverlap (BoxCollider2D& a,BoxCollider2D& b);
-        bool CheckOverlapX(const Bounds& a, const Bounds& b);
-        bool CheckOverlapY(const Bounds& a, const Bounds& b);
+        bool CheckOverlapX(const Bounds& a, const Bounds& b, bool contactAsOverlap);
+        bool CheckOverlapY(const Bounds& a, const Bounds& b, bool contactAsOverlap);
         Vector3 CalculateContactPoint(const Bounds& a, const Bounds& b);
-        ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime);
+        ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime, float t);
+        void ResolveContiniousRigidCollision(ContinuousCollision& result, float fixedDeltaTime);
 		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
         void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);
         void CollisionCallback(BoxCollider2D& a, BoxCollider2D& b,const Collision& aCollision, const Collision& bCollision);

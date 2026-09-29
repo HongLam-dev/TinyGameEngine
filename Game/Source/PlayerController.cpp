@@ -42,7 +42,7 @@ namespace TinyGame {
 		{
 			rb->AddForce({ 0,-200,0 });
 		}
-		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
+		else if (Input::Get().OnKeyDown(sf::Keyboard::Key::L))
 		{
 			rb->AddForce({ 200,0,0 });
 		}
@@ -83,13 +83,13 @@ namespace TinyGame {
 	}
 
 	void PlayerController::OnCollisionEnter(const Collision& collision) {
-		std::cout << "Enter \n";
+		std::cout << collision.other->GetOwner().GetName() << " Enter \n";
 	}
 	void PlayerController::OnCollisionStay(const Collision& collision) {
-		std::cout << "Stay \n";
+		std::cout << collision.other->GetOwner().GetName()<< " Stay \n";
 	}
 	void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-		std::cout << "Exit \n";
+		std::cout <<other.GetOwner().GetName() << " Exit \n";
 	}
 
 	void PlayerController::OnTriggerEnter(BoxCollider2D& other) {

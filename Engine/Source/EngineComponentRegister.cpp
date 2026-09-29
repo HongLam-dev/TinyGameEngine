@@ -89,6 +89,12 @@ namespace TinyEngine{
                        FieldType::Vector3,
                        &BoxCollider2D::GetSize,
                        &BoxCollider2D::SetSize
+                   ),
+                        MakeField<BoxCollider2D, bool>(
+                       "Is Trigger",
+                       FieldType::Bool,
+                       &BoxCollider2D::IsTrigger,
+                       &BoxCollider2D::SetIsTrigger
                    )
                }
            }

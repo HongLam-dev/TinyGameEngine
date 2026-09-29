@@ -37,7 +37,7 @@ namespace TinyEngine {
 		void SetIsTrigger(bool isTrigger) {
 			this->isTrigger = isTrigger;
 		}
-		bool GetIsTrigger() { return isTrigger; };
+		bool IsTrigger() const { return isTrigger; };
 		void OnDestroy() override;
 	private:
 		Vector3 size{1,1,1};
