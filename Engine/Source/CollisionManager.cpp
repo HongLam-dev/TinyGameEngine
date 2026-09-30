@@ -126,11 +126,9 @@ namespace TinyEngine {
 		}
 
 		bool hasCollision = false;
-		if (tEnter <= tExit && tExit > 0 && tEnter < fixedDeltaTime&&tEnter>=0)
+		if (tEnter <= tExit && tExit > 0 && tEnter < fixedDeltaTime)
 		{
 			tEnter += t;
-			if (tEnter < t)
-				tEnter = t;
 			hasCollision = true;
 		}
 		Collision collisionA(b, normal, contactPoint, relativeVelocity);
@@ -179,7 +177,7 @@ namespace TinyEngine {
 				{
 					bool recalculated = false;
 					ContinuousCollision& result = collisionResults[i];
-					if (!result.hasCollision||result.enterTime<t)
+					if (!result.hasCollision || result.enterTime < t)
 					{
 						ExitCallback(*result.a, *result.b);		
 						if (i == collisionResults.size() - 1|| result.enterTime > fixedDeltaTime)
