@@ -145,8 +145,12 @@ namespace TinyEngine {
 			{
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
-				CollisionDetectionMode aMode = a.GetRigidbody() ? a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-				CollisionDetectionMode bMode = b.GetRigidbody() ? b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+
+				CollisionDetectionMode aMode = a.GetRigidbody() ?
+					a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+				CollisionDetectionMode bMode = b.GetRigidbody() ?
+					b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+
 				if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
 					continue;
 				collisionResults.push_back(ContinuousCollisionDetect(a, b, fixedDeltaTime,0));
@@ -173,83 +177,121 @@ namespace TinyEngine {
 					{
 						return a.enterTime < b.enterTime;
 					});
+
 				for (size_t i=0 ; i<collisionResults.size();i++ )
 				{
-					bool recalculated = false;
-					ContinuousCollision& result = collisionResults[i];
-					if (!result.hasCollision || result.enterTime < t)
+					float nextEnterTime = fixedDeltaTime;
+
+					for (size_t j = 0; j < collisionResults.size(); j++)
 					{
-						ExitCallback(*result.a, *result.b);		
-						if (i == collisionResults.size() - 1|| result.enterTime > fixedDeltaTime)
+						ContinuousCollision& result = collisionResults[j];
+						if (result.hasCollision && result.enterTime > t)
+						{
+							nextEnterTime = result.enterTime;
+							break;
+						}
+					}
+					for (size_t j = 0; j < collisionResults.size(); j++)
+					{
+						ContinuousCollision& result = collisionResults[j];
+						if (result.a->IsTrigger() || result.b->IsTrigger())
+						{
+							if (result.exitTime > t && result.exitTime <= nextEnterTime)
+							{
+								ExitCallback(*result.a, *result.b);
+							}
+						}
+					}
+
+					ContinuousCollision& result = collisionResults[i];
+					if (result.hasCollision )
+					{
+						if (result.enterTime >= t)
+						{
+							t = result.enterTime;
+							BoxCollider2D& a = *result.a;
+							BoxCollider2D& b = *result.b;
+
+							if (!a.IsTrigger() && !b.IsTrigger())
+							{
+
+								ResolveContiniousRigidCollision(result, fixedDeltaTime);
+								collisionResults.erase(collisionResults.begin() + i);
+								std::vector<ContinuousCollision> recalculateResults;
+								for (auto col = collisionResults.begin();
+									col != collisionResults.end(); )
+								{
+									if (col->a == &a || col->a == &b ||
+										col->b == &a || col->b == &b)
+									{
+										auto* colliderA = col->a;
+										auto* colliderB = col->b;
+										col = collisionResults.erase(col);
+										auto newCollision =
+											ContinuousCollisionDetect(
+												*colliderA,
+												*colliderB,
+												fixedDeltaTime,
+												t);
+
+										recalculateResults.push_back(newCollision);
+
+									}
+									else
+									{
+										++col;
+									}
+								}
+								collisionResults.insert(collisionResults.end(), recalculateResults.begin(), recalculateResults.end());
+								break;
+							}
+							else {
+								TriggerCallback(a, b);
+							}
+							if (i == collisionResults.size() - 1 || t > fixedDeltaTime)
+							{
+								allResolved = true;
+							}
+						}
+						else {
+							if (result.a->IsTrigger() || result.b->IsTrigger())
+							{
+								if (CheckOverlapX(result.a->GetBounds(), result.b->GetBounds(), false)
+								&& CheckOverlapY(result.a->GetBounds(), result.b->GetBounds(), false))
+								{
+									TriggerCallback(*result.a, *result.b);
+								}
+							}
+						}
+					}
+					else {
+						if (!result.hasCollision)
+						{
+							if (!result.a->IsTrigger() && !result.b->IsTrigger())
+							{
+								if (!CheckOverlapX(result.a->GetBounds(), result.b->GetBounds(), false)
+									|| !CheckOverlapY(result.a->GetBounds(), result.b->GetBounds(), false))
+								{
+									ExitCallback(*result.a, *result.b);
+								}
+							}
+						}
+						if (i == collisionResults.size() - 1 || result.enterTime > fixedDeltaTime)
 						{
 							t = result.enterTime;
 							allResolved = true;
 							break;
 						}
 						continue;
-					}
 
-				/**	for (size_t j = 0; j < collisionResults.size(); j++)
-					{
-						if (collisionResults[j].a->IsTrigger() || collisionResults[j].b->IsTrigger())
-						{
-							if (collisionResults[j].exitTime >= t && collisionResults[j].exitTime < result.enterTime)
-							{
-								ExitCallback(*collisionResults[j].a, *collisionResults[j].b);
-							}
-						}
-					}
-					*/
-					t = result.enterTime;
-					BoxCollider2D& a = *result.a;
-					BoxCollider2D& b = *result.b;
-
-					if (!a.IsTrigger() && !b.IsTrigger())
-					{
-						
-						ResolveContiniousRigidCollision(result,fixedDeltaTime);
-						collisionResults.erase(collisionResults.begin() + i);
-						std::vector<ContinuousCollision> recalculateResults;
-						for (auto col = collisionResults.begin();
-							col != collisionResults.end(); )
-						{
-							if (col->a == &a || col->a == &b ||
-								col->b == &a || col->b == &b)
-							{
-								auto* colliderA = col->a;
-								auto* colliderB = col->b;
-								col = collisionResults.erase(col);
-								auto newCollision =
-									ContinuousCollisionDetect(
-										*colliderA,
-										*colliderB,
-										fixedDeltaTime,
-									t);
-
-								recalculateResults.push_back(newCollision);
-
-							}
-							else
-							{
-								++col;
-							}
-						}
-						collisionResults.insert(collisionResults.end(), recalculateResults.begin(), recalculateResults.end());
-						break;
-					}
-					else {
-						TriggerCallback(a,b);
-					}
-					if (i == collisionResults.size() - 1||t>fixedDeltaTime)
-					{
-						allResolved = true;
 					}
 				}
+			
 			}	
 
 		}
 	
-	/*	for (size_t i = 0; i < colliders.size(); i++)
+		for (size_t i = 0; i < colliders.size(); i++)
 		{
 			for (size_t j = i + 1; j < colliders.size(); j++)
 			{
@@ -264,7 +306,7 @@ namespace TinyEngine {
 
 				DiscreteCollisionDetect(a, b);
 			}
-		}*/
+		}
 		
 	}
 
@@ -319,7 +361,7 @@ namespace TinyEngine {
 		}
 	}
 
-	const std::array<Collision, 2>& CollisionManager::CalculateCollisionAndResolveOverlap(BoxCollider2D& a, BoxCollider2D& b) {
+	const std::array<Collision, 2>& CollisionManager::CalculateCollision(BoxCollider2D& a, BoxCollider2D& b, bool resolveOverlap) {
 
 		Vector3 direction =a.GetWorldCenter() - b.GetWorldCenter();
 		Vector3 separation;
@@ -350,7 +392,10 @@ namespace TinyEngine {
 		else
 			correctionVector.x = 0;
 		float magnitude = correctionVector.Magnitude();
-		ResolveCollision(a, b, correctionVector);
+
+		if(resolveOverlap)
+			ResolveCollision(a, b, correctionVector);
+
 		Vector3 normal = correctionVector.Normalize();
 
 		Vector3 aVelocity = a.GetRigidbody() ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
@@ -376,7 +421,7 @@ namespace TinyEngine {
 		{	
 			if (!a.IsTrigger() && !a.IsTrigger())
 			{
-				std::array<Collision, 2> collisions = CalculateCollisionAndResolveOverlap(a, b);
+				std::array<Collision, 2> collisions = CalculateCollision(a, b,true);
 				CollisionCallback(a, b, collisions[0], collisions[1]);
 			}
 			else {
