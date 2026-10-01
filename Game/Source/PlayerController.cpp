@@ -44,7 +44,7 @@ namespace TinyGame {
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
 		{
-			rb->AddForce({ 20000,0,0 });
+			rb->AddForce({ 200,0,0 });
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::J))
 		{

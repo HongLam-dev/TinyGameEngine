@@ -194,9 +194,12 @@ namespace TGModule {
 		std::string sceneName,
 		TinyEngine::Scene& emptyScene)
 	{
-		std::filesystem::path path =
-			std::filesystem::path("Scenes") /
-			(sceneName + ".tge");
+		std::filesystem::path path = std::filesystem::path("Scenes") / sceneName;
+
+		if (path.extension() != ".tge")
+		{
+			path += ".tge";
+		}
 
 		std::ifstream file(path);
 

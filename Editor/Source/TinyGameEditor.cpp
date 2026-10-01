@@ -31,7 +31,11 @@ namespace TinyEditor {
 
     void TinyGameEditor::Run() {
         sf::RenderWindow* renderWindow = window.GetRenderWindow();
-        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();}, [this](std::string sceneName) { LoadScene(sceneName); });
+        TinyEditor::InputHandler inputHandler(window, [this]() { SaveScene();} );
+
+        projectWindow.SetLoadSceneCallback([this](std::string sceneName) {
+            LoadScene(sceneName);
+            });
         if (!LoadScene("Example Scene"))
         {
             CreateNewScene();
@@ -72,6 +76,7 @@ namespace TinyEditor {
             scenePreview.Draw(window,engine,editingScene.get(), *editorCamera,selectedObject);
             hierarchy.Draw(*editingScene,selectedObject,*editorCamera);
             inspector.Draw(selectedObject);
+            projectWindow.Draw();
 
             ImGui::SFML::Render(*renderWindow);
 
@@ -95,11 +100,10 @@ namespace TinyEditor {
    }
 
    bool TinyGameEditor::LoadScene(std::string sceneName) {
-       auto emptyScene = std::make_unique<Scene>(engine);
+       editingScene = std::make_unique<Scene>(engine);
 
-       if (TGModule::SceneSerializer::Instance().LoadScene(sceneName, *emptyScene))
+       if (TGModule::SceneSerializer::Instance().LoadScene(sceneName, *editingScene))
        {
-           editingScene = std::move(emptyScene);
            selectedObject = nullptr;
            engine.ActivateScene(*editingScene);
            return true;

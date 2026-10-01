@@ -101,12 +101,16 @@ target_link_libraries(TinyGameApp PRIVATE
 )
 
 add_executable(TinyGameEditor
-    "Editor/main.cpp"
-    "Editor/Header/InputHandler.h"
-    "Editor/Source/InputHandler.cpp"
-    "Editor/Header/TinyGameEditor.h"
-    "Editor/Source/TinyGameEditor.cpp"
-  "Editor/Header/Hierarchy.h" "Editor/Source/Hierarchy.cpp" "Editor/Header/Inspector.h" "Editor/Source/Inspector.cpp" "Editor/Header/ScenePreview.h" "Editor/Source/ScenePreview.cpp")
+"Editor/main.cpp"
+"Editor/Header/InputHandler.h"
+"Editor/Source/InputHandler.cpp"
+"Editor/Header/TinyGameEditor.h"
+"Editor/Source/TinyGameEditor.cpp"
+"Editor/Header/Hierarchy.h" "Editor/Source/Hierarchy.cpp" 
+"Editor/Header/Inspector.h" "Editor/Source/Inspector.cpp" 
+"Editor/Header/ScenePreview.h" "Editor/Source/ScenePreview.cpp" 
+"Editor/Source/ProjectWindow.cpp"
+"Editor/Header/ProjectWindow.h")
 find_package(ImGui-SFML CONFIG REQUIRED)
 
 target_include_directories(TinyGameEditor PRIVATE

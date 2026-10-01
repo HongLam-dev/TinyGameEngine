@@ -11,6 +11,7 @@
 #include "Hierarchy.h"
 #include "Inspector.h"
 #include "ScenePreview.h"
+#include "ProjectWindow.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -42,6 +43,7 @@ namespace TinyEditor {
         Hierarchy hierarchy;
 		ScenePreview scenePreview;
         Inspector inspector;
+		ProjectWindow projectWindow;
 
 		TinyEngine::Camera* editorCamera;
 		std::unique_ptr< TinyEngine::Scene> editingScene;
