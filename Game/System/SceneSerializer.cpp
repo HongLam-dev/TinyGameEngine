@@ -21,12 +21,22 @@ using namespace TinyEngine;
 
 namespace TGModule {
 
-	void SceneSerializer::SaveScene(TinyEngine::Scene& scene)
-	{
-		std::filesystem::path path =
-			std::filesystem::path("Scenes") /
-			(scene.GetName() + ".tge");
+	bool SceneSerializer::FindScene(std::string scenePath) {
+		if (!std::filesystem::exists(scenePath))
+		{
+			std::cout<<scenePath << " scene not found\n";
+			return false;
+		}
+		return true;
+	}
 
+	void SceneSerializer::SaveScene(TinyEngine::Scene& scene, std::string pathToSave)
+	{
+		std::filesystem::path path = pathToSave;
+		if (path.extension() != ".tge")
+		{
+			path += ".tge";
+		}
 		std::ofstream file(path);
 
 		if (!file)
@@ -191,23 +201,15 @@ namespace TGModule {
 	}
 
 	bool SceneSerializer::LoadScene(
-		std::string sceneName,
+		std::string scenePath,
 		TinyEngine::Scene& emptyScene)
 	{
-		std::filesystem::path path = std::filesystem::path("Scenes") / sceneName;
 
-		if (path.extension() != ".tge")
-		{
-			path += ".tge";
-		}
+		if (!FindScene(scenePath))
+			return false;
+		std::filesystem::path path = scenePath;
 
 		std::ifstream file(path);
-
-		if (!file)
-		{
-			std::cout << "Failed to open scene\n";
-			return false;
-		}
 
 		std::string line;
 

@@ -110,7 +110,8 @@ add_executable(TinyGameEditor
 "Editor/Header/Inspector.h" "Editor/Source/Inspector.cpp" 
 "Editor/Header/ScenePreview.h" "Editor/Source/ScenePreview.cpp" 
 "Editor/Source/ProjectWindow.cpp"
-"Editor/Header/ProjectWindow.h")
+"Editor/Header/ProjectWindow.h"
+"Editor/Header/Helpers.h")
 find_package(ImGui-SFML CONFIG REQUIRED)
 
 target_include_directories(TinyGameEditor PRIVATE

@@ -8,6 +8,7 @@
 #include "EngineComponentRegister.h"
 #include "SceneSerializer.h"
 #include "Hierarchy.h"
+#include "Helpers.h"
 #include <SFML/Graphics.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -16,10 +17,12 @@
 #include <memory>
 #include <cstring>
 
+
 using namespace TinyEngine;
 
 namespace TinyEditor {
-    TinyGameEditor::TinyGameEditor() :engine(window) {
+    TinyGameEditor::TinyGameEditor() :engine(window){
+        projectWindow.SetProjectDirectory(projectDirectory);
         RegisterComponents();
     }
 
@@ -36,7 +39,7 @@ namespace TinyEditor {
         projectWindow.SetLoadSceneCallback([this](std::string sceneName) {
             LoadScene(sceneName);
             });
-        if (!LoadScene("Example Scene"))
+        if (!LoadScene(projectDirectory+'\\'+defaultSceneFolder + "\\Example Scene.tge"))
         {
             CreateNewScene();
         }
@@ -91,19 +94,30 @@ namespace TinyEditor {
         ImGui::SFML::Shutdown();
     }
 
-   void TinyGameEditor::SaveScene() {
-       if (!editingScene)
-           return;
-       TGModule::SceneSerializer::Instance().SaveScene(*editingScene);
+    void TinyGameEditor::SaveScene()
+    {
+        if (!editingScene)
+            return;
 
-       std::cout << "Scene Saved\n";
-   }
+        std::string folder = SelectFolder(projectDirectory + '\\' + defaultSceneFolder);
 
-   bool TinyGameEditor::LoadScene(std::string sceneName) {
-       editingScene = std::make_unique<Scene>(engine);
+        if (folder.empty())
+            return; // user cancelled
 
-       if (TGModule::SceneSerializer::Instance().LoadScene(sceneName, *editingScene))
+        std::string path =
+            folder +'\\' + (editingScene->GetName() + ".tge");
+
+        TGModule::SceneSerializer::Instance()
+            .SaveScene(*editingScene, path);
+
+        std::cout << "Scene saved at " << path;;
+    }
+
+   bool TinyGameEditor::LoadScene(std::string scenePath) {
+       if (TGModule::SceneSerializer::Instance().FindScene(scenePath))
        {
+           editingScene = std::make_unique<Scene>(engine);
+           TGModule::SceneSerializer::Instance().LoadScene(scenePath, *editingScene);
            selectedObject = nullptr;
            engine.ActivateScene(*editingScene);
            return true;

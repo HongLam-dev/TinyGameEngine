@@ -7,7 +7,8 @@ namespace TinyEditor {
         ImGui::Begin("Project");
         if (ImGui::Button("< Back"))
         {
-            currentDirectory = currentDirectory.parent_path();
+            if(currentDirectory!=projectDirectory)
+                currentDirectory = currentDirectory.parent_path();
         }
         for (const auto& entry :
             std::filesystem::directory_iterator(currentDirectory))

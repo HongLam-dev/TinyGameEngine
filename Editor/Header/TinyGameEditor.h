@@ -17,6 +17,7 @@
 #include <imgui-SFML.h>
 #include <iostream>
 #include <functional>
+#include <filesystem>
 
 namespace TinyEditor {
 	class TinyGameEditor
@@ -51,5 +52,8 @@ namespace TinyEditor {
 
 		sf::Color sceneColor{ 55, 65, 80 };
 		TinyEngine::GameObject* selectedObject = nullptr;
+
+		std::string defaultSceneFolder = "Scenes";
+		std::string projectDirectory = "D:\\CodeProject\\TinyGameEngine\\Game";
 	};
 }

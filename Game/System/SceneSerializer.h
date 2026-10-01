@@ -1,7 +1,6 @@
 #pragma once
 #include "TinyGameEngine.h"
 #include "Window.h"
-#include <iostream>
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "BoxCollider2D.h"
@@ -14,16 +13,18 @@
 #include "UIObject.h"
 #include "TextureManager.h"
 #include "GameComponentRegister.h"
-#include <string>
 #include "FieldType.h"
+#include <string>
+#include <iostream>
 namespace TGModule {
 	class SceneSerializer
 	{
 	public:
 		std::string FieldTypeToString(TinyEngine::FieldType type);
-		void SaveScene(TinyEngine::Scene& scene);
+		void SaveScene(TinyEngine::Scene& scene, std::string pathToSave);
 		bool LoadScene(std::string sceneName,
 			TinyEngine::Scene& emptyScene);
+		static bool FindScene(std::string scenePath);
 
 		static SceneSerializer& Instance() {
 			static SceneSerializer serializer;

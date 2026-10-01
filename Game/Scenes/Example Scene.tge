@@ -1,0 +1,255 @@
+<Object name="Main Camera">
+	<Component name="Transform" id="17588800187422110716">
+		<Field name="Position" type="Vector3">
+			-0.540001 -2.94 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			1 1 1
+		</Field>
+	</Component>
+	<Component name="Camera" id="13601378585956671567">
+	</Component>
+</Object>
+<Object name="Player">
+	<Component name="Transform" id="11800222281244577954">
+		<Field name="Position" type="Vector3">
+			-2 -1.94 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			0.3 0.3 1
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="1354649136689110084">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			1.5 3.5 2
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="7292696052529235120">
+		<Field name="Texture" type="String">
+			Assets/Run.png
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			1259 0 277 567
+		</Field>
+	</Component>
+	<Component name="Player Controller" id="8350388744422781638">
+		<Field name="Move Speed" type="Float">
+			5
+		</Field>
+	</Component>
+	<Component name="Rigidbody 2D" id="16811977575603316780">
+		<Field name="Mass" type="Float">
+			1
+		</Field>
+		<Field name="Gravity Factor" type="Float">
+			0
+		</Field>
+		<Field name="Collision Detect Mode" type="Enum" enum="Collision Detection Mode">
+			1
+		</Field>
+	</Component>
+</Object>
+<Object name="Platform">
+	<Component name="Transform" id="15344813734475749601">
+		<Field name="Position" type="Vector3">
+			0.280001 2.81 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			20 10 1
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="18216970801159982839">
+		<Field name="Texture" type="String">
+			ASsets/Crate.png
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 64 64
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="6991815164900774853">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			0.64 0.64 0
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+</Object>
+<Object name="Rect2">
+	<Component name="Transform" id="7946867083206218711">
+		<Field name="Position" type="Vector3">
+			0.590002 -1.41 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			1 1 1
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="3429835366931194890">
+		<Field name="Texture" type="String">
+			
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 0 0
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="7224952468493468212">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			0.64 0.64 0
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+</Object>
+<Object name="Image">
+	<Component name="Transform" id="2993362914391375502">
+		<Field name="Position" type="Vector3">
+			105 659 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			0.1 0.1 0.1
+		</Field>
+	</Component>
+	<Component name="Image" id="8858250999484617989">
+		<Field name="Texture" type="String">
+			Assets/rankscore.png
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 784 1168
+		</Field>
+	</Component>
+</Object>
+<Object name="Crate">
+	<Component name="Transform" id="17711032178735384177">
+		<Field name="Position" type="Vector3">
+			1.48 -2.59 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			1 1 1
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="6661115387345449026">
+		<Field name="Texture" type="String">
+			Assets/crate.png
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 64 64
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="8762309221747998387">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			0.64 0.64 0
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+	<Component name="Ping Pong Around Center" id="17834947348120239538">
+		<Field name="Radius" type="Float">
+			5
+		</Field>
+		<Field name="Direction" type="Vector3">
+			1 0 0
+		</Field>
+		<Field name="Speed" type="Float">
+			5
+		</Field>
+	</Component>
+</Object>
+<Object name="Rect">
+	<Component name="Transform" id="17080199578589381769">
+		<Field name="Position" type="Vector3">
+			-5.47005 -1.16 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			1 1 1
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="7107236561567327444">
+		<Field name="Texture" type="String">
+			
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 0 0
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="10241373797339286251">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			0.64 6.64 0
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+</Object>
+<Object name="Rect3">
+	<Component name="Transform" id="15458107847240405412">
+		<Field name="Position" type="Vector3">
+			1.34 -1.41 0
+		</Field>
+		<Field name="Rotation" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Scale" type="Vector3">
+			1 1 1
+		</Field>
+	</Component>
+	<Component name="Sprite Renderer" id="13739918247036996489">
+		<Field name="Texture" type="String">
+			
+		</Field>
+		<Field name="Texture Rect" type="IntRect">
+			0 0 0 0
+		</Field>
+	</Component>
+	<Component name="Box Collider 2D" id="15933580557400013889">
+		<Field name="Offset" type="Vector3">
+			0 0 0
+		</Field>
+		<Field name="Size" type="Vector3">
+			0.64 0.64 0
+		</Field>
+		<Field name="Is Trigger" type="Bool">
+			0
+		</Field>
+	</Component>
+</Object>

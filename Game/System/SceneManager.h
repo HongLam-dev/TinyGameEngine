@@ -13,13 +13,13 @@ namespace TGModule {
 	public:
 		SceneManager(TinyEngine::TinyGameEngine& engine);
 		~SceneManager();
-		static void LoadScene(std::string sceneToLoad);
+		static void LoadScene(std::string scenePath);
 	private:
 		std::vector<std::unique_ptr<TinyEngine::GameObject>> persistentObjects;
 		std::unique_ptr<TinyEngine::Scene> activeScene=nullptr;
 		TinyEngine::TinyGameEngine& engine;
 		inline static SceneManager* instance = nullptr;
-		static void LoadNewScene(const std::string& sceneToLoad);
+		static void LoadNewScene(const std::string& scenePath);
 	};
 
 }
