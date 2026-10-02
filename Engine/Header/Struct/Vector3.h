@@ -99,7 +99,7 @@ namespace TinyEngine{
             return *this;
         }
 
-        float Dot(const Vector3& other)
+        float Dot(const Vector3& other) const
         {
             return x * other.x + y * other.y + z * other.z;
         }

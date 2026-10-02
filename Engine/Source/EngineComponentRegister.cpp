@@ -125,6 +125,12 @@ namespace TinyEngine{
                        "Collision Detect Mode",
                        &Rigidbody2D::GetCollisionDetectMode,
                        &Rigidbody2D::SetCollisionDetectMode
+                   ),
+                       MakeField<Rigidbody2D, bool>(
+                       "Is Kinematic",
+                       FieldType::Bool,
+                       &Rigidbody2D::IsKinematic,
+                       &Rigidbody2D::SetKinematic
                    )
                }
            }

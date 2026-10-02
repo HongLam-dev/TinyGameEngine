@@ -25,12 +25,7 @@ namespace TinyEngine {
 
 	void Rigidbody2D::FixedUpdate(float fixedDeltaTime) {
 		ApplyGravity();
-
-		Vector3 acceleration = accumulatedForce / mass;
-
-		velocity += acceleration;
-		accumulatedForce = Vector3::Zero;
-
+		ApplyForce();
 		ApplyVelocity(fixedDeltaTime);
 	}
 
@@ -49,9 +44,19 @@ namespace TinyEngine {
 	}
 
 	void Rigidbody2D::AddForce(Vector3 force) {
+		if (isKinematic)
+			return;
 		accumulatedForce += force;
 	}
 	void Rigidbody2D::ApplyGravity() {
 		AddForce(gravity*gravityScale*mass);
+	}
+	void Rigidbody2D::ApplyForce() {
+		if (isKinematic)
+			return;
+		Vector3 acceleration = accumulatedForce / mass;
+
+		velocity += acceleration;
+		accumulatedForce = Vector3::Zero;
 	}
 }

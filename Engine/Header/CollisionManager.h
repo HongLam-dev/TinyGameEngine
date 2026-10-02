@@ -38,7 +38,7 @@ namespace TinyEngine{
             auto operator<=>(const CollisionPair&) const = default;
         };
 
-        struct ContinuousCollision
+        struct CollisionResult
         {
             float enterTime;
             float exitTime;
@@ -48,7 +48,7 @@ namespace TinyEngine{
             bool hasCollision;
             Collision collisionA;
             Collision collisionB;
-            ContinuousCollision(float enter,
+            CollisionResult(float enter,
                 float exit ,
                 float t,
                 bool hasCollision,
@@ -61,14 +61,12 @@ namespace TinyEngine{
             }
         };
 
-        const std::array<Collision,2>& CalculateCollision (BoxCollider2D& a,BoxCollider2D& b,bool resolveOverlap);
         bool CheckOverlapX(const Bounds& a, const Bounds& b, bool contactAsOverlap);
         bool CheckOverlapY(const Bounds& a, const Bounds& b, bool contactAsOverlap);
         Vector3 CalculateContactPoint(const Bounds& a, const Bounds& b);
-        ContinuousCollision ContinuousCollisionDetect(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime, float t);
-        void ResolveContiniousRigidCollision(ContinuousCollision& result, float fixedDeltaTime);
-		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other);
-        void ResolveCollision(BoxCollider2D& a, BoxCollider2D& b, const Vector3& correctionVector);
+        CollisionResult CalculateCollision(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime, float t);
+        void ResolveRigidCollision(const CollisionResult& result, float fixedDeltaTime);
+		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other,float fixedDeltaTime);
         void CollisionCallback(BoxCollider2D& a, BoxCollider2D& b,const Collision& aCollision, const Collision& bCollision);
         void TriggerCallback(BoxCollider2D& a, BoxCollider2D& b);
         void ExitCallback(BoxCollider2D& a, BoxCollider2D& b);

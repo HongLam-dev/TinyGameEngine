@@ -15,16 +15,17 @@ namespace TinyEngine {
 	public:
 		Rigidbody2D(GameObject& owner);
 		void Start() override;
-		void ApplyGravity();
 		void AddImpulse(Vector3 force);
 		void AddForce(Vector3 force);
 
+		void ApplyGravity();
+		void ApplyForce();
 		void FixedUpdate(float fixedDeltaTime) override;
-		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }
 		void SetPosition(Vector3 pos);
 
+		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
 		Vector3 GetVelocity(){ return velocity; }
 
 		float GetMass() const { return mass; }
@@ -32,6 +33,9 @@ namespace TinyEngine {
 
 		void SetCollisionDetectMode(CollisionDetectionMode mode) { this->collisionDetectMode = mode; }
 		CollisionDetectionMode GetCollisionDetectMode() const { return collisionDetectMode; }
+
+		bool IsKinematic() const { return isKinematic; }
+		void SetKinematic(bool isKinematic) { this->isKinematic = isKinematic; }
 
 		Vector3 GetPreviousWorldCenter() { return previousPostion; }
 	private:
@@ -44,6 +48,7 @@ namespace TinyEngine {
 		float gravityScale = 1.0f;
 		Vector3 accumulatedForce = Vector3::Zero;
 		Vector3 previousPostion = Vector3::Zero;
+		bool isKinematic=false;
 		CollisionDetectionMode collisionDetectMode = CollisionDetectionMode::Discrete;
 	};
 }

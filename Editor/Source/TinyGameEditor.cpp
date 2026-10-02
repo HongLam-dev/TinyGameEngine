@@ -41,10 +41,14 @@ namespace TinyEditor {
             });
         inputHandler.SetDuplicateCallback([this]() {DuplicateObject(); });
 
-        if (!LoadScene(projectDirectory+'\\'+defaultSceneFolder + "\\Example Scene.tge"))
+     /*   if (!LoadScene(projectDirectory+'\\'+defaultSceneFolder + "\\Example Scene.tge"))
         {
             CreateNewScene();
-        }
+        }*/
+      if (!LoadScene("Scenes\\Example Scene.tge"))
+       {
+           CreateNewScene();
+       }
 
         GameObject editorCameraObj(engine);
         editorCamera = &editorCameraObj.AddComponent<Camera>();

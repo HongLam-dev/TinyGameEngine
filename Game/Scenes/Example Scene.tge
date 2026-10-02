@@ -59,6 +59,9 @@
 		<Field name="Collision Detect Mode" type="Enum" enum="Collision Detection Mode">
 			1
 		</Field>
+		<Field name="Is Kinematic" type="Bool">
+			0
+		</Field>
 	</Component>
 </Object>
 <Object name="Platform">
@@ -218,6 +221,20 @@
 		</Field>
 		<Field name="Speed" type="Float">
 			5
+		</Field>
+	</Component>
+	<Component name="Rigidbody 2D" id="1453751589290118942">
+		<Field name="Mass" type="Float">
+			1
+		</Field>
+		<Field name="Gravity Factor" type="Float">
+			1
+		</Field>
+		<Field name="Collision Detect Mode" type="Enum" enum="Collision Detection Mode">
+			0
+		</Field>
+		<Field name="Is Kinematic" type="Bool">
+			1
 		</Field>
 	</Component>
 </Object>

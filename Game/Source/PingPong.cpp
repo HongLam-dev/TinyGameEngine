@@ -10,7 +10,8 @@ using namespace TinyEngine;
 namespace TinyGame {
     void PingPongAroundCenter::Start()
     {
-        transform = GetOwner().GetComponent<Transform>();
+        transform = &GetTransform();
+        rb = GetOwner().GetComponent<Rigidbody2D>();
         direction.Normalize();
         center = transform->GetPosition();
     }
@@ -25,6 +26,7 @@ namespace TinyGame {
         {
             transform->SetPosition(center + direction * radius);
             direction = direction * (-1);
+
         }
         else if (distance < -radius)
         {
@@ -36,7 +38,12 @@ namespace TinyGame {
 
     void PingPongAroundCenter::FixedUpdate(float fixedDeltaTime)
     {
-        transform->SetPosition(transform->GetPosition() + direction * speed *fixedDeltaTime);
+        if (!rb)
+        {
+            std::cout << "No rigidbody for ping pong\n";
+            return;
+        }
+        rb->SetVelocity(direction * speed);
     }
 
     float PingPongAroundCenter::GetRadius() const

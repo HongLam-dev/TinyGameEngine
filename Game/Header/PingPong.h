@@ -29,6 +29,7 @@ namespace TinyGame {
 		void SetSpeed(float value);
 	private:
 		TinyEngine::Transform* transform = nullptr;
+		TinyEngine::Rigidbody2D* rb = nullptr;
 		float speed = 5.0f;
 		TinyEngine::Vector3 direction = TinyEngine::Vector3::Zero;
 		TinyEngine::Vector3 center = TinyEngine::Vector3::Zero;
