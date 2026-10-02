@@ -55,6 +55,7 @@ namespace TinyEditor {
 		TinyEngine::GameObject* selectedObject = nullptr;
 
 		std::string defaultSceneFolder = "Scenes";
+		std::string sceneExtension = ".tge";
 		std::string projectDirectory = "D:\\CodeProject\\TinyGameEngine\\Game";
 	};
 }

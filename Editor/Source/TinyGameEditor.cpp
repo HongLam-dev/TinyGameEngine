@@ -105,14 +105,11 @@ namespace TinyEditor {
     {
         if (!editingScene)
             return;
+        std::string sceneFileName = editingScene->GetName() + sceneExtension;
 
-        std::string folder = SelectFolder(projectDirectory + '\\' + defaultSceneFolder);
-
-        if (folder.empty())
-            return; // user cancelled
-
-        std::string path =
-            folder +'\\' + (editingScene->GetName() + ".tge");
+        std::string path = SelectSaveFile(projectDirectory + '\\' + defaultSceneFolder + '\\'+sceneFileName);
+        if (path.empty())
+            return;
 
         TGModule::SceneSerializer::Instance()
             .SaveScene(*editingScene, path);

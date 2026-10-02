@@ -3,12 +3,12 @@
 #include <windows.h>
 #include <shobjidl.h>
 namespace TinyEditor {
-    std::string SelectFolder(const std::string& defaultPath)
+    std::string SelectSaveFile(const std::string& defaultPath)
     {
         IFileDialog* dialog = nullptr;
 
         HRESULT hr = CoCreateInstance(
-            CLSID_FileOpenDialog,
+            CLSID_FileSaveDialog,
             nullptr,
             CLSCTX_INPROC_SERVER,
             IID_PPV_ARGS(&dialog)
@@ -18,24 +18,34 @@ namespace TinyEditor {
             return {};
 
         DWORD options = 0;
-
         dialog->GetOptions(&options);
 
         dialog->SetOptions(
-            options | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM
+            options | FOS_FORCEFILESYSTEM
         );
 
+        // Only allow .tge files
+        COMDLG_FILTERSPEC fileTypes[] =
+        {
+            { L"TinyGameEngine Scene", L"*.tge" }
+        };
+
+        dialog->SetFileTypes(
+            ARRAYSIZE(fileTypes),
+            fileTypes
+        );
+
+        dialog->SetDefaultExtension(L"tge");
+
+        // Start in the requested folder
         if (!defaultPath.empty())
         {
             IShellItem* folder = nullptr;
 
-            std::wstring widePath(
-                defaultPath.begin(),
-                defaultPath.end()
-            );
+            std::filesystem::path path(defaultPath);
 
             hr = SHCreateItemFromParsingName(
-                widePath.c_str(),
+                path.c_str(),
                 nullptr,
                 IID_PPV_ARGS(&folder)
             );
@@ -76,9 +86,7 @@ namespace TinyEditor {
 
         if (SUCCEEDED(hr))
         {
-            std::filesystem::path filesystemPath(path);
-            result = filesystemPath.string();
-
+            result = std::filesystem::path(path).string();
             CoTaskMemFree(path);
         }
 
