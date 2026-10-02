@@ -1,4 +1,5 @@
 #pragma once
+#include "EditorWindow.h"
 #include "TinyGameEngine.h"
 #include "Scene.h"
 

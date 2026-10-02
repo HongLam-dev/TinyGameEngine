@@ -11,18 +11,14 @@ namespace TinyEditor {
             ImGuiCond_FirstUseEver
         );
 
-        ImGui::Begin("Inspector");
-
-    //    if (ImGui::IsWindowHovered())
-    //        workingWindow = WorkingWindow::Other;
-
+        BeginWindow("Inspector");
         if (selectedObject)
         {
             DrawSelectedObject(*selectedObject);
             DrawAddComponentMenu(*selectedObject);
         }
 
-        ImGui::End();
+        EndWindow();
     }
 
 

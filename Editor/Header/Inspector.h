@@ -1,8 +1,9 @@
 #pragma once
 #include "ComponentRegister.h"
 #include "Scene.h"
+#include "EditorWindow.h"
 namespace TinyEditor {
-    class Inspector
+    class Inspector:public EditorWindow
     {
     public:
         void Draw(

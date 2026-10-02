@@ -8,10 +8,8 @@ namespace TinyEditor {
     {
         ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
 
-        ImGui::Begin("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV';:/\"\\ (Don't ask why)");
-
-       // if (ImGui::IsWindowHovered())
-       //     workingWindow = WorkingWindow::Other;
+        BeginWindow("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV';:/\"\\ (Don't ask why)");
+        CheckActive();
         if (ImGui::BeginPopupContextWindow())
         {
             if (ImGui::MenuItem("Create Empty"))
@@ -36,7 +34,7 @@ namespace TinyEditor {
             DrawGameObject(*object.get(), selectedObject,editorCamera,scene);
         }
 
-        ImGui::End();
+        EndWindow();
     }
 
     void Hierarchy::DrawGameObject(

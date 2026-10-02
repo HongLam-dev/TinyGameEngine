@@ -221,35 +221,3 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Rect3">
-	<Component name="Transform" id="15458107847240405412">
-		<Field name="Position" type="Vector3">
-			1.34 -1.41 0
-		</Field>
-		<Field name="Rotation" type="Vector3">
-			0 0 0
-		</Field>
-		<Field name="Scale" type="Vector3">
-			1 1 1
-		</Field>
-	</Component>
-	<Component name="Sprite Renderer" id="13739918247036996489">
-		<Field name="Texture" type="String">
-			
-		</Field>
-		<Field name="Texture Rect" type="IntRect">
-			0 0 0 0
-		</Field>
-	</Component>
-	<Component name="Box Collider 2D" id="15933580557400013889">
-		<Field name="Offset" type="Vector3">
-			0 0 0
-		</Field>
-		<Field name="Size" type="Vector3">
-			0.64 0.64 0
-		</Field>
-		<Field name="Is Trigger" type="Bool">
-			0
-		</Field>
-	</Component>
-</Object>

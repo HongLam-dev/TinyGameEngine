@@ -20,7 +20,7 @@ int main()
 
 	TinyEngine::TinyGameEngine engine(window);
 	TGModule::SceneManager sceneManager(engine);
-	TGModule::SceneManager::LoadScene("Example Scene");
+	TGModule::SceneManager::LoadScene("Scenes/Example Scene.tge");
 	engine.Run();
 	return 0;
 }

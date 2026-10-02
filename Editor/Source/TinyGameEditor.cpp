@@ -81,6 +81,11 @@ namespace TinyEditor {
             inspector.Draw(selectedObject);
             projectWindow.Draw();
 
+            if (inspector.IsActiveWindow() || hierarchy.IsActiveWindow() || projectWindow.IsActiveWindow())
+            {
+                workingWindow = WorkingWindow::Other;
+            }
+
             ImGui::SFML::Render(*renderWindow);
 
             renderWindow->display();

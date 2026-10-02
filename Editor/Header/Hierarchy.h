@@ -1,8 +1,8 @@
 #pragma once
 #include "Scene.h"
-
+#include "EditorWindow.h"
 namespace TinyEditor {
-class Hierarchy
+class Hierarchy:public EditorWindow
 {
 public:
     void Draw(
@@ -10,7 +10,6 @@ public:
         TinyEngine::GameObject*& selectedObject,
         TinyEngine::Camera& editorCamera
     );
-
 private:
     void DrawGameObject(
         TinyEngine::GameObject& object,

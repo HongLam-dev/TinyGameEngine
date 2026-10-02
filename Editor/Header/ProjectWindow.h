@@ -1,8 +1,9 @@
 #pragma once
+#include "EditorWindow.h"
 #include <filesystem>
 #include <functional>
 namespace TinyEditor {
-	class ProjectWindow {
+	class ProjectWindow :public EditorWindow {
 	public:
 		void SetLoadSceneCallback(std::function<void(std::string sceneName)> loadSceneCallback)
 		{ this->loadSceneCallback = loadSceneCallback; }

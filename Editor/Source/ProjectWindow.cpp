@@ -4,7 +4,8 @@
 
 namespace TinyEditor {
 	void ProjectWindow::Draw() {
-        ImGui::Begin("Project");
+        BeginWindow("Project");
+        CheckActive();
         if (ImGui::Button("< Back"))
         {
             if(currentDirectory!=projectDirectory)
@@ -35,6 +36,6 @@ namespace TinyEditor {
                 }
             }
         }
-        ImGui::End();
+        EndWindow();
 	}
 }
