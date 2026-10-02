@@ -92,7 +92,7 @@ namespace TinyEngine {
 			return result;
 		}
 
-		std::vector<Component*> GetAllComponents()
+		std::vector<Component*> GetAllComponents() const
 		{
 			std::vector<Component*> result;
 

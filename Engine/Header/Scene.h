@@ -24,6 +24,7 @@ namespace TinyEngine {
 		UIObject& CreateUIObject();
 		GameObject& CreateMainCamera();
 		GameObject& CreateCamera();
+		GameObject& DuplicateObject(const GameObject& object);
 
 		std::unique_ptr<GameObject> RemoveSceneObject(GameObject& gameObject);
 		void DestroySceneObject(GameObject& object);

@@ -36,6 +36,7 @@ namespace TinyEditor {
         void SaveScene();
         bool LoadScene(std::string sceneName);
 
+		void DuplicateObject();
 	private:
         TinyEngine::ComponentRegister& componentRegister = TinyEngine::ComponentRegister::Instance();
 		TinyEngine::Window window;

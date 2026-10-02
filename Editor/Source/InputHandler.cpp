@@ -40,6 +40,9 @@ namespace TinyEditor {
             {
                 saveSceneCallback();
             }
+            else if(input.OnKeyDown(sf::Keyboard::Key::D)) {
+                duplicateCallback();
+            }
         }
     }
     void InputHandler::MoveObject(

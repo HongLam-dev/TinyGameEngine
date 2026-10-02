@@ -39,6 +39,8 @@ namespace TinyEditor {
         projectWindow.SetLoadSceneCallback([this](std::string sceneName) {
             LoadScene(sceneName);
             });
+        inputHandler.SetDuplicateCallback([this]() {DuplicateObject(); });
+
         if (!LoadScene(projectDirectory+'\\'+defaultSceneFolder + "\\Example Scene.tge"))
         {
             CreateNewScene();
@@ -131,6 +133,12 @@ namespace TinyEditor {
            return false;
        }
 
+   }
+   void TinyGameEditor::DuplicateObject() {
+       if (selectedObject)
+       {
+           editingScene->DuplicateObject(*selectedObject);
+       }
    }
 
    void TinyGameEditor::CreateNewScene()

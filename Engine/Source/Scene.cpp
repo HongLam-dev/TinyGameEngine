@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "GameObject.h"
+#include "ComponentRegister.h"
 
 namespace TinyEngine {
 
@@ -143,5 +144,35 @@ namespace TinyEngine {
 
 	const std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects() const {
 		return sceneObjects;
+	}
+
+	GameObject& Scene::DuplicateObject(const GameObject& object) {
+
+		GameObject& newObject = CreateSceneObject();
+		newObject.SetName(object.GetName());
+		for (auto& component : object.GetAllComponents())
+		{		
+			const ComponentInfo* info = ComponentRegister::Instance().FindComponent(typeid(*component));
+			if (info)
+			{
+				Component* newComponent = nullptr;
+				if (Transform* transform = dynamic_cast<Transform*>(component))
+				{
+					newComponent = &newObject.GetTransform();
+				}
+				else {
+					newComponent = &info->create(newObject);;
+				}
+			
+				for (auto& field : info->fields)
+				{
+					field.setValue(*newComponent,field.getValue(*component));
+				}
+			}
+			else {
+				std::cout << "Component duplication failed, its type was not registered \n";
+			}
+		}
+		return newObject;
 	}
 }
