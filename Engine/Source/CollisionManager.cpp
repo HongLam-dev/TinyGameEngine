@@ -25,7 +25,6 @@ namespace TinyEngine {
 		}
 	}
 
-
 	CollisionManager::CollisionResult CollisionManager::CalculateCollision(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime, float t)
 	{
 		Vector3 normal;
@@ -153,12 +152,14 @@ namespace TinyEngine {
 			{
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
-				if (!a.GetRigidbody() && !b.GetRigidbody())
+				Rigidbody2D* rba = a.GetRigidbody();
+				Rigidbody2D* rbb = b.GetRigidbody();
+				if (!rba && !rbb)
 					continue;
-				CollisionDetectionMode aMode = a.GetRigidbody() ?
-					a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-				CollisionDetectionMode bMode = b.GetRigidbody() ?
-					b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+				CollisionDetectionMode aMode = rba ?
+					rba->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+				CollisionDetectionMode bMode = rbb ?
+					rbb->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
 
 				if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
 				{
@@ -229,42 +230,46 @@ namespace TinyEngine {
 
 						if (!a.IsTrigger() && !b.IsTrigger())
 						{
-							ResolveRigidCollision(result, fixedDeltaTime);
+							ResolveRigidCollision(result, fixedDeltaTime);		
 							collisionResults.erase(collisionResults.begin() + i);
 							std::vector<CollisionResult> recalculateResults;
+							for (size_t i = 0; i < colliders.size(); i++)
+							{
+								for (size_t j = i + 1; j < colliders.size(); j++)
+								{
+									if (colliders[i] == &a || colliders[i] == &b ||
+										colliders[j] == &a || colliders[j] == &b)
+									{
+										BoxCollider2D& c = *colliders[i];
+										BoxCollider2D& d = *colliders[j];
+
+										CollisionDetectionMode aMode = c.GetRigidbody() ?
+											c.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+										CollisionDetectionMode bMode = d.GetRigidbody() ?
+											d.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+
+										if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
+										{
+											Bounds bc = c.GetBounds();
+											Bounds bd = d.GetBounds();
+											bool overlap = CheckOverlapY(bc, bd, false) && CheckOverlapX(bc, bd, false);
+											if (!overlap)
+											{
+												continue;
+											}
+										}
+										recalculateResults.push_back(CalculateCollision(c, d, fixedDeltaTime, t));
+									}
+								}
+							}
+
 							for (auto col = collisionResults.begin();
 								col != collisionResults.end(); )
 							{
 								if (col->a == &a || col->a == &b ||
 									col->b == &a || col->b == &b)
 								{
-									auto* colliderA = col->a;
-									auto* colliderB = col->b;
 									col = collisionResults.erase(col);
-									CollisionDetectionMode aMode = colliderA->GetRigidbody() ?
-										colliderA->GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-									CollisionDetectionMode bMode = colliderB->GetRigidbody() ?
-										colliderB->GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-
-									if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
-									{
-										Bounds ba = colliderA->GetBounds();
-										Bounds bb = colliderB->GetBounds();
-										bool overlap = CheckOverlapY(ba, bb, false) && CheckOverlapX(ba, bb, false);
-										if (!overlap)
-										{
-											continue;
-										}
-									}
-					
-									auto newCollision =
-										CalculateCollision(
-											*colliderA,
-											*colliderB,
-											fixedDeltaTime,
-											t);
-									recalculateResults.push_back(newCollision);
-
 								}
 								else
 								{
