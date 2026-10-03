@@ -19,7 +19,7 @@ namespace TinyEngine {
 		void AddForce(Vector3 force);
 
 		void ApplyGravity();
-		void ApplyForce();
+		void ApplyForce(float fixedDeltaTime);
 		void FixedUpdate(float fixedDeltaTime) override;
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }

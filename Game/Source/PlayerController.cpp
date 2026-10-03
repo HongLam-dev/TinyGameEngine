@@ -17,10 +17,9 @@ namespace TinyGame {
 
 	void PlayerController::Update(float deltaTime)
 	{
-		if (Input::Get().isKeyPressed(sf::Keyboard::Key::W))
+		if (Input::Get().OnKeyDown(sf::Keyboard::Key::W))
 		{
-			//direction = Vector3::Down;
-			rb->AddForce({ 0,-20,0 });
+			rb->AddForce({ 0,-300,0 });
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
 		{
@@ -78,7 +77,9 @@ namespace TinyGame {
 	{
 		if (rb != nullptr)
 		{
-			rb->SetVelocity(direction * moveSpeed);
+			Vector3 velocity = direction * moveSpeed;
+			velocity.y = rb->GetVelocity().y;
+			rb->SetVelocity(velocity);
 		}
 	}
 
