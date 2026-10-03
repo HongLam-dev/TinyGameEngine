@@ -19,6 +19,7 @@ namespace TinyGame {
 	{
 		if (Input::Get().OnKeyDown(sf::Keyboard::Key::W))
 		{
+			//direction = Vector3::Down;
 			rb->AddForce({ 0,-300,0 });
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::D))
@@ -43,7 +44,7 @@ namespace TinyGame {
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::L))
 		{
-			rb->AddForce({ 200,0,0 });
+			rb->AddForce({ 20000,0,0 });
 		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::J))
 		{
@@ -84,22 +85,22 @@ namespace TinyGame {
 	}
 
 	void PlayerController::OnCollisionEnter(const Collision& collision) {
-	//	std::cout << collision.other->GetOwner().GetName() << " Enter \n";
+		std::cout <<"Normal: "<<collision.normal.x <<" " << collision.other->GetOwner().GetName() << " Enter \n";
 	}
 	void PlayerController::OnCollisionStay(const Collision& collision) {
-		//std::cout << collision.other->GetOwner().GetName()<< " Stay \n";
+		std::cout << "Normal: " << collision.normal.x << " " << collision.other->GetOwner().GetName()<< " Stay \n";
 	}
 	void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-	//	std::cout <<other.GetOwner().GetName() << " Exit \n";
+		std::cout <<other.GetOwner().GetName() << " Exit \n";
 	}
 
 	void PlayerController::OnTriggerEnter(BoxCollider2D& other) {
-	//	std::cout << other.GetOwner().GetName() << " trigger Enter \n";
+		std::cout << other.GetOwner().GetName() << " trigger Enter \n";
 	}
 	void PlayerController::OnTriggerStay(BoxCollider2D& other) {
-		//std::cout << other.GetOwner().GetName() <<" trigger Stay \n";
+		std::cout << other.GetOwner().GetName() <<" trigger Stay \n";
 	}
 	void PlayerController::OnTriggerExit(BoxCollider2D& other) {
-		//std::cout << other.GetOwner().GetName()<< " trigger  Exit \n";
+		std::cout << other.GetOwner().GetName()<< " trigger  Exit \n";
 	}
 }

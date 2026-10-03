@@ -125,7 +125,7 @@ namespace TinyEngine {
 		}
 
 		bool hasCollision = false;
-		if (tEnter <= tExit && tExit > 0 && tEnter < fixedDeltaTime)
+		if (tEnter <= tExit && tExit > 0 && tEnter <= fixedDeltaTime)
 		{
 			tEnter += t;
 			hasCollision = true;
@@ -168,6 +168,7 @@ namespace TinyEngine {
 					bool overlap = CheckOverlapY(ba, bb, false) && CheckOverlapX(ba, bb, false);
 					if (!overlap)
 					{
+						ExitCallback(a, b);
 						continue;
 					}
 				}
@@ -231,7 +232,6 @@ namespace TinyEngine {
 						if (!a.IsTrigger() && !b.IsTrigger())
 						{
 							ResolveRigidCollision(result, fixedDeltaTime);		
-							collisionResults.erase(collisionResults.begin() + i);
 							std::vector<CollisionResult> recalculateResults;
 							for (size_t i = 0; i < colliders.size(); i++)
 							{
@@ -255,6 +255,7 @@ namespace TinyEngine {
 											bool overlap = CheckOverlapY(bc, bd, false) && CheckOverlapX(bc, bd, false);
 											if (!overlap)
 											{
+												ExitCallback(c,d);
 												continue;
 											}
 										}
@@ -284,18 +285,10 @@ namespace TinyEngine {
 						}
 					}
 					else {
-						if (!result.hasCollision)
+						if (!result.a->IsTrigger() && !result.b->IsTrigger())
 						{
-							if (!result.a->IsTrigger() && !result.b->IsTrigger())
-							{
-								if (!CheckOverlapX(result.a->GetBounds(), result.b->GetBounds(), false)
-									|| !CheckOverlapY(result.a->GetBounds(), result.b->GetBounds(), false))
-								{
-									ExitCallback(*result.a, *result.b);
-								}
-							}
+							ExitCallback(*result.a, *result.b);
 						}
-
 					}
 					if (i == collisionResults.size() - 1 || result.enterTime > fixedDeltaTime)
 					{
