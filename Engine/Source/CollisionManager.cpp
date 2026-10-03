@@ -153,15 +153,24 @@ namespace TinyEngine {
 			{
 				BoxCollider2D& a = *colliders[i];
 				BoxCollider2D& b = *colliders[j];
-
+				if (!a.GetRigidbody() && !b.GetRigidbody())
+					continue;
 				CollisionDetectionMode aMode = a.GetRigidbody() ?
 					a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
 				CollisionDetectionMode bMode = b.GetRigidbody() ?
 					b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
 
 				if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
-					continue;
-				collisionResults.push_back(CalculateCollision(a, b, fixedDeltaTime,0));
+				{
+					Bounds ba = a.GetBounds();
+					Bounds bb = b.GetBounds();
+					bool overlap = CheckOverlapY(ba, bb, false) && CheckOverlapX(ba, bb, false);
+					if (!overlap)
+					{
+						continue;
+					}
+				}
+				collisionResults.push_back(CalculateCollision(a, b, fixedDeltaTime, 0));
 			}
 		}
 
@@ -232,13 +241,28 @@ namespace TinyEngine {
 									auto* colliderA = col->a;
 									auto* colliderB = col->b;
 									col = collisionResults.erase(col);
+									CollisionDetectionMode aMode = colliderA->GetRigidbody() ?
+										colliderA->GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+									CollisionDetectionMode bMode = colliderB->GetRigidbody() ?
+										colliderB->GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
+
+									if (aMode == CollisionDetectionMode::Discrete && bMode == CollisionDetectionMode::Discrete)
+									{
+										Bounds ba = colliderA->GetBounds();
+										Bounds bb = colliderB->GetBounds();
+										bool overlap = CheckOverlapY(ba, bb, false) && CheckOverlapX(ba, bb, false);
+										if (!overlap)
+										{
+											continue;
+										}
+									}
+					
 									auto newCollision =
 										CalculateCollision(
 											*colliderA,
 											*colliderB,
 											fixedDeltaTime,
 											t);
-
 									recalculateResults.push_back(newCollision);
 
 								}
@@ -278,24 +302,6 @@ namespace TinyEngine {
 			}	
 
 		}
-	
-		for (size_t i = 0; i < colliders.size(); i++)
-		{
-			for (size_t j = i + 1; j < colliders.size(); j++)
-			{
-				BoxCollider2D& a = *colliders[i];
-				BoxCollider2D& b = *colliders[j];
-				if (!a.GetRigidbody() && !b.GetRigidbody())
-					continue;
-				CollisionDetectionMode aMode = a.GetRigidbody() ? a.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-				CollisionDetectionMode bMode = b.GetRigidbody() ? b.GetRigidbody()->GetCollisionDetectMode() : CollisionDetectionMode::Discrete;
-				if (aMode == CollisionDetectionMode::Continuous || bMode == CollisionDetectionMode::Continuous)
-					continue;
-
-				DiscreteCollisionDetect(a, b,fixedDeltaTime);
-			}
-		}
-		
 	}
 
 	void CollisionManager::ResolveRigidCollision(const CollisionResult& result,float fixedDeltaTime) {
