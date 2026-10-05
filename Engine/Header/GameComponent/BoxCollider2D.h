@@ -23,7 +23,7 @@ namespace TinyEngine {
 		void SetSize(Vector3 size)  { this->size=size; }
 		Vector3 GetSize() const { return size; }
 
-		void SetPosition(const Vector3& newPos);
+		void SetColliderPosition(const Vector3& newPos);
 		Vector3 GetWorldCenter() const;
 
 		void SetOffset(Vector3 offset) { this->offset = offset; }
@@ -32,7 +32,7 @@ namespace TinyEngine {
 		Vector3 GetPreviousWorldCenter();
 
 		Bounds GetBounds() const;
-		Bounds GetBoundsAtPosition(Vector3 position) const;
+		Bounds GetBoundsAtOwnerPosition(Vector3 position) const;
 
 		void SetIsTrigger(bool isTrigger) {
 			this->isTrigger = isTrigger;

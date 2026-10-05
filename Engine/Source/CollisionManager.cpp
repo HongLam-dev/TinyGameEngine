@@ -30,21 +30,23 @@ namespace TinyEngine {
 		Vector3 normal;
 		Vector3 contactPoint;
 
-		Vector3 aVelocity = a.GetRigidbody() ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
-		Vector3 bVelocity = b.GetRigidbody() ? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
+		Rigidbody2D* rba= a.GetRigidbody();
+		Rigidbody2D* rbb= b.GetRigidbody();
+		Vector3 aVelocity = rba ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
+		Vector3 bVelocity =  rbb? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
 
 		float tEnter = fixedDeltaTime + 1;
 		float tExit = fixedDeltaTime + 1;
 
 		Vector3 relativeVelocity = aVelocity - bVelocity;
 
-		Vector3 aPreviousPos = a.GetPreviousWorldCenter();
-		Vector3 bPreviousPos = b.GetPreviousWorldCenter();
-		Bounds aPreviousBounds = a.GetBoundsAtPosition(aPreviousPos);
-		Bounds bPreviousBounds = b.GetBoundsAtPosition(bPreviousPos);
+		Vector3 aPreviousPos = rba? rba->GetPreviousPosition():a.GetOwner().GetTransform().GetPosition();
+		Vector3 bPreviousPos = rbb ? rbb->GetPreviousPosition() : b.GetOwner().GetTransform().GetPosition();
+		Bounds aPreviousBounds = a.GetBoundsAtOwnerPosition(aPreviousPos);
+		Bounds bPreviousBounds = b.GetBoundsAtOwnerPosition(bPreviousPos);
 
-		bool overlapX = CheckOverlapX(aPreviousBounds, bPreviousBounds,false);
-		bool overlapY = CheckOverlapY(aPreviousBounds, bPreviousBounds,false);
+		bool overlapX = CheckOverlapX(a.GetBounds(), b.GetBounds(), false);
+		bool overlapY = CheckOverlapY(a.GetBounds(), b.GetBounds(),false);
 
 		if (relativeVelocity.x !=0&& relativeVelocity.y!=0)
 		{
@@ -72,6 +74,8 @@ namespace TinyEngine {
 				tEnterY = temp;
 			}
 
+			tExit = std::min(tExitX, tExitY);
+
 			if (tEnterX > tEnterY)
 			{
 				tEnter = tEnterX;
@@ -82,7 +86,6 @@ namespace TinyEngine {
 				normal.y = relativeVelocity.y > 0 ? -1 : 1;
 			}
 
-			tExit = std::min(tExitX, tExitY);
 		}
 		else {
 			if (relativeVelocity.x == 0 && relativeVelocity.y!=0)
@@ -127,17 +130,15 @@ namespace TinyEngine {
 		bool hasCollision = false;
 		if (tEnter <= tExit && tExit > 0 && tEnter <= fixedDeltaTime)
 		{
-			tEnter += t;
 			hasCollision = true;
 
 			Vector3 aCollidePos = aPreviousPos + aVelocity * (tEnter - t);
 			Vector3 bCollidePos = bPreviousPos + bVelocity * (tEnter - t);
 
-			Vector3 contactPoint = CalculateContactPoint(a.GetBoundsAtPosition(aCollidePos), b.GetBoundsAtPosition(bCollidePos));
-			contactPoint = contactPoint;
-			contactPoint = contactPoint;
-
+			contactPoint = CalculateContactPoint(a.GetBoundsAtOwnerPosition(aCollidePos), b.GetBoundsAtOwnerPosition(bCollidePos));
 		}
+		tEnter += t;
+		tExit += t;
 		Collision collisionA(b, normal, contactPoint, relativeVelocity);
 		Collision collisionB(a, normal * -1, contactPoint, relativeVelocity * -1);
 		return { tEnter, tExit,t, hasCollision, collisionA, collisionB };
@@ -334,8 +335,8 @@ namespace TinyEngine {
 				Vector3 normalVelocity = result.collisionB.normal * velocityAlongNormalB;
 				bVelocity -= normalVelocity;
 			}
-			a.SetPosition(aCollidePos);
-			b.SetPosition(bCollidePos);
+			a.SetColliderPosition(aCollidePos);
+			b.SetColliderPosition(bCollidePos);
 			rba->SetPosition(a.GetOwner().GetTransform().GetPosition() + (aVelocity * (fixedDeltaTime - result.enterTime )));
 			rba->SetVelocity(aVelocity);
 			rbb->SetPosition(b.GetOwner().GetTransform().GetPosition() + (bVelocity * (fixedDeltaTime - result.enterTime)));
@@ -353,7 +354,7 @@ namespace TinyEngine {
 			{
 				aVelocity += normalVelocityB;
 			}
-			a.SetPosition(aCollidePos);
+			a.SetColliderPosition(aCollidePos);
 			rba->SetPosition(a.GetOwner().GetTransform().GetPosition() + (aVelocity * (fixedDeltaTime - result.enterTime)));
 			rba->SetVelocity(aVelocity);
 		} else if (rbb && !rbb->IsKinematic() && (rba && rba->IsKinematic()) || !rba)
@@ -368,40 +369,12 @@ namespace TinyEngine {
 			{
 				bVelocity += normalVelocityA;
 			}
-			b.SetPosition(bCollidePos);
+			b.SetColliderPosition(bCollidePos);
 			rbb->SetPosition(b.GetOwner().GetTransform().GetPosition() + (bVelocity * (fixedDeltaTime - result.enterTime)));
 			rbb->SetVelocity(bVelocity);
 		}
 
 	}
-
-	void CollisionManager::DiscreteCollisionDetect(
-		BoxCollider2D& a,
-		BoxCollider2D& b , float fixedDeltaTime)
-	{
-		Bounds ba = a.GetBounds();
-		Bounds bb = b.GetBounds();
-		bool overlap = CheckOverlapY(ba, bb,false) && CheckOverlapX(ba, bb,false);
-		if (overlap)
-		{	
-			if (!a.IsTrigger() && !a.IsTrigger())
-			{
-				CollisionResult result = CalculateCollision(a,b,fixedDeltaTime,0);
-
-				ResolveRigidCollision(result,fixedDeltaTime);
-				CollisionCallback(a, b,result.collisionA,result.collisionB);
-			}
-			else {
-				TriggerCallback(a, b);
-			}
-		}
-		else
-		{
-			ExitCallback(a, b);
-		}
-
-	}
-
 
 	void CollisionManager::CollisionCallback(BoxCollider2D& a, BoxCollider2D& b, const Collision& aCollision, const Collision& bCollision) {
 		if (previousPairs.contains({ &a, &b }))
@@ -455,28 +428,34 @@ namespace TinyEngine {
 		}
 	}
 
-	bool CollisionManager::CheckOverlapX(const Bounds& a, const Bounds& b, bool contactAsOverlap) {
+	bool CollisionManager::CheckOverlapX(
+		const Bounds& a,
+		const Bounds& b,
+		bool contactAsOverlap)
+	{
+		float overlap =
+			std::min(a.max.x, b.max.x) -
+			std::max(a.min.x, b.min.x);
+
 		if (contactAsOverlap)
-		{
-			return a.min.x <= b.max.x &&
-				a.max.x >= b.min.x;
-		}
-		else {
-			return a.min.x < b.max.x &&
-				a.max.x > b.min.x;
-		}
-		
+			return overlap >= -COLLISION_EPSILON;
+
+		return overlap > COLLISION_EPSILON;
 	}
-	bool CollisionManager::CheckOverlapY(const Bounds& a, const Bounds& b, bool contactAsOverlap) {
+
+	bool CollisionManager::CheckOverlapY(
+		const Bounds& a,
+		const Bounds& b,
+		bool contactAsOverlap)
+	{
+		float overlap =
+			std::min(a.max.y, b.max.y) -
+			std::max(a.min.y, b.min.y);
+
 		if (contactAsOverlap)
-		{
-			return a.min.y <= b.max.y &&
-				a.max.y >= b.min.y;
-		}
-		else {
-			return a.min.y < b.max.y &&
-				a.max.y > b.min.y;
-		}
+			return overlap >= -COLLISION_EPSILON;
+
+		return overlap > COLLISION_EPSILON;
 	}
 
 	Vector3 CollisionManager::CalculateContactPoint(const Bounds& a, const Bounds& b) {

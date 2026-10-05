@@ -5,7 +5,9 @@ namespace TinyEngine
     class EngineSettings
     {
 
-    public:
+    public:		
+        static constexpr int targetFPS = 60;
+        static constexpr int timeStep = 60;
         static constexpr float PixelsPerUnit = 100.0f;
     };
 

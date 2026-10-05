@@ -37,7 +37,7 @@ namespace TinyEngine {
 		bool IsKinematic() const { return isKinematic; }
 		void SetKinematic(bool isKinematic) { this->isKinematic = isKinematic; }
 
-		Vector3 GetPreviousWorldCenter() { return previousPostion; }
+		Vector3 GetPreviousPosition() { return previousPostion; }
 	private:
 		void ApplyVelocity(float fixedDeltaTime);
 

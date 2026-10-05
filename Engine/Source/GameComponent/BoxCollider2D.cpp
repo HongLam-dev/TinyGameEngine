@@ -18,7 +18,7 @@ namespace TinyEngine {
 	Vector3 BoxCollider2D::GetPreviousWorldCenter()
 	{
 		if (rb)
-			return rb->GetPreviousWorldCenter() + offset;
+			return rb->GetPreviousPosition() + offset;
 		else
 			return GetWorldCenter();
 	}
@@ -27,10 +27,10 @@ namespace TinyEngine {
 		return GetTransform().GetPosition() + offset;
 	}
 	Bounds BoxCollider2D::GetBounds() const {
-		return GetBoundsAtPosition(GetTransform().GetPosition());
+		return GetBoundsAtOwnerPosition(GetTransform().GetPosition());
 	}
 
-	Bounds BoxCollider2D::GetBoundsAtPosition(Vector3 position) const {
+	Bounds BoxCollider2D::GetBoundsAtOwnerPosition(Vector3 position) const {
 		Bounds bounds;
 		Vector3 scale = GetTransform().GetScale();
 		Vector3 colliderPosition = position + offset;
@@ -42,7 +42,7 @@ namespace TinyEngine {
 		return bounds;
 	}
 
-	void BoxCollider2D::SetPosition(const Vector3& newPos) {
+	void BoxCollider2D::SetColliderPosition(const Vector3& newPos) {
 		GetTransform().SetPosition(newPos-offset);
 	}
 

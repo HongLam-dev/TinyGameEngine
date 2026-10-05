@@ -20,7 +20,6 @@ namespace TinyEditor {
 		void SetDuplicateCallback(std::function<void()> duplicateCallback) { this->duplicateCallback = duplicateCallback; };
 	private:
 		TinyEngine::Window& window;
-		TinyEngine::Vector2 cameraMoveSpeed{5,5};
 		TinyEngine::Input& input = TinyEngine::Input::Get();
 		std::function<void()> saveSceneCallback;
 		std::function<void()> duplicateCallback;

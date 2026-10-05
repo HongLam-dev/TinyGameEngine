@@ -19,36 +19,35 @@ namespace TinyEngine
 	void TinyGameEngine::Run()
 	{
 		HandleReferredActions();
-		float accumulatedTimeStep = 0;
 		while (window.IsOpen())
 		{
-			float elapsedTime = clock.restart().asSeconds();
-			deltaTime += elapsedTime;
-			accumulatedTimeStep += elapsedTime;
-
 			while (const std::optional event = window.PollEvent())
 			{
 				if (event->is<sf::Event::Closed>())
 					window.Close();
 				Input::Get().ProcessEvent(*event);
 			}
+			float elapsedTime = clock.restart().asSeconds();
+			static float accumulatedTimeStep = 0;
+			deltaTime += elapsedTime;
+			accumulatedTimeStep += elapsedTime;
 
-			if (deltaTime >= 1.0 / targetFPS)
-			{	
+			if (deltaTime >= 1.0 / EngineSettings::targetFPS)
+			{
 				Update(deltaTime);
 			}
 
-			while (accumulatedTimeStep >= 1.0 / timeStep)
+			while (accumulatedTimeStep >= 1.0 / EngineSettings::timeStep)
 			{
-				FixedUpdate(1.0f/timeStep);
+				FixedUpdate(1.0f / EngineSettings::timeStep);
 
-				accumulatedTimeStep -= 1.0f / timeStep;
+				accumulatedTimeStep -= 1.0f / EngineSettings::timeStep;
 			}
 
-			if (deltaTime >= 1.0 / targetFPS)
+			if (deltaTime >= 1.0 / EngineSettings::targetFPS)
 			{
 				window.Clear();
-				Render(window,*activeScene->GetMainCamera());
+				Render(window, *activeScene->GetMainCamera());
 				window.Display();
 
 				HandleReferredActions();
@@ -57,6 +56,7 @@ namespace TinyEngine
 			}
 		}
 	}
+
 
 	void TinyGameEngine::FixedUpdate(float fixedDeltaTime)
 	{

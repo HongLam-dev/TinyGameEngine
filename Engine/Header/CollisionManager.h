@@ -9,7 +9,7 @@
 #include <set>
 
 namespace TinyEngine{
-
+    constexpr float COLLISION_EPSILON = 1e-6f;
 	class CollisionManager
 	{
     public:
@@ -66,7 +66,6 @@ namespace TinyEngine{
         Vector3 CalculateContactPoint(const Bounds& a, const Bounds& b);
         CollisionResult CalculateCollision(BoxCollider2D& a, BoxCollider2D& b, float fixedDeltaTime, float t);
         void ResolveRigidCollision(const CollisionResult& result, float fixedDeltaTime);
-		void DiscreteCollisionDetect(BoxCollider2D& collider, BoxCollider2D& other,float fixedDeltaTime);
         void CollisionCallback(BoxCollider2D& a, BoxCollider2D& b,const Collision& aCollision, const Collision& bCollision);
         void TriggerCallback(BoxCollider2D& a, BoxCollider2D& b);
         void ExitCallback(BoxCollider2D& a, BoxCollider2D& b);

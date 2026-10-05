@@ -33,8 +33,6 @@ namespace TinyEngine
 		void HandleReferredActions();
 	private:
 		Window& window;
-		int targetFPS = 60;
-		int timeStep = 60;
 		float deltaTime = 0;
 		sf::Clock clock;
 		RenderManager renderManager;

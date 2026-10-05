@@ -85,13 +85,13 @@ namespace TinyGame {
 	}
 
 	void PlayerController::OnCollisionEnter(const Collision& collision) {
-		std::cout <<"Normal: "<<collision.normal.x <<" " << collision.other->GetOwner().GetName() << " Enter \n";
+		std::cout <<"Normal: "<<collision.normal.x <<", " << collision.normal.y << " " << collision.other->GetOwner().GetName() << " Enter \n";
 	}
 	void PlayerController::OnCollisionStay(const Collision& collision) {
-		std::cout << "Normal: " << collision.normal.x << " " << collision.other->GetOwner().GetName()<< " Stay \n";
+		std::cout << "Normal: " << collision.normal.x << ", " << collision.normal.y << " " << collision.other->GetOwner().GetName()<< " Stay \n";
 	}
 	void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-		std::cout <<other.GetOwner().GetName() << " Exit \n";
+		std::cout <<other.GetOwner().GetName() << "------- Exit Exit Exit Exit Exit Exit Exit Exit Exit  ---------\n";
 	}
 
 	void PlayerController::OnTriggerEnter(BoxCollider2D& other) {

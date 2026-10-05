@@ -75,35 +75,91 @@ namespace TinyEditor {
                 if (event->is<sf::Event::Closed>())
                     renderWindow->close();
             }
-            sf::Time deltaTime = deltaClock.restart();
-
-            ImGui::SFML::Update(*renderWindow, deltaTime);
-            renderWindow->clear(sceneColor);
-
+            sf::Time elapsedTime = deltaClock.restart();
             workingWindow = WorkingWindow::Scene;
 
-            scenePreview.Draw(window,engine,editingScene.get(), *editorCamera,selectedObject);
-            hierarchy.Draw(*editingScene,selectedObject,*editorCamera);
-            inspector.Draw(selectedObject);
-            projectWindow.Draw();
-
-            if (inspector.IsActiveWindow() || hierarchy.IsActiveWindow() || projectWindow.IsActiveWindow())
+            if(!isGameRuning)
             {
-                workingWindow = WorkingWindow::Other;
+                ImGui::SFML::Update(*renderWindow, elapsedTime);
+                renderWindow->clear(sceneColor);
+
+                scenePreview.Draw(window, engine, editingScene.get(), *editorCamera, selectedObject);
+                hierarchy.Draw(*editingScene, selectedObject, *editorCamera);
+                inspector.Draw(selectedObject);
+                projectWindow.Draw();
+                DrawGadgetBar();
+
+                ImGui::SFML::Render(*renderWindow);
+                renderWindow->display();
+
+                if (inspector.IsActiveWindow() || hierarchy.IsActiveWindow() || projectWindow.IsActiveWindow())
+                {
+                    workingWindow = WorkingWindow::Other;
+                }
+
+                if (workingWindow == WorkingWindow::Scene)
+                {
+                    inputHandler.HandleSceneInput(*editorCamera, selectedObject, elapsedTime.asSeconds());
+                }
+                inputHandler.HandleGlobalInput();
+                Input::Get().EndFrame();
             }
+            else {
+                static float accumulatedTimeStep = 0;
+                static float deltaTime = 0;
+                deltaTime += elapsedTime.asSeconds();
+                accumulatedTimeStep += elapsedTime.asSeconds();
 
-            ImGui::SFML::Render(*renderWindow);
+                if (deltaTime >= 1.0 / EngineSettings::targetFPS)
+                {
+                    engine.Update(deltaTime);
+                }
 
-            renderWindow->display();
+                while (accumulatedTimeStep >= 1.0 /EngineSettings::timeStep)
+                {
+                    engine.FixedUpdate(1.0 / EngineSettings::timeStep);
 
-            if (workingWindow == WorkingWindow::Scene)
-                inputHandler.HandleSceneInput(*editorCamera, selectedObject, deltaTime.asSeconds());
-            inputHandler.HandleGlobalInput();
-            Input::Get().EndFrame();
+                    accumulatedTimeStep -= 1.0 / EngineSettings::timeStep;
+                }
+
+                if (deltaTime >= 1.0 / EngineSettings::targetFPS)
+                {
+                    ImGui::SFML::Update(*renderWindow, elapsedTime);
+                    renderWindow->clear(sceneColor);
+
+                    engine.Render(window, *editingScene->GetMainCamera());
+                    hierarchy.Draw(*editingScene, selectedObject, *editorCamera);
+                    inspector.Draw(selectedObject);
+                    projectWindow.Draw();
+                    DrawGadgetBar();
+
+                    ImGui::SFML::Render(*renderWindow);
+                    renderWindow->display();
+
+                    engine.HandleReferredActions();
+                    deltaTime = 0;
+                    Input::Get().EndFrame();
+                }
+            }
+   
         }
 
         ImGui::SFML::Shutdown();
     }
+
+    void TinyGameEditor::DrawGadgetBar() {
+        ImGui::Begin("Gadgets");
+        if (ImGui::Button("Run Game"))
+        {
+            isGameRuning = !isGameRuning;
+            if (isGameRuning)
+            {
+                engine.ActivateScene(*editingScene);
+            }
+        }
+        ImGui::End();
+    }
+
 
     void TinyGameEditor::SaveScene()
     {

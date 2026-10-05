@@ -35,6 +35,8 @@ namespace TinyEditor {
         void CreateNewScene();
         void SaveScene();
         bool LoadScene(std::string sceneName);
+		
+		void DrawGadgetBar();
 
 		void DuplicateObject();
 	private:
@@ -57,5 +59,7 @@ namespace TinyEditor {
 		std::string defaultSceneFolder = "Scenes";
 		std::string sceneExtension = ".tge";
 		std::string projectDirectory = "D:\\CodeProject\\TinyGameEngine\\Game";
+
+		bool isGameRuning = false;
 	};
 }
