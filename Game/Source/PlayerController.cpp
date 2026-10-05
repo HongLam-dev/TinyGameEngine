@@ -79,7 +79,7 @@ namespace TinyGame {
 		if (rb != nullptr)
 		{
 			Vector3 velocity = direction * moveSpeed;
-			velocity.y = rb->GetVelocity().y;
+			velocity.y = rb->GetCurrentVelocity().y;
 			rb->SetVelocity(velocity);
 		}
 	}
@@ -91,7 +91,7 @@ namespace TinyGame {
 		std::cout << "Normal: " << collision.normal.x << ", " << collision.normal.y << " " << collision.other->GetOwner().GetName()<< " Stay \n";
 	}
 	void PlayerController::OnCollisionExit(BoxCollider2D& other) {
-		std::cout <<other.GetOwner().GetName() << "------- Exit Exit Exit Exit Exit Exit Exit Exit Exit  ---------\n";
+		std::cout <<other.GetOwner().GetName() << " Exit\n";
 	}
 
 	void PlayerController::OnTriggerEnter(BoxCollider2D& other) {

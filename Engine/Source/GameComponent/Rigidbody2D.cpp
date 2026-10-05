@@ -30,15 +30,16 @@ namespace TinyEngine {
 	}
 
 	void Rigidbody2D::ApplyVelocity(float fixedDeltaTime) {
-		Vector3 newPosition = transform->GetPosition() + velocity *fixedDeltaTime;
-		SetPosition(newPosition);
+		Vector3 newPosition = transform->GetPosition() + unappliedVelocity *fixedDeltaTime;
+		MovePosition(newPosition);
+		appliedVelocity = unappliedVelocity;
 	}
 
 	void Rigidbody2D::AddImpulse(Vector3 force) {
 
 	}
 
-	void Rigidbody2D::SetPosition(Vector3 pos) {
+	void Rigidbody2D::MovePosition(Vector3 pos) {
 		previousPostion = transform->GetPosition();
 		transform->SetPosition(pos);
 	}
@@ -56,7 +57,7 @@ namespace TinyEngine {
 			return;
 		Vector3 acceleration = accumulatedForce / mass;
 
-		velocity += acceleration*fixedDeltaTime;
+		unappliedVelocity += acceleration*fixedDeltaTime;
 		accumulatedForce = Vector3::Zero;
 	}
 }

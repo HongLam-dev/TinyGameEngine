@@ -32,8 +32,8 @@ namespace TinyEngine {
 
 		Rigidbody2D* rba= a.GetRigidbody();
 		Rigidbody2D* rbb= b.GetRigidbody();
-		Vector3 aVelocity = rba ? a.GetRigidbody()->GetVelocity() : Vector3::Zero;
-		Vector3 bVelocity =  rbb? b.GetRigidbody()->GetVelocity() : Vector3::Zero;
+		Vector3 aVelocity = rba ? a.GetRigidbody()->GetAppliedVelocity() : Vector3::Zero;
+		Vector3 bVelocity =  rbb? b.GetRigidbody()->GetAppliedVelocity() : Vector3::Zero;
 
 		float tEnter = fixedDeltaTime + 1;
 		float tExit = fixedDeltaTime + 1;
@@ -309,8 +309,8 @@ namespace TinyEngine {
 		Rigidbody2D* rba = a.GetRigidbody();
 		Rigidbody2D* rbb = b.GetRigidbody();
 
-		Vector3 aVelocity = rba ? rba->GetVelocity() : Vector3::Zero;
-		Vector3 bVelocity = rbb ? rbb->GetVelocity() : Vector3::Zero;
+		Vector3 aVelocity = rba ? rba->GetAppliedVelocity() : Vector3::Zero;
+		Vector3 bVelocity = rbb ? rbb->GetAppliedVelocity() : Vector3::Zero;
 
 		Vector3 aPreviousPos = a.GetPreviousWorldCenter();
 		Vector3 bPreviousPos = b.GetPreviousWorldCenter();
@@ -337,10 +337,10 @@ namespace TinyEngine {
 			}
 			a.SetColliderPosition(aCollidePos);
 			b.SetColliderPosition(bCollidePos);
-			rba->SetPosition(a.GetOwner().GetTransform().GetPosition() + (aVelocity * (fixedDeltaTime - result.enterTime )));
 			rba->SetVelocity(aVelocity);
-			rbb->SetPosition(b.GetOwner().GetTransform().GetPosition() + (bVelocity * (fixedDeltaTime - result.enterTime)));
 			rbb->SetVelocity(bVelocity);
+			rba->ApplyVelocity(fixedDeltaTime - result.enterTime);
+			rbb->ApplyVelocity(fixedDeltaTime - result.enterTime);
 		}
 		else if(rba && !rba->IsKinematic() && (rbb && rbb->IsKinematic())||!rbb)
 		{
@@ -355,8 +355,8 @@ namespace TinyEngine {
 				aVelocity += normalVelocityB;
 			}
 			a.SetColliderPosition(aCollidePos);
-			rba->SetPosition(a.GetOwner().GetTransform().GetPosition() + (aVelocity * (fixedDeltaTime - result.enterTime)));
 			rba->SetVelocity(aVelocity);
+			rba->ApplyVelocity(fixedDeltaTime - result.enterTime);
 		} else if (rbb && !rbb->IsKinematic() && (rba && rba->IsKinematic()) || !rba)
 		{
 			Vector3 normalVelocityA = result.collisionA.normal * velocityAlongNormalA;
@@ -370,8 +370,8 @@ namespace TinyEngine {
 				bVelocity += normalVelocityA;
 			}
 			b.SetColliderPosition(bCollidePos);
-			rbb->SetPosition(b.GetOwner().GetTransform().GetPosition() + (bVelocity * (fixedDeltaTime - result.enterTime)));
 			rbb->SetVelocity(bVelocity);
+			rbb->ApplyVelocity(fixedDeltaTime - result.enterTime);
 		}
 
 	}

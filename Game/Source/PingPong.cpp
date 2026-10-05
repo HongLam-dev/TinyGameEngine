@@ -18,6 +18,11 @@ namespace TinyGame {
 
     void PingPongAroundCenter::Update(float deltaTime)
     {
+    }
+
+    void PingPongAroundCenter::FixedUpdate(float fixedDeltaTime)
+    {
+
         Vector3 position = transform->GetPosition();
 
         float distance = (position - center).Dot(direction);
@@ -34,15 +39,12 @@ namespace TinyGame {
             direction = direction * (-1);
         }
 
-    }
-
-    void PingPongAroundCenter::FixedUpdate(float fixedDeltaTime)
-    {
         if (!rb)
         {
             std::cout << "No rigidbody for ping pong\n";
             return;
         }
+
         rb->SetVelocity(direction * speed);
     }
 

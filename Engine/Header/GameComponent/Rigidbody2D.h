@@ -23,10 +23,11 @@ namespace TinyEngine {
 		void FixedUpdate(float fixedDeltaTime) override;
 		void SetGravityScale(float factor) { gravityScale = factor; }
 		void SetMass(float mass) { this->mass = mass; }
-		void SetPosition(Vector3 pos);
+		void MovePosition(Vector3 pos);
 
-		void SetVelocity(const Vector3& velocity) { this->velocity = velocity; }
-		Vector3 GetVelocity(){ return velocity; }
+		void SetVelocity(const Vector3& velocity) { this->unappliedVelocity = velocity; }
+		Vector3 GetCurrentVelocity(){ return unappliedVelocity; }
+		Vector3 GetAppliedVelocity() { return appliedVelocity; }
 
 		float GetMass() const { return mass; }
 		float GetGravityScale() const { return gravityScale; }
@@ -38,11 +39,12 @@ namespace TinyEngine {
 		void SetKinematic(bool isKinematic) { this->isKinematic = isKinematic; }
 
 		Vector3 GetPreviousPosition() { return previousPostion; }
-	private:
 		void ApplyVelocity(float fixedDeltaTime);
+	private:
 
 		Transform* transform=nullptr;
-		Vector3 velocity{0,0,0};
+		Vector3 appliedVelocity;
+		Vector3 unappliedVelocity;
 		Vector3 gravity{ 0.0f, 9.81f, 0.0f };
 		float mass = 1.0f;
 		float gravityScale = 1.0f;
