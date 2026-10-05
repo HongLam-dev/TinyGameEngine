@@ -146,6 +146,7 @@ namespace TinyEngine {
 
 	void CollisionManager::CheckCollision(float fixedDeltaTime)
 	{
+	//	std::cout << "-----begin-----\n";
 		std::vector<CollisionResult> collisionResults;
 		for (size_t i = 0; i < colliders.size(); i++)
 		{
@@ -202,10 +203,10 @@ namespace TinyEngine {
 				{
 					float nextEnterTime = fixedDeltaTime;
 
-					for (size_t j = 0; j < collisionResults.size(); j++)
+					for (size_t j = i; j < collisionResults.size(); j++)
 					{
 						CollisionResult& result = collisionResults[j];
-						if (result.hasCollision && result.enterTime > t)
+						if (result.hasCollision)
 						{
 							nextEnterTime = result.enterTime;
 							break;
@@ -218,21 +219,24 @@ namespace TinyEngine {
 						{
 							if (result.exitTime > t && result.exitTime <= nextEnterTime)
 							{
+								t = result.exitTime;
+								currentPairs.erase({result.a,result.b});
 								ExitCallback(*result.a, *result.b);
+								previousPairs.erase({ result.a,result.b });
 							}
 						}
 					}
-
 					CollisionResult& result = collisionResults[i];
 					if (result.hasCollision )
 					{
 						t = result.enterTime;
 						BoxCollider2D& a = *result.a;
-						BoxCollider2D& b = *result.b;
-
+						BoxCollider2D& b = *result.b;;
 						if (!a.IsTrigger() && !b.IsTrigger())
 						{
-							ResolveRigidCollision(result, fixedDeltaTime);		
+							CollisionCallback(a,b,result.collisionA,result.collisionB);
+							ResolveRigidCollision(result, fixedDeltaTime);	
+							currentPairs.insert({ &a,&b });
 							std::vector<CollisionResult> recalculateResults;
 							for (size_t i = 0; i < colliders.size(); i++)
 							{
@@ -282,8 +286,14 @@ namespace TinyEngine {
 							break;
 						}
 						else {
-							TriggerCallback(a, b);
+							if (!currentPairs.contains({ result.a,result.b }))
+							{
+								TriggerCallback(a, b);
+								currentPairs.insert({ result.a,result.b });
+								previousPairs.insert({ result.a,result.b });
+							}
 						}
+						currentPairs.insert({ &a,&b });
 					}
 					else {
 						if (!result.a->IsTrigger() && !result.b->IsTrigger())
@@ -299,8 +309,11 @@ namespace TinyEngine {
 				}
 			
 			}	
-
 		}
+		
+		previousPairs = currentPairs;
+		currentPairs.clear();
+		//std::cout << "-----end-----\n";
 	}
 
 	void CollisionManager::ResolveRigidCollision(const CollisionResult& result,float fixedDeltaTime) {
@@ -317,8 +330,6 @@ namespace TinyEngine {
 
 		Vector3 aCollidePos = aPreviousPos + aVelocity * (result.enterTime - result.t);
 		Vector3 bCollidePos = bPreviousPos + bVelocity * (result.enterTime - result.t);
-
-		CollisionCallback(a, b, result.collisionA, result.collisionB);
 
 		float velocityAlongNormalA =result.collisionA.normal.Dot(aVelocity);
 		float velocityAlongNormalB =result.collisionB.normal.Dot(bVelocity);
@@ -384,17 +395,13 @@ namespace TinyEngine {
 		}
 		else
 		{
-			currentPairs.insert({ &a, &b });
 			a.NotifyCollisionEnter(aCollision);
 			b.NotifyCollisionEnter(bCollision);
 		}
-
-		previousPairs = currentPairs;
 	}
 
 	void CollisionManager::TriggerCallback(BoxCollider2D& a, BoxCollider2D& b) {
 
-		currentPairs.insert({ &a, &b });
 		if (previousPairs.contains({ &a, &b }))
 		{
 			a.NotifyTriggerStay(b);
@@ -405,16 +412,13 @@ namespace TinyEngine {
 			a.NotifyTriggerEnter(b);
 			b.NotifyTriggerEnter(a);
 		}
-
-		previousPairs = currentPairs;
 	}
 
 
 	void CollisionManager::ExitCallback(BoxCollider2D& a, BoxCollider2D& b) {
 
-		if (previousPairs.contains({ &a, &b }))
+		if (previousPairs.contains({ &a, &b })&&!currentPairs.contains({ &a, &b }))
 		{
-			currentPairs.erase({ &a, &b });
 			if (a.IsTrigger() || b.IsTrigger())
 			{
 				a.NotifyTriggerExit(b);
@@ -424,7 +428,6 @@ namespace TinyEngine {
 				a.NotifyCollisionExit(b);
 				b.NotifyCollisionExit(a);
 			}
-			previousPairs = currentPairs;
 		}
 	}
 

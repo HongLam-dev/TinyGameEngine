@@ -31,7 +31,7 @@ namespace TinyEditor {
                 {
                     if (entry.path().extension() == ".tge")
                     {
-                        loadSceneCallback(entry.path().filename().string());
+                        loadSceneCallback(entry.path().string());
                     }
                 }
             }
