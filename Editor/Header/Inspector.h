@@ -9,7 +9,7 @@ namespace TinyEditor {
         void Draw(
             TinyEngine::GameObject* selectedObject
         );
-
+        
     private:
         void DrawSelectedObject(TinyEngine::GameObject& gameObject);
 
@@ -20,49 +20,52 @@ namespace TinyEditor {
             const TinyEngine::FieldInfo& field
         );
 
-        bool DrawFloatField(
+        void DrawFloatField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawVector2Field(
+        void DrawVector2Field(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawVector3Field(
+        void DrawVector3Field(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawIntField(
+        void DrawIntField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawBoolField(
+        void DrawBoolField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawStringField(
+        void DrawStringField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawIntRectField(
+        void DrawIntRectField(
             TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value
         );
 
-        bool DrawEnumField(TinyEngine::Component& component,
+        void DrawEnumField(TinyEngine::Component& component,
+            const TinyEngine::FieldInfo& field,
+            const std::any& value);
+        void DrawComponentField(TinyEngine::Component& component,
             const TinyEngine::FieldInfo& field,
             const std::any& value);
 

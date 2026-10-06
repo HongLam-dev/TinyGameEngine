@@ -78,7 +78,7 @@ namespace TGModule {
 					if (field.type == FieldType::Enum)
 					{
 						file << "\" enum=\""
-							<< componentRegister.FindEnumClass(field.enumType)->name;
+							<< componentRegister.FindEnumClass(field.valueTypeID)->name;
 					}	
 
 					file<< "\">\n";
@@ -168,20 +168,19 @@ namespace TGModule {
 
 					case FieldType::Component:
 					{
-						Component* component =
-							std::any_cast<Component*>(
-								field.getValue(*component));
-						if (component)
+
+						Component* referencedComponent = field.getReferencedComponent(field.getValue(*component));
+
+						if (referencedComponent)
 						{
-							file << component->GetID();
+							file << referencedComponent->GetID();
 						}
 						else {
 							file << "None";
 						}
-
 						break;
 					}
-					case FieldType::Enum:{
+					case FieldType::Enum: {
 						int enumValue = std::any_cast<int>(
 							field.getValue(*component));
 						file << enumValue;

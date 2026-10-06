@@ -70,6 +70,12 @@ namespace TGModule{
                     return gameObject.AddComponent<TinyGame::CameraFollow>();
                 },
                 {
+                    MakeField<TinyGame::CameraFollow,Transform*>(
+                        "Target",
+                        FieldType::Component,
+                        &TinyGame::CameraFollow::GetTarget,
+                        &TinyGame::CameraFollow::SetTarget
+                    )
                 }
             }
         );

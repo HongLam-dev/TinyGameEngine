@@ -8,10 +8,7 @@ namespace TinyEngine {
     struct ComponentInfo
     {
         std::string name;
-
-        std::function<Component&(TinyEngine::GameObject&)> create;
-
+        std::function<Component& (GameObject&)> create;
         std::vector<FieldInfo> fields;
     };
-
  }

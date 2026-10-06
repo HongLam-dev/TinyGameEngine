@@ -69,7 +69,21 @@ namespace TinyEditor {
                 object.GetName().c_str(),
                 selectedObject == &object))
             {
-                selectedObject = &object;
+                selectedObject = &object;           
+            }
+            if (ImGui::BeginDragDropSource())
+            {
+                TinyEngine::GameObject* objectPtr = &object;
+
+                ImGui::SetDragDropPayload(
+                    "GAMEOBJECT",
+                    &objectPtr,
+                    sizeof(objectPtr)
+                );
+
+                ImGui::Text("%s", object.GetName().c_str());
+
+                ImGui::EndDragDropSource();
             }
             if (ImGui::IsItemHovered() &&
                 ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -92,7 +106,6 @@ namespace TinyEditor {
                     selectedObject = nullptr;
                     scene.DestroySceneObject(object);
                 }
-
 
                 ImGui::EndPopup();
             }

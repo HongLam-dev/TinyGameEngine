@@ -121,8 +121,9 @@ namespace TinyEngine{
                        &Rigidbody2D::GetGravityScale,
                        &Rigidbody2D::SetGravityScale
                    ),
-                    MakeEnumField<Rigidbody2D, CollisionDetectionMode>(
+                    MakeField<Rigidbody2D, CollisionDetectionMode>(
                        "Collision Detect Mode",
+                        FieldType::Enum,
                        &Rigidbody2D::GetCollisionDetectMode,
                        &Rigidbody2D::SetCollisionDetectMode
                    ),

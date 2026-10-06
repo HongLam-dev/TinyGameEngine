@@ -70,48 +70,46 @@ namespace TinyEditor {
         const FieldInfo& field)
     {
         std::any value = field.getValue(component);
-        bool isFieldInteracted = false;
         switch (field.type)
         {
         case FieldType::Float:
-            isFieldInteracted = DrawFloatField(component, field, value);
+            DrawFloatField(component, field, value);
             break;
 
         case FieldType::Vector2:
-            isFieldInteracted = DrawVector2Field(component, field, value);
+            DrawVector2Field(component, field, value);
             break;
 
         case FieldType::Vector3:
-            isFieldInteracted = DrawVector3Field(component, field, value);
+            DrawVector3Field(component, field, value);
             break;
 
         case FieldType::Int:
-            isFieldInteracted = DrawIntField(component, field, value);
+           DrawIntField(component, field, value);
             break;
 
         case FieldType::Bool:
-            isFieldInteracted = DrawBoolField(component, field, value);
+            DrawBoolField(component, field, value);
             break;
 
         case FieldType::String:
-            isFieldInteracted = DrawStringField(component, field, value);
+            DrawStringField(component, field, value);
             break;
 
         case FieldType::IntRect:
-            isFieldInteracted = DrawIntRectField(component, field, value);
+            DrawIntRectField(component, field, value);
             break;
         case FieldType::Enum:
-            isFieldInteracted = DrawEnumField(component, field, value);
+            DrawEnumField(component, field, value);
             break;
-        }
-        if (isFieldInteracted)
-        {
-         //   workingWindow = WorkingWindow::Other;
+        case FieldType::Component:
+            DrawComponentField(component,field,value);
+            break;     
         }
     }
 
 
-    bool Inspector::DrawFloatField(
+    void Inspector::DrawFloatField(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -124,13 +122,11 @@ namespace TinyEditor {
             &valueFloat))
         {
             field.setValue(component, valueFloat);
-            return true;
         }
-        return false;
     }
 
 
-    bool Inspector::DrawVector2Field(
+    void Inspector::DrawVector2Field(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -143,13 +139,11 @@ namespace TinyEditor {
             &valueVector.x))
         {
             field.setValue(component, valueVector);
-            return true;
         }
-        return false;
     }
 
 
-    bool Inspector::DrawVector3Field(
+    void Inspector::DrawVector3Field(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -162,13 +156,11 @@ namespace TinyEditor {
             &valueVector.x))
         {
             field.setValue(component, valueVector);
-            return true;
         }
-        return false;
     }
 
 
-    bool Inspector::DrawIntField(
+    void Inspector::DrawIntField(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -181,13 +173,11 @@ namespace TinyEditor {
             &valueInt))
         {
             field.setValue(component, valueInt);
-            return true;
         }
-        return false;
     }
 
 
-    bool Inspector::DrawBoolField(
+    void Inspector::DrawBoolField(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -200,13 +190,11 @@ namespace TinyEditor {
             &valueBool))
         {
             field.setValue(component, valueBool);
-            return true;
         }
-        return false;
     }
 
 
-    bool Inspector::DrawStringField(
+    void Inspector::DrawStringField(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -257,11 +245,10 @@ namespace TinyEditor {
             editingComponent = nullptr;
 
         }
-        return false;
     }
 
 
-    bool Inspector::DrawIntRectField(
+    void Inspector::DrawIntRectField(
         Component& component,
         const FieldInfo& field,
         const std::any& value)
@@ -287,21 +274,19 @@ namespace TinyEditor {
             rect.size.y = values[3];
 
             field.setValue(component, rect);
-            return true;
         }
-        return false;
     }
 
-    bool Inspector::DrawEnumField(
+    void Inspector::DrawEnumField(
         TinyEngine::Component& component,
         const TinyEngine::FieldInfo& field,
         const std::any& mode)
     {
         EnumStringMap* enumClass =
-            componentRegister.FindEnumClass(field.enumType);
+            componentRegister.FindEnumClass(field.valueTypeID);
 
         if (!enumClass)
-            return false;
+            return;
 
         int current = std::any_cast<int>(mode);
 
@@ -342,7 +327,55 @@ namespace TinyEditor {
             ImGui::EndCombo();
         }
 
-        return true;
+    }
+
+    void Inspector::DrawComponentField(
+        TinyEngine::Component& component,
+        const TinyEngine::FieldInfo& field,
+        const std::any& value)
+    {
+        TinyEngine::Component* referencedComponent = nullptr;
+
+        if (value.has_value() && value.type() == field.valueTypeID)
+        {
+            referencedComponent = field.getReferencedComponent(field.getValue(component));
+        }
+
+        ImGui::Text("%s:", field.name.c_str());
+        ImGui::SameLine();
+
+        if (referencedComponent)
+        {
+            ImGui::Text(
+                "%s",
+                referencedComponent->GetOwner().GetName().c_str()
+            );
+        }
+        else
+        {
+            ImGui::Text("None");
+        }
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload =
+                ImGui::AcceptDragDropPayload("GAMEOBJECT"))
+            {
+                GameObject* object =
+                    *static_cast<GameObject**>(payload->Data);
+
+                for (auto& objComponent : object->GetAllComponents())
+                {
+                    if (field.setValue(component, objComponent))
+                    {
+                        std::cout << "Found it\n";
+                        break;
+                    }
+                }
+            }
+
+            ImGui::EndDragDropTarget();
+        }
     }
 
     void Inspector::DrawAddComponentMenu(
