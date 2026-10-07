@@ -23,11 +23,6 @@ namespace TinyEditor {
 	class TinyGameEditor
 	{
 	public:
-		enum class WorkingWindow
-		{
-			Scene,
-			Other
-		};
 		TinyGameEditor();
 		void Run();
 		void RegisterComponents();
@@ -51,7 +46,6 @@ namespace TinyEditor {
 
 		TinyEngine::Camera* editorCamera;
 		std::unique_ptr< TinyEngine::Scene> editingScene;
-		WorkingWindow workingWindow = WorkingWindow::Other;
 
 		sf::Color sceneColor{ 55, 65, 80 };
 		TinyEngine::GameObject* selectedObject = nullptr;

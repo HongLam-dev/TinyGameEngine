@@ -44,7 +44,6 @@ namespace TGModule {
 			std::cout << "Failed to open scene file\n";
 			return;
 		}
-
 		ComponentRegister& componentRegister =
 			ComponentRegister::Instance();
 
@@ -207,6 +206,8 @@ namespace TGModule {
 		if (!FindScene(scenePath))
 			return false;
 		std::filesystem::path path = scenePath;
+
+		emptyScene.SetName(path.stem().string());
 
 		std::ifstream file(path);
 

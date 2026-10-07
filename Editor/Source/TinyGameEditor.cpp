@@ -76,7 +76,6 @@ namespace TinyEditor {
                     renderWindow->close();
             }
             sf::Time elapsedTime = deltaClock.restart();
-            workingWindow = WorkingWindow::Scene;
 
             if(!isGameRuning)
             {
@@ -92,12 +91,7 @@ namespace TinyEditor {
                 ImGui::SFML::Render(*renderWindow);
                 renderWindow->display();
 
-                if (inspector.IsActiveWindow() || hierarchy.IsActiveWindow() || projectWindow.IsActiveWindow())
-                {
-                    workingWindow = WorkingWindow::Other;
-                }
-
-                if (workingWindow == WorkingWindow::Scene)
+                if (!inspector.IsActiveWindow() && !hierarchy.IsActiveWindow() && !projectWindow.IsActiveWindow())
                 {
                     inputHandler.HandleSceneInput(*editorCamera, selectedObject, elapsedTime.asSeconds());
                 }
@@ -192,9 +186,14 @@ namespace TinyEditor {
 
    }
    void TinyGameEditor::DuplicateObject() {
-       if (selectedObject)
+       if (projectWindow.IsActiveWindow())
        {
-           editingScene->DuplicateObject(*selectedObject);
+           projectWindow.DuplicateSelectedObject();
+       }
+       else if (hierarchy.IsActiveWindow())
+       {
+           if(selectedObject)
+                editingScene->DuplicateObject(*selectedObject);
        }
    }
 

@@ -18,7 +18,7 @@ namespace TinyEditor {
 
             if (ImGui::Selectable(name.c_str(), entry.path() ==selectedFile ))
             {
-                selectedFile = entry.path();     
+                selectedFile = entry;
             }
             if (ImGui::IsItemHovered() &&
                 ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -38,4 +38,22 @@ namespace TinyEditor {
         }
         EndWindow();
 	}
+
+    void ProjectWindow::DuplicateSelectedObject() {
+        if (selectedFile.is_regular_file())
+        {
+            int n = 1;
+            auto source = selectedFile.path();
+            auto destination =source.parent_path() /
+                (source.stem().string() + std::to_string(n) + source.extension().string());
+            while (std::filesystem::exists(destination))
+            {
+                n++;
+                destination = source.parent_path() /
+                    (source.stem().string() + std::to_string(n) + source.extension().string());
+            }
+
+            std::filesystem::copy_file(source, destination);
+        }
+    }
 }

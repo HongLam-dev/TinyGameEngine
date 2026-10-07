@@ -8,7 +8,7 @@ namespace TinyEditor {
     {
         ImGui::SetNextWindowSize(ImVec2(300, 1280), ImGuiCond_FirstUseEver);
 
-        BeginWindow("Scene                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV';:/\"\\ (Don't ask why)");
+        BeginWindow(scene.GetName()+"                                                       1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXMNCBV';:/\"\\ (Don't ask why)");
         CheckActive();
         if (ImGui::BeginPopupContextWindow())
         {

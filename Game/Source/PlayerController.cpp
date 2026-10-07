@@ -54,14 +54,6 @@ namespace TinyGame {
 		{
 			rb->SetGravityScale(1);
 		}
-		else if (Input::Get().OnKeyDown(sf::Keyboard::Key::Num1))
-		{
-			TGModule::SceneManager::LoadScene("Example Scene");
-		}
-		else if (Input::Get().OnKeyDown(sf::Keyboard::Key::Num2))
-		{
-			TGModule::SceneManager::LoadScene("Test Scene");
-		}
 		else if (Input::Get().isKeyPressed(sf::Keyboard::Key::H))
 		{
 			rb->SetGravityScale(0);
