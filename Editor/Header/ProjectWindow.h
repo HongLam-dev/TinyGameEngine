@@ -14,8 +14,11 @@ namespace TinyEditor {
 		}
 		void DuplicateSelectedObject();
 	private:
+		char renameBuffer[128]{};
+		bool isRenaming=false;
 		std::function<void(std::string sceneName)> loadSceneCallback;
 		std::filesystem::directory_entry selectedFile;
+		std::filesystem::directory_entry renamingFile;
 		std::filesystem::path currentDirectory = "C:\\";
 		std::filesystem::path projectDirectory= "C:\\";
 	};
