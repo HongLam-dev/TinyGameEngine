@@ -20,6 +20,7 @@ namespace TinyEngine {
         void SetRotation(Vector3 newRotation);
         Vector3 GetScale() const { return scale; }
         Vector3 GetRotation() const { return rotation; }
+        virtual ~Transform() = default;
     protected:
         Vector3 position{};
         Vector3 scale{ 1.0f, 1.0f, 1.0f };

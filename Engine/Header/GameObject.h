@@ -35,6 +35,8 @@ namespace TinyEngine {
 		void Destroy();
 		void OnDestroy();
 
+		ObjectType GetType() { return type; }
+
 		const std::string& GetName() const { return name; }
 		void SetName(const std::string& name) { this->name = name; }
 
@@ -110,6 +112,7 @@ namespace TinyEngine {
 			return result;
 		}
 	protected:
+		ObjectType type;
 		Transform* transform = nullptr;
 		std::string name="";
 		bool destroyOnLoad = true;

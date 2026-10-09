@@ -48,8 +48,11 @@ namespace TGModule {
 
 		for (auto& object : scene.GetGameObjects())
 		{
+
 			file << "<Object name=\""
 				<< object->GetName()
+				<< "\" type=\""
+				<< static_cast<int>(object->GetType())
 				<< "\">\n";
 
 			for (auto& component : object->GetAllComponents())
@@ -219,13 +222,33 @@ namespace TGModule {
 
 			std::string objectName =
 				GetAttribute(line, "name");
+			std::string objectType =
+				GetAttribute(line, "type");
+			
+			TinyEngine::GameObject* object=nullptr;
+			try
+			{
+				int value = std::stoi(objectType);
+				if (value == static_cast<int>(ObjectType::UIObject))
+				{
+					object = &emptyScene.CreateSceneObject(ObjectType::UIObject);
+				}
+				else {
+					object = &emptyScene.CreateSceneObject(ObjectType::WorldObject);
+				}
+			}
+			catch (const std::invalid_argument&)
+			{
+				std::cout << "Invalid object type\n";
+			}
+			catch (const std::out_of_range&)
+			{
+				std::cout << "Invalid object type\n";
+			}
 
-			TinyEngine::GameObject& object =
-				emptyScene.CreateSceneObject();
+			object->SetName(objectName);
 
-			object.SetName(objectName);
-
-			LoadObject(file, object);
+			LoadObject(file, *object);
 		}
 
 		for (auto& unresolvedReference : unresolvedReferences)
@@ -275,7 +298,7 @@ namespace TGModule {
 				continue;
 			}
 			Component* component=nullptr;
-			if (componentName == "Transform")
+			if (componentName == "Transform"|| componentName == "UI Transform")
 			{
 				component = &object.GetTransform();
 			}

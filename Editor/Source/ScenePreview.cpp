@@ -1,4 +1,5 @@
 #include "ScenePreview.h"
+#include "UITransform.h"
 using namespace TinyEngine;
 
 namespace TinyEditor {
@@ -18,8 +19,18 @@ namespace TinyEditor {
         Camera& editorCamera) {
         if (selectedObject)
         {
+            TinyEngine::Transform* transform = &selectedObject->GetTransform();
             Vector3 position = selectedObject->GetTransform().GetPosition();
-            Vector2 screenPos = editorCamera.WorldToScreenPosition(position, window.GetSize());
+            Vector2 screenPos;
+            if (!dynamic_cast<TinyEngine::UITransform*>(transform))
+            {
+                screenPos = editorCamera.WorldToScreenPosition(position, window.GetSize());
+            }
+            else {
+                screenPos.x = position.x;
+                screenPos.y = position.y;
+            }
+      
             DrawMarker(window,{ screenPos.x,screenPos.y });
         }
     }

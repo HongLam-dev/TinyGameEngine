@@ -1,4 +1,4 @@
-<Object name="Main Camera">
+<Object name="Main Camera" type="0">
 	<Component name="Transform" id="17588800187422110716">
 		<Field name="Position" type="Vector3">
 			-0.540001 -2.94 0
@@ -12,8 +12,13 @@
 	</Component>
 	<Component name="Camera" id="13601378585956671567">
 	</Component>
+	<Component name="Camera Follow" id="3348550410662222646">
+		<Field name="Target" type="Component">
+			10866402192315578018
+		</Field>
+	</Component>
 </Object>
-<Object name="Platform">
+<Object name="Platform" type="0">
 	<Component name="Transform" id="15344813734475749601">
 		<Field name="Position" type="Vector3">
 			-0.269999 3.56003 0
@@ -45,7 +50,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Rect2">
+<Object name="Rect2" type="0">
 	<Component name="Transform" id="7946867083206218711">
 		<Field name="Position" type="Vector3">
 			-4.46001 -2.06 0
@@ -77,7 +82,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Crate3">
+<Object name="Crate3" type="0">
 	<Component name="Transform" id="1100290338814432772">
 		<Field name="Position" type="Vector3">
 			1.76 -1.09003 0
@@ -123,7 +128,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Player">
+<Object name="Player" type="0">
 	<Component name="Transform" id="10866402192315578018">
 		<Field name="Position" type="Vector3">
 			-3.20998 -2.70002 0
@@ -143,7 +148,7 @@
 			1.5 3.5 2
 		</Field>
 		<Field name="Is Trigger" type="Bool">
-			1
+			0
 		</Field>
 	</Component>
 	<Component name="Sprite Renderer" id="4959037745815209355">
@@ -174,7 +179,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Rect">
+<Object name="Rect" type="0">
 	<Component name="Transform" id="3028720061889525066">
 		<Field name="Position" type="Vector3">
 			-6.05007 -3.37 0
@@ -206,7 +211,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Crate">
+<Object name="Crate" type="0">
 	<Component name="Transform" id="7171521889450893648">
 		<Field name="Position" type="Vector3">
 			0.910001 -3.40003 0
@@ -263,7 +268,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Rect4">
+<Object name="Rect4" type="0">
 	<Component name="Transform" id="2629554373016857522">
 		<Field name="Position" type="Vector3">
 			4.13 -1.76 0
@@ -295,7 +300,7 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Rect3">
+<Object name="Rect3" type="0">
 	<Component name="Transform" id="18056797887070546225">
 		<Field name="Position" type="Vector3">
 			-1.63 -1.9 0
@@ -327,10 +332,10 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="Image">
-	<Component name="Transform" id="16941702545042379695">
+<Object name="NewGameObject" type="1">
+	<Component name="UI Transform" id="17092321899421693867">
 		<Field name="Position" type="Vector3">
-			659.09 43.2501 0
+			571.04 44.129 0
 		</Field>
 		<Field name="Rotation" type="Vector3">
 			0 0 0
@@ -339,18 +344,7 @@
 			0.1 0.1 1
 		</Field>
 	</Component>
-	<Component name="UI Transform" id="17328588164590548836">
-		<Field name="Position" type="Vector3">
-			653 77 0
-		</Field>
-		<Field name="Rotation" type="Vector3">
-			0 0 0
-		</Field>
-		<Field name="Scale" type="Vector3">
-			0.1 0.1 1
-		</Field>
-	</Component>
-	<Component name="Image" id="1015075701475253011">
+	<Component name="Image" id="5939940831435331568">
 		<Field name="Texture" type="String">
 			assets/rankscore.png
 		</Field>

@@ -7,7 +7,7 @@
 
 namespace TinyEngine
 {
-	GameObject::GameObject(TinyGameEngine& engine, ObjectType type): engine(engine) {
+	GameObject::GameObject(TinyGameEngine& engine, ObjectType type): engine(engine),type(type) {
 		if (type == ObjectType::WorldObject)
 		{
 			transform = &AddComponent<Transform>();

@@ -2,6 +2,7 @@
 #include "Vector2.h"
 #include "EngineSettings.h"
 #include "Camera.h"
+#include "UITransform.h"
 #include <SFML/Window.hpp>
 
 namespace TinyEditor {
@@ -17,8 +18,16 @@ namespace TinyEditor {
 
         if (selectedObject)
         {
-            TinyEngine::Vector2 objectScreenPosition =
-                editorCamera.WorldToScreenPosition (selectedObject->GetTransform().GetPosition(),window.GetSize());
+            TinyEngine::Transform* transform = &selectedObject->GetTransform();
+            TinyEngine::Vector2 objectScreenPosition;
+            if (!dynamic_cast<TinyEngine::UITransform*>(transform))
+            {
+                objectScreenPosition = editorCamera.WorldToScreenPosition(transform->GetPosition(), window.GetSize());
+            }
+            else {
+                objectScreenPosition.x = transform->GetPosition().x;
+                objectScreenPosition.y = transform->GetPosition().y;
+            }
 
             TinyEngine::Vector2 mousePosition =
                 input.GetMousePosition(window.GetPosition());
