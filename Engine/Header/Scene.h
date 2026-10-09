@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "CollisionManager.h"
 #include "RenderManager.h"
-#include "UI/UIObject.h"
 #include "BoxCollider2D.h"
 #include <vector>
 #include <string>
@@ -13,15 +12,13 @@ namespace TinyEngine {
 		Scene(TinyGameEngine& engine):engine(engine){}
 		~Scene() { Unload(); }
 
-		GameObject& CreateSceneObject();
+		GameObject& CreateSceneObject(ObjectType type=ObjectType::WorldObject);
 		GameObject& CreateASimpleBox(
 			const Vector3& position,
 			const Vector3& size,
 			std::string boxTexture="");
 		void SetCamera(Camera& camera) { this->mainCamera = &camera; };
 		Camera* GetMainCamera() { return mainCamera; };
-
-		UIObject& CreateUIObject();
 		GameObject& CreateMainCamera();
 		GameObject& CreateCamera();
 		GameObject& DuplicateObject(const GameObject& object);

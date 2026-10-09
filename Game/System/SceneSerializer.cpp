@@ -10,7 +10,6 @@
 #include "Animator.h"
 #include "Camera.h"
 #include "Image.h"
-#include "UIObject.h"
 #include "PingPong.h"
 #include "CameraFollow.h"
 #include "PlayerController.h"

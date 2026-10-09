@@ -24,7 +24,7 @@ namespace TinyEditor {
 
             if (ImGui::MenuItem("UI Object"))
             {
-                scene.CreateUIObject();
+                scene.CreateSceneObject(ObjectType::UIObject);
             }
             ImGui::EndPopup();
         }

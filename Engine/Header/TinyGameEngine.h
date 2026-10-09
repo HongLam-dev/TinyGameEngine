@@ -7,7 +7,6 @@
 #include "GameObject.h"
 #include "CollisionManager.h"
 #include "Camera.h"
-#include "UIObject.h"
 #include "Scene.h"
 #include "RenderableComponent.h"
 

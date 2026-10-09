@@ -45,26 +45,14 @@ namespace TinyEngine {
 		return result;
 	}
 
-	GameObject& Scene::CreateSceneObject()
+	GameObject& Scene::CreateSceneObject(ObjectType type)
 	{
-		auto go = std::make_unique<GameObject>(engine);
+		auto go = std::make_unique<GameObject>(engine,type);
 		go->SetName("NewGameObject");
 
 		sceneObjects.push_back(std::move(go));
 
 		return *sceneObjects.back();
-	}
-
-	UIObject& Scene::CreateUIObject()
-	{
-		auto go = std::make_unique<UIObject>(engine);
-		UIObject& uiObject = *go;
-
-		go->SetName("NewUIObject");
-
-		sceneObjects.push_back(std::move(go));
-
-		return uiObject;
 	}
 
 	void Scene::Start()

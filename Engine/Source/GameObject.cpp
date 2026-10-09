@@ -2,12 +2,19 @@
 #include "SpriteRenderer.h"
 #include "TinyGameEngine.h"
 #include "Image.h"
+#include "UITransform.h"
 #include <iostream>
 
 namespace TinyEngine
 {
-	GameObject::GameObject(TinyGameEngine& engine): engine(engine) {
-		transform = &AddComponent<Transform>();
+	GameObject::GameObject(TinyGameEngine& engine, ObjectType type): engine(engine) {
+		if (type == ObjectType::WorldObject)
+		{
+			transform = &AddComponent<Transform>();
+		}
+		else {
+			transform = &AddComponent<UITransform>();
+		}
 	}
 	void GameObject::Update(float deltaTime)
 	{

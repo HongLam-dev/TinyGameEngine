@@ -28,7 +28,6 @@ add_library(TinyGameEngine
     "Engine/Source/GameComponent/Animator.cpp"
     "Engine/Source/GameComponent/Camera.cpp"
     "Engine/Source/UI/UITransform.cpp"
-    "Engine/Source/UI/UIObject.cpp"
     "Engine/Source/UI/Image.cpp"
     "Engine/Source/RenderManager.cpp"
     "Engine/Source/Scene.cpp"

@@ -10,7 +10,6 @@
 #include "Animator.h"
 #include "Camera.h"
 #include "Image.h"
-#include "UIObject.h"
 #include "TextureManager.h"
 #include "GameComponentRegister.h"
 #include "FieldType.h"

@@ -12,7 +12,6 @@
 #include "Animator.h"
 #include "Camera.h"
 #include "Image.h"
-#include "UIObject.h"
 namespace TinyEngine
 {
 

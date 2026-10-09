@@ -9,12 +9,18 @@
 #include "IDGenerator.h"
 namespace TinyEngine {
 
+	enum class ObjectType
+	{
+		WorldObject,
+		UIObject
+	};
+
 	class Camera;
 	class Window;
 	class TinyGameEngine;
 	class GameObject {
 	public:
-		GameObject(TinyGameEngine& engine);
+		GameObject(TinyGameEngine& engine,ObjectType type=ObjectType::WorldObject);
 		void Update(float deltaTime);
 		void FixedUpdate(float fixedDeltaTime);
 		void Start();
