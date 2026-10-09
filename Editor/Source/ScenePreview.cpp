@@ -22,7 +22,7 @@ namespace TinyEditor {
             TinyEngine::Transform* transform = &selectedObject->GetTransform();
             Vector3 position = selectedObject->GetTransform().GetPosition();
             Vector2 screenPos;
-            if (!dynamic_cast<TinyEngine::UITransform*>(transform))
+            if (selectedObject->GetType()==ObjectType::WorldObject)
             {
                 screenPos = editorCamera.WorldToScreenPosition(position, window.GetSize());
             }

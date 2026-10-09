@@ -2,7 +2,7 @@
 #include "Vector2.h"
 #include "EngineSettings.h"
 #include "Camera.h"
-#include "UITransform.h"
+#include "GameObject.h"
 #include <SFML/Window.hpp>
 
 namespace TinyEditor {
@@ -20,7 +20,7 @@ namespace TinyEditor {
         {
             TinyEngine::Transform* transform = &selectedObject->GetTransform();
             TinyEngine::Vector2 objectScreenPosition;
-            if (!dynamic_cast<TinyEngine::UITransform*>(transform))
+            if (selectedObject->GetType() == TinyEngine::ObjectType::WorldObject)
             {
                 objectScreenPosition = editorCamera.WorldToScreenPosition(transform->GetPosition(), window.GetSize());
             }
@@ -59,17 +59,23 @@ namespace TinyEditor {
         sf::Vector2i mouseMovement,
         TinyEngine::Camera& camera)
     {
-        TinyEngine::Vector2 worldMovement =
-        {
-            TinyEngine::PixelsToWorld(mouseMovement.x),
-            TinyEngine::PixelsToWorld(mouseMovement.y)
-        };
-
         TinyEngine::Vector3 position =
             objectToMove.GetTransform().GetPosition();
+        if (objectToMove.GetType() == TinyEngine::ObjectType::WorldObject)
+        {
+            TinyEngine::Vector2 worldMovement=
+            {
+                TinyEngine::PixelsToWorld(mouseMovement.x),
+                TinyEngine::PixelsToWorld(mouseMovement.y)
+            };
 
-        position.x += worldMovement.x;
-        position.y += worldMovement.y;
+            position.x += worldMovement.x;
+            position.y += worldMovement.y;
+        }
+        else {
+            position.x += mouseMovement.x;
+            position.y += mouseMovement.y;
+        }
 
         objectToMove.GetTransform().SetPosition(position);
     }

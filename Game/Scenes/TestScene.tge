@@ -332,10 +332,10 @@
 		</Field>
 	</Component>
 </Object>
-<Object name="NewGameObject" type="1">
+<Object name="Image" type="1">
 	<Component name="UI Transform" id="17092321899421693867">
 		<Field name="Position" type="Vector3">
-			571.04 44.129 0
+			899.04 349.129 0
 		</Field>
 		<Field name="Rotation" type="Vector3">
 			0 0 0
