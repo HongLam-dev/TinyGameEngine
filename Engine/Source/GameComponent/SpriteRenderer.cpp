@@ -41,6 +41,38 @@ namespace TinyEngine {
         window.Draw(*sprite);
     }
 
+    void  SpriteRenderer::SetTexture(std::string texturePath)
+    {
+        sf::Texture* tex =
+            TextureManager::Instance().GetTexture(texturePath);
+
+        if (!tex)
+        {
+            return;
+        }
+
+        if (sprite == nullptr)
+        {
+            sprite = std::make_unique<sf::Sprite>(*tex);
+        }
+        else
+        {
+            sprite->setTexture(*tex);
+        }
+
+        sprite->setTextureRect(
+            sf::IntRect(
+                { 0, 0 },
+            {
+                static_cast<int>(tex->getSize().x),
+                static_cast<int>(tex->getSize().y)
+            }
+            )
+        );
+
+        this->texturePath = texturePath;
+    }
+
     Bounds SpriteRenderer::GetBounds() {
         Bounds bounds;
         Vector3 position = GetTransform().GetPosition();

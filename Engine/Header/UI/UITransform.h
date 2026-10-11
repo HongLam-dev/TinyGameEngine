@@ -7,7 +7,6 @@ namespace TinyEngine {
 	public:
 		UITransform(GameObject& owner):Transform(owner){};
 	private:
-
 	};
 
 }

@@ -8,11 +8,15 @@ namespace TinyEngine
 	{
 		if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>())
 		{
-			keyStates[static_cast<std::size_t>(keyPressed->code)] = true;
+			int code = static_cast<std::size_t>(keyPressed->code);
+			if (code < keyStates.size())
+				keyStates[code] = true;
 		}
 		else if(const auto* keyPressed = event.getIf<sf::Event::KeyReleased>())
 		{
-			keyStates[static_cast<std::size_t>(keyPressed->code)] = false;
+			int code = static_cast<std::size_t>(keyPressed->code);
+			if(code<keyStates.size())
+				keyStates[code] = false;
 		}
 		else if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
 		{

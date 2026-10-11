@@ -1,6 +1,7 @@
 #include "RenderManager.h"
 #include "RenderableComponent.h"
 #include "SpriteRenderer.h"
+#include <algorithm>
 namespace TinyEngine {
 	void RenderManager::RegisterRenderer(RenderableComponent& renderer) {
 		if (auto* uiRenderable = dynamic_cast<UIRenderable*>(&renderer))
@@ -9,7 +10,17 @@ namespace TinyEngine {
 		}
 		else if (auto* spriteRenderer = dynamic_cast<SpriteRenderer*>(&renderer))
 		{
-			spriteRenderers.push_back(spriteRenderer);
+			auto it = std::lower_bound(
+				spriteRenderers.begin(),
+				spriteRenderers.end(),
+				spriteRenderer,
+				[](const SpriteRenderer* a, const SpriteRenderer* b)
+				{
+					return a->GetLayer() < b->GetLayer();
+				}
+			);
+
+			spriteRenderers.insert(it, spriteRenderer);
 		}
 	}
 	void  RenderManager::UnregisterRenderer(RenderableComponent& renderer) {

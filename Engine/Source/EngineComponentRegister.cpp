@@ -64,6 +64,12 @@ namespace TinyEngine{
                            FieldType::IntRect,
                            &SpriteRenderer::GetTextureRect,
                            &SpriteRenderer::SetTextureRect
+                       ),
+                       MakeField<SpriteRenderer, int>(
+                           "Layer",
+                           FieldType::Int,
+                           &SpriteRenderer::GetLayer,
+                           &SpriteRenderer::SetLayer
                        )
                    }
                }
